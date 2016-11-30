@@ -1,6 +1,7 @@
 # Notifications
 
-An app that notifies the user about important events of other apps.
+Notification backend and UI for the notification panel/icon.
+Used for notifications of other apps ([announcementcenter](https://github.com/owncloud/announcementcenter), [federatedfilesharing](https://github.com/owncloud/core/tree/master/apps/federatedfilesharing) etc.)
 
 ## QA metrics on master branch:
 
