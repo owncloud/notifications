@@ -29,6 +29,9 @@ require_once __DIR__ . '/../../../../lib/base.php';
 // Fix for "Autoload path not allowed: .../tests/lib/testcase.php"
 \OC::$loader->addValidRoot(OC::$SERVERROOT . '/tests');
 
+\OC::$composerAutoloader->addPsr4('Test\\', OC::$SERVERROOT . '/tests/lib/', true);
+\OC::$composerAutoloader->addPsr4('Tests\\', OC::$SERVERROOT . '/tests/', true);
+
 // Fix for "Autoload path not allowed: .../notifications/tests/testcase.php"
 \OC_App::loadApp('notifications');
 
