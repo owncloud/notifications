@@ -102,6 +102,7 @@
 .notification .notification-subject {
 	display: inline-block;
 	margin-right: 10px;
+	font-weight: bold;
 }
 
 .notification .notification-message {
