@@ -21,9 +21,11 @@
 
 namespace OCA\Notifications\Controller;
 
+use OC\OCS\Result;
 use OCA\Notifications\Handler;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\OCSController;
 use OCP\IConfig;
 use OCP\IRequest;
 use OCP\IUser;
@@ -32,7 +34,7 @@ use OCP\Notification\IAction;
 use OCP\Notification\IManager;
 use OCP\Notification\INotification;
 
-class EndpointController extends Controller {
+class EndpointController extends OCSController {
 	/** @var Handler */
 	private $handler;
 
@@ -66,13 +68,13 @@ class EndpointController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 *
-	 * @return \OC_OCS_Result
+	 * @return Result
 	 */
 	public function listNotifications() {
 		// When there are no apps registered that use the notifications
 		// We stop polling for them.
 		if (!$this->manager->hasNotifiers()) {
-			return new \OC_OCS_Result(null, Http::STATUS_NO_CONTENT);
+			return new Result(null, Http::STATUS_NO_CONTENT);
 		}
 
 		$filter = $this->manager->createNotification();
@@ -96,7 +98,7 @@ class EndpointController extends Controller {
 			$data[] = $this->notificationToArray($notificationId, $notification);
 		}
 
-		return new \OC_OCS_Result(
+		return new Result(
 			$data,
 			100, // HTTP::STATUS_OK, TODO: <status>failure</status><statuscode>200</statuscode>
 			null,
@@ -108,23 +110,18 @@ class EndpointController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 *
-	 * @param array $parameters
-	 * @return \OC_OCS_Result
+	 * @param $id
+	 * @return Result
 	 */
-	public function getNotification(array $parameters) {
+	public function getNotification($id) {
 		if (!$this->manager->hasNotifiers()) {
-			return new \OC_OCS_Result(null, Http::STATUS_NOT_FOUND);
+			return new Result(null, Http::STATUS_NOT_FOUND);
 		}
-
-		if (!isset($parameters['id'])) {
-			return new \OC_OCS_Result(null, HTTP::STATUS_NOT_FOUND);
-		}
-		$id = (int) $parameters['id'];
 
 		$notification = $this->handler->getById($id, $this->getCurrentUser());
 
 		if (!($notification instanceof INotification)) {
-			return new \OC_OCS_Result(null, HTTP::STATUS_NOT_FOUND);
+			return new Result(null, HTTP::STATUS_NOT_FOUND);
 		}
 
 		$language = $this->config->getUserValue($this->getCurrentUser(), 'core', 'lang', null);
@@ -133,10 +130,10 @@ class EndpointController extends Controller {
 			$notification = $this->manager->prepare($notification, $language);
 		} catch (\InvalidArgumentException $e) {
 			// The app was disabled
-			return new \OC_OCS_Result(null, HTTP::STATUS_NOT_FOUND);
+			return new Result(null, HTTP::STATUS_NOT_FOUND);
 		}
 
-		return new \OC_OCS_Result(
+		return new Result(
 			$this->notificationToArray($id, $notification),
 			100 // HTTP::STATUS_OK TODO: <status>failure</status><statuscode>200</statuscode>
 		);
@@ -144,18 +141,14 @@ class EndpointController extends Controller {
 
 	/**
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 *
-	 * @param array $parameters
-	 * @return \OC_OCS_Result
+	 * @param $id
+	 * @return Result
 	 */
-	public function deleteNotification(array $parameters) {
-		if (!isset($parameters['id'])) {
-			return new \OC_OCS_Result(null, HTTP::STATUS_NOT_FOUND);
-		}
-		$id = (int) $parameters['id'];
-
+	public function deleteNotification($id) {
 		$this->handler->deleteById($id, $this->getCurrentUser());
-		return new \OC_OCS_Result();
+		return new Result();
 	}
 
 	/**
