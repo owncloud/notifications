@@ -2,7 +2,11 @@
 <info>
 	<id>notifications</id>
 	<name>Notifications</name>
-	<description>An app that notifies the user about important events of other apps.</description>
+	<summary>Notification system for internal events</summary>
+	<description>This application adds an internal notification system to an ownCloud instance. Notifications are triggered by apps like the Announcement Center or Custom Groups and displayed via a bell indicator in the WebUI as well as via the ownCloud clients.</description>
+
+	<category>tools</category>
+	<screenshot>https://raw.githubusercontent.com/owncloud/promo/e1dd604d66b4c5f765579b4c160de3268169ea3c/ownCloud%20logo%20square.png</screenshot>
 
 	<licence>AGPL</licence>
 	<author>Joas Schilling</author>
