@@ -67,13 +67,17 @@ matrix:
     - php: 5.6
       env: DB=mysql
     - php: 5.6
+      env: DB=mysql CORE_BRANCH=stable10
+    - php: 5.6
       env: DB=pgsql
     - php: 5.6
-      env: DB=mysql;CODECHECK=1
+      env: DB=mysql CODECHECK=1
     - php: 5.6
-      env: DB=mysql;CODECHECK=2
+      env: DB=mysql CODECHECK=2
     - php: 5.6
-      env: DB=mysql;INTEGRATION=1
+      env: DB=mysql INTEGRATION=1
+    - php: 5.6
+      env: DB=mysql INTEGRATION=1 CORE_BRANCH=stable10
 #    - php: 5.4
 #      env: DB=mysql;JSTESTS=1
   allow_failures:
