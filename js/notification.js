@@ -95,6 +95,10 @@
 			return message;
 		},
 
+		getRawMessage: function() {
+			return this.message;
+		},
+
 		getEl: function() {
 			return $('div.notification[data-id='+escapeHTML(this.getId())+']');
 		},
