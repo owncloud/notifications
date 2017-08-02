@@ -23,6 +23,7 @@
 		this.subject = jsonData.subject;
 		this.message = jsonData.message;
 		this.link = jsonData.link;
+		this.icon = jsonData.icon;
 		this.actions = jsonData.actions; // TODO some parsing here?
 		this.notification_id = jsonData.notification_id;
 	};
@@ -63,6 +64,10 @@
 
 		getLink: function() {
 			return this.link;
+		},
+
+		getIcon: function() {
+			return this.icon;
 		},
 
 		getActions: function() {
@@ -116,11 +121,16 @@
 			el.attr('data-id', escapeHTML(this.getId()));
 			el.attr('data-timestamp', escapeHTML(this.getTimestamp()));
 
-			if (this.getLink()) {
-				el.append('<a href="'+this.getLink()+'" class="notification-subject"> '+escapeHTML(this.getSubject())+'</a>');
-			} else {
-				el.append('<div class="notification-subject"> '+escapeHTML(this.getSubject())+'</div>');
+			var subject = $('<div class="notification-subject">');
+			if (this.getIcon()) {
+				subject.append('<img src="' + this.getIcon() + '" class="notification-icon"/>');
 			}
+			if (this.getLink()) {
+				subject.append('<a href="'+this.getLink()+'" class="notification-subject"> '+escapeHTML(this.getSubject())+'</a>');
+			} else {
+				subject.append('<div class="notification-title"> '+escapeHTML(this.getSubject())+'</div>');
+			}
+			el.append(subject);
 			el.append('<div class="notification-message">'+this.getMessage()+'</div>');
 			// Add actions
 			var actions = $('<div class="notification-actions"></div>');

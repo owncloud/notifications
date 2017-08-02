@@ -105,6 +105,16 @@
 	font-weight: bold;
 }
 
+.notification .notification-icon {
+	width: 32px;
+	height: 32px;
+	padding: 5px;
+}
+
+.notification .notification-title {
+	display: inline-block;
+}
+
 .notification .notification-message {
 	line-height: 20px;
 	padding-bottom: 5px;
