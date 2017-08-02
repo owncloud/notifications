@@ -32,6 +32,17 @@ use OCP\Util;
 		)
 	);
 });
+\OC::$server->getNotificationManager()->registerNotifier(
+	function() {
+		return new \OCA\Notifications\Notifier();
+	}, function () {
+	$l = \OC::$server->getL10N('notifications');
+	return [
+		'id' => 'notifications',
+		'name' => $l->t('Admin notifications'),
+	];
+
+});
 
 // Only display the app on index.php except for public shares
 $request = \OC::$server->getRequest();

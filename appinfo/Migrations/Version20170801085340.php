@@ -29,7 +29,7 @@ class Version20170801085340 implements ISchemaMigration {
 		$table->addColumn('actions', Type::TEXT, ['notNull' => false]);
 		$table->addColumn('icon', Type::STRING, ['length' => 4000, 'notNull' => false]);
 
-		$table->setPrimaryKey(['id']);
+		$table->setPrimaryKey(['notification_id']);
 		$table->addIndex(['app']);
 		$table->addIndex(['user']);
 		$table->addIndex(['timestamp']);
