@@ -264,6 +264,7 @@
 				title: notification.getSubject(),
 				lang: OC.getLocale(),
 				body: notification.getRawMessage(),
+				icon: notification.getIcon(),
 				tag: notification.getId()
 			});
 			setTimeout(n.close.bind(n), 5000);

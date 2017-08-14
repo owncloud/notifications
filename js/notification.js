@@ -23,6 +23,7 @@
 		this.subject = jsonData.subject;
 		this.message = jsonData.message;
 		this.link = jsonData.link;
+		this.icon = jsonData.icon;
 		this.actions = jsonData.actions; // TODO some parsing here?
 		this.notification_id = jsonData.notification_id;
 	};
@@ -63,6 +64,10 @@
 
 		getLink: function() {
 			return this.link;
+		},
+
+		getIcon: function() {
+			return this.icon;
 		},
 
 		getActions: function() {
@@ -112,30 +117,82 @@
 		 */
 		renderElement: function() {
 			// FIXME: use handlebars template
-			var el = $('<div class="notification"></div>');
-			el.attr('data-id', escapeHTML(this.getId()));
-			el.attr('data-timestamp', escapeHTML(this.getTimestamp()));
+			var cssNameSpace = 'notification';
+
+			var $container = $('<div>', {
+				'class'          : cssNameSpace,
+				'data-id'        : escapeHTML(this.getId()),
+				'data-timestamp' : escapeHTML(this.getTimestamp())
+			});
+
+			var $close = $('<button>', {
+				'class' : cssNameSpace + '-delete icon icon-close svg',
+				'text'  : t('notifications', 'Dismiss')
+			});
+
+			var $content = $('<div>', {
+				'class' : cssNameSpace + '-content'
+			});
+
+			var $actions = $('<div>', {
+				'class' : cssNameSpace + '-actions'
+			});
+
+			var $title = $('<h3>', {
+				'class' : cssNameSpace + '-title',
+				'text'  : escapeHTML(this.getSubject())
+			});
+
+			var $message = $('<p>', {
+				'class' : cssNameSpace + '-message',
+				'text'  : this.getMessage()
+			});
+
+			$container
+				.append($close);
+
+			$content
+				.append($title, $message, $actions)
+				.appendTo($container);
+
+			// --- optional ----------------------------------------------------
+
+			if (this.getIcon()) {
+				var $icon = $('<img>', {
+					'class' : cssNameSpace + '-icon',
+					'src'   : this.getIcon()
+				});
+
+				// Insert before container
+				$container.prepend($icon);
+			}
 
 			if (this.getLink()) {
-				el.append('<a href="'+this.getLink()+'" class="notification-subject"> '+escapeHTML(this.getSubject())+'</a>');
-			} else {
-				el.append('<div class="notification-subject"> '+escapeHTML(this.getSubject())+'</div>');
+				var $link = $('<a>', {
+					'class' : cssNameSpace + '-link',
+					'href'  : this.getLink(),
+					'text'  : escapeHTML(this.getSubject())
+				});
+
+				// Replace title content with link
+				$title.html($link);
 			}
-			el.append('<div class="notification-message">'+this.getMessage()+'</div>');
-			// Add actions
-			var actions = $('<div class="notification-actions"></div>');
+
+			// --- Add actions -------------------------------------------------
+
 			var actionsData = this.getActions();
+
 			_.each(actionsData, function(actionData) {
-				// FIXME: use handlebars template
-				actions.append(
-					'<button class="action-button' + (actionData.primary ? ' primary': '') + '" data-type="' + escapeHTML(actionData.type) + '" ' +
-					'data-href="'+escapeHTML(actionData.link)+'">'+escapeHTML(actionData.label)+'</button>'
-				);
+				$('<button>', {
+					'class'     : cssNameSpace + '-action-button' + (actionData.primary ? ' primary': ''),
+					'data-type' : escapeHTML(actionData.type),
+					'data-href' : escapeHTML(actionData.link),
+					'html'      : escapeHTML(actionData.label)
+				}).appendTo($actions);
 				// TODO create event handler on click for given action type
 			});
-			el.append(actions);
-			el.append('<div style="display: none;" class="notification-delete"><div class="icon icon-close svg" alt="' + t('notifications', 'Dismiss') + '"></div></div>');
-			return el;
+
+			return $container;
 		},
 
 		/**

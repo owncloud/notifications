@@ -1,7 +1,9 @@
 .notification {
-	display: block;
-	padding: 7px 15px 50px 15px;
+	display: flex;
+	padding: 15px;
+	transition: background .125s;
 }
+
 .notification:not(:last-child) {
 	border-bottom: 1px solid rgb(238, 238, 238);
 }
@@ -41,12 +43,20 @@
 	color: #999;
 }
 
-.notification:hover > .notification-delete{
-	display: block !important;
+.notification > .notification-delete {
 	position: absolute;
-	top: 4px;
-	right: 9px;
+	top: 8px;
+	right: 8px;
 	opacity: 0.3;
+	transition: opacity .25s;
+	text-indent: -9999px;
+	background-color: transparent;
+	margin: 0;
+	padding: 0;
+}
+
+.notification:not(:hover) > .notification-delete {
+	opacity: 0;
 }
 
 .notification:hover {
@@ -103,6 +113,20 @@
 	display: inline-block;
 	margin-right: 10px;
 	font-weight: bold;
+}
+
+.notification .notification-icon {
+	width: 32px;
+	height: 32px;
+	margin-right: 14px;
+}
+
+.notification .notification-title {
+	color: #000;
+	font-size: 12.8px;
+	line-height: 20.48px;
+	font-weight: 600;
+	margin: 5px 0 10px;
 }
 
 .notification .notification-message {

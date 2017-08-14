@@ -9,8 +9,8 @@
 	<screenshot>https://raw.githubusercontent.com/owncloud/promo/e1dd604d66b4c5f765579b4c160de3268169ea3c/ownCloud%20logo%20square.png</screenshot>
 
 	<licence>AGPL</licence>
-	<author>Joas Schilling</author>
-	<version>0.3.0</version>
+	<author>Joas Schilling, Thomas Müller</author>
+	<version>0.3.1</version>
 
 	<types>
 		<logging/>
@@ -22,7 +22,12 @@
 	<bugs>https://github.com/owncloud/notifications/issues</bugs>
 	<repository type="git">https://github.com/owncloud/notifications.git</repository>
 
+	<commands>
+		<command>OCA\Notifications\Command\Generate</command>
+	</commands>
+
 	<dependencies>
 		<owncloud min-version="10.0" max-version="10.0" />
 	</dependencies>
+	<use-migrations>true</use-migrations>
 </info>

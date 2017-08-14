@@ -244,6 +244,10 @@ class Handler {
 		$sql->setValue('link', $sql->createParameter('link'))
 			->setParameter('link', $notification->getLink());
 
+		if (method_exists($notification, 'getIcon')) {
+			$sql->setValue('icon', $sql->createNamedParameter($notification->getIcon()));
+		}
+
 		$actions = [];
 		foreach ($notification->getActions() as $action) {
 			/** @var IAction $action */
@@ -280,6 +284,9 @@ class Handler {
 		}
 		if ($row['link'] !== '') {
 			$notification->setLink($row['link']);
+		}
+		if (method_exists($notification, 'setIcon') && $row['icon'] !== '' && $row['icon'] !== null) {
+			$notification->setIcon($row['icon']);
 		}
 
 		$actions = (array) json_decode($row['actions'], true);

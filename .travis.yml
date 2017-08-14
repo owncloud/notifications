@@ -1,7 +1,10 @@
 language: php
 php:
   - 5.6
-  - 7
+  - 7.0
+  - 7.1
+  - 7.2
+  - nightly
 
 env:
   global:
@@ -81,6 +84,6 @@ matrix:
 #    - php: 5.4
 #      env: DB=mysql;JSTESTS=1
   allow_failures:
-    - php: hhvm
+    - php: nightly
     - env: DB=mysql;CODECHECK=2
   fast_finish: true
