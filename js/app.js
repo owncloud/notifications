@@ -62,7 +62,7 @@
 			OC.registerMenu(this.$button, this.$container);
 			this.$button.on('click', this._onNotificationsButtonClick);
 
-			this.$container.on('click', '.action-button', _.bind(this._onClickAction, this));
+			this.$container.on('click', '.notification-action-button', _.bind(this._onClickAction, this));
 			this.$container.on('click', '.notification-delete', _.bind(this._onClickDismissNotification, this));
 
 			// Setup the background checker
