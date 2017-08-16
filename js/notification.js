@@ -94,7 +94,6 @@
 				message += '…';
 			}
 
-			message = escapeHTML(message);
 			message = message.replace(new RegExp("\n", 'g'), ' ');
 
 			return message;
@@ -140,7 +139,7 @@
 
 			var $title = $('<h3>', {
 				'class' : cssNameSpace + '-title',
-				'text'  : escapeHTML(this.getSubject())
+				'text'  : this.getSubject()
 			});
 
 			var $message = $('<p>', {
