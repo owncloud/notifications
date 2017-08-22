@@ -170,7 +170,7 @@
 				var $link = $('<a>', {
 					'class' : cssNameSpace + '-link',
 					'href'  : this.getLink(),
-					'text'  : escapeHTML(this.getSubject())
+					'text'  : this.getSubject()
 				});
 
 				// Replace title content with link
