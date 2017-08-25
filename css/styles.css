@@ -121,17 +121,29 @@
 	margin-right: 14px;
 }
 
+.notification .notification-content {
+	overflow: hidden;
+}
+
 .notification .notification-title {
 	color: #000;
 	font-size: 12.8px;
 	line-height: 20.48px;
 	font-weight: 600;
 	margin: 5px 0 10px;
+	width: 270px;
+	/*white-space: nowrap;*/
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .notification .notification-message {
 	line-height: 20px;
 	padding-bottom: 5px;
+	width: 270px;
+	/*white-space: nowrap;*/
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .notification-container {
