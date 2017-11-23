@@ -23,6 +23,7 @@ namespace OCA\Notifications;
 
 
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\IAutobahn;
 use OCP\IDBConnection;
 use OCP\Notification\IAction;
 use OCP\Notification\IManager;
@@ -54,7 +55,10 @@ class Handler {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->insert('notifications');
 		$this->sqlInsert($sql, $notification);
-		$sql->execute();
+		$id = $sql->execute();
+		// TODO: if enabled
+		\OC::$server->query(IAutobahn::class)->publish('org.owncloud.user-notification', json_encode($notification));
+		return $id;
 	}
 
 	/**
@@ -88,6 +92,9 @@ class Handler {
 		$sql->delete('notifications');
 		$this->sqlWhere($sql, $notification);
 		$sql->execute();
+
+		// TODO: if enabled
+		\OC::$server->query(IAutobahn::class)->publish('org.owncloud.user-notification', json_encode($notification));
 	}
 
 	/**
@@ -105,6 +112,9 @@ class Handler {
 			->andWhere($sql->expr()->eq('user', $sql->createParameter('user')))
 			->setParameter('user', $user);
 		$sql->execute();
+
+		// TODO: if enabled
+		\OC::$server->query(IAutobahn::class)->publish('org.owncloud.user-notification', json_encode($notification));
 	}
 
 	/**

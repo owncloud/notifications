@@ -66,7 +66,11 @@
 			this.$container.on('click', '.notification-delete', _.bind(this._onClickDismissNotification, this));
 
 			// Setup the background checker
-			this.interval = setInterval(_.bind(this.backgroundFetch, this), this.pollInterval);
+			if (OC.Autobahn) {
+				OC.Autobahn.subscribe('org.owncloud.user-notification', _.bind(this.backgroundFetch, this));
+			} else {
+				this.interval = setInterval(_.bind(this.backgroundFetch, this), this.pollInterval);
+			}
 		},
 
 		_onClickDismissNotification: function(event) {
