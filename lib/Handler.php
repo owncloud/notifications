@@ -28,6 +28,7 @@ use OCP\IDBConnection;
 use OCP\Notification\IAction;
 use OCP\Notification\IManager;
 use OCP\Notification\INotification;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 class Handler {
 	/** @var IDBConnection */
@@ -57,7 +58,11 @@ class Handler {
 		$this->sqlInsert($sql, $notification);
 		$id = $sql->execute();
 		// TODO: if enabled
-		\OC::$server->query(IAutobahn::class)->publish('org.owncloud.user-notification', json_encode($notification));
+//		\OC::$server->query(IAutobahn::class)->publish('org.owncloud.user-notification', json_encode($notification));
+		\OC::$server->getEventDispatcher()->dispatch('notification.added',
+			new GenericEvent('', [
+				'id' => $id
+			]));
 		return $id;
 	}
 
@@ -94,7 +99,12 @@ class Handler {
 		$sql->execute();
 
 		// TODO: if enabled
-		\OC::$server->query(IAutobahn::class)->publish('org.owncloud.user-notification', json_encode($notification));
+//		\OC::$server->query(IAutobahn::class)->publish('org.owncloud.user-notification', json_encode($notification));
+		\OC::$server->getEventDispatcher()->dispatch('notification.deleted',
+			new GenericEvent('', [
+//				'id' => $notification->getI
+			]));
+
 	}
 
 	/**
@@ -114,7 +124,11 @@ class Handler {
 		$sql->execute();
 
 		// TODO: if enabled
-		\OC::$server->query(IAutobahn::class)->publish('org.owncloud.user-notification', json_encode($notification));
+//		\OC::$server->query(IAutobahn::class)->publish('org.owncloud.user-notification', json_encode($notification));
+		\OC::$server->getEventDispatcher()->dispatch('notification.deleted',
+			new GenericEvent('', [
+				'id' => $id
+			]));
 	}
 
 	/**
