@@ -48,6 +48,13 @@ class HandlerTest extends TestCase {
 		]));
 	}
 
+	protected function tearDown() {
+		parent::tearDown();
+		$this->handler->delete($this->getNotification([
+			'getApp' => 'testing_notifications',
+		]));
+	}
+
 	public function testFull() {
 		$notification = $this->getNotification([
 			'getApp' => 'testing_notifications',
@@ -236,5 +243,26 @@ class HandlerTest extends TestCase {
 		}
 
 		return $notification;
+	}
+
+	public function testInsert() {
+		$notification = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+			'getDateTime' => new \DateTime(),
+			'getObjectType' => 'notification',
+			'getObjectId' => '1337',
+			'getSubject' => 'subject',
+		]);
+
+		// Add and count
+		$this->handler->add($notification);
+
+		$limitedNotification = $this->getNotification([
+			'getApp' => 'testing_notifications',
+		]);
+
+		$notifications = $this->handler->get($limitedNotification);
+		$this->assertCount(1, $notifications);
 	}
 }

@@ -279,10 +279,10 @@ class Handler {
 			->setObject($row['object_type'], $row['object_id'])
 			->setSubject($row['subject'], (array) json_decode($row['subject_parameters'], true));
 
-		if ($row['message'] !== '') {
+		if ($row['message'] !== '' && $row['message'] !== null) {
 			$notification->setMessage($row['message'], (array) json_decode($row['message_parameters'], true));
 		}
-		if ($row['link'] !== '') {
+		if ($row['link'] !== '' && $row['link'] !== null) {
 			$notification->setLink($row['link']);
 		}
 		if (method_exists($notification, 'setIcon') && isset($row['icon']) && $row['icon'] !== '' && $row['icon'] !== null) {
