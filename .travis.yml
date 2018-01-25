@@ -1,4 +1,5 @@
 language: php
+sudo: required
 php:
   - 5.6
   - 7.0
@@ -18,8 +19,10 @@ branches:
     - /^stable\d+(\.\d+)?$/
 
 before_install:
-  - wget https://raw.githubusercontent.com/owncloud/administration/master/travis-ci/before_install.sh
-  - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
+  - which php
+  - more $(which pecl)
+  - which phpize
+  - bash tests/.travis/before_install.sh $APP_NAME $CORE_BRANCH $DB
 
   # Add some output debugging information
   - cd ../core
@@ -66,6 +69,8 @@ script:
 
 matrix:
   include:
+    - php: 5.6
+      env: DB=oracle
     - php: 5.6
       env: DB=mysql
     - php: 5.6
