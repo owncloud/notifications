@@ -41,11 +41,12 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	protected $deletedNotification;
 
 	/**
-	 * @Given /^user "([^"]*)" has notifications$/
+	 * @When /^user "([^"]*)" is sent (?:a|another) notification$/
+	 * @Given /^user "([^"]*)" has been sent (?:a|another) notification$/
 	 *
 	 * @param string $user
 	 */
-	public function hasNotifications($user) {
+	public function hasBeenSentANotification($user) {
 		if ($user === 'test1') {
 			$response = $this->setTestingValue('POST', 'apps/notificationsintegrationtesting/notifications', null);
 			PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
@@ -54,12 +55,13 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Given /^user "([^"]*)" receives notification with$/
+	 * @When /^user "([^"]*)" is sent (?:a|another) notification with$/
+	 * @Given /^user "([^"]*)" has been sent (?:a|another) notification with$/
 	 *
 	 * @param string $user
 	 * @param \Behat\Gherkin\Node\TableNode|null $formData
 	 */
-	public function receiveNotification($user, \Behat\Gherkin\Node\TableNode $formData) {
+	public function hasBeenSentANotificationWith($user, \Behat\Gherkin\Node\TableNode $formData) {
 		if ($user === 'test1') {
 			$response = $this->setTestingValue('POST', 'apps/notificationsintegrationtesting/notifications', $formData);
 			PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
@@ -68,7 +70,7 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then /^list of notifications has (\d+) entries$/
+	 * @Then /^the list of notifications should have (\d+) (?:entry|entries)$/
 	 *
 	 * @param int $numNotifications
 	 */
@@ -85,7 +87,7 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then /^user "([^"]*)" has (\d+) notifications(| missing the last one| missing the first one)$/
+	 * @Then /^user "([^"]*)" should have (\d+) notification(?:s|)(| missing the last one| missing the first one)$/
 	 *
 	 * @param string $user
 	 * @param int $numNotifications
@@ -119,7 +121,7 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then /^(first|last) notification matches$/
+	 * @Then /^the (first|last) notification should match$/
 	 *
 	 * @param \Behat\Gherkin\Node\TableNode|null $formData
 	 */
@@ -142,7 +144,7 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then /^delete (first|last) notification$/
+	 * @When /^the user deletes the (first|last) notification$/
 	 *
 	 * @param string $firstOrLast
 	 */
