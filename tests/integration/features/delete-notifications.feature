@@ -1,4 +1,5 @@
 Feature: delete-notifications
+
   Background:
     Given user "test1" has been created
     Given as user "test1"
