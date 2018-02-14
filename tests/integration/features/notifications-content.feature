@@ -1,7 +1,7 @@
 Feature: notifications-content
   Background:
-    Given user "test1" exists
-    Given As user "test1"
+    Given user "test1" has been created
+    Given as user "test1"
 
   Scenario: Create notification
     Given user "test1" receives notification with
