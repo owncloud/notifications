@@ -8,7 +8,7 @@ php:
 
 env:
   global:
-    - CORE_BRANCH=master
+    - CORE_BRANCH=remove-deprecated-integration-test-methods-03
     - APP_NAME=notifications
   matrix:
     - DB=sqlite
@@ -86,7 +86,7 @@ matrix:
     - php: 5.6
       env: DB=mysql INTEGRATION=1
     - php: 5.6
-      env: DB=mysql INTEGRATION=1 CORE_BRANCH=stable10
+      env: DB=mysql INTEGRATION=1 CORE_BRANCH=remove-deprecated-integration-test-methods-03
 #    - php: 5.4
 #      env: DB=mysql;JSTESTS=1
   allow_failures:
