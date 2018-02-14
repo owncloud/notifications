@@ -4,17 +4,17 @@ Feature: delete-notifications
     Given as user "test1"
 
   Scenario: Delete first notification
-    Given user "test1" has notifications
-    Given user "test1" has notifications
-    Given user "test1" has notifications
-    Then user "test1" has 3 notifications
-    And delete first notification
-    And user "test1" has 2 notifications missing the first one
+    When user "test1" is sent a notification
+    And user "test1" is sent another notification
+    And user "test1" is sent another notification
+    Then user "test1" should have 3 notifications
+    When the user deletes the first notification
+    Then user "test1" should have 2 notifications missing the first one
 
   Scenario: Delete last notification
-    Given user "test1" has notifications
-    Given user "test1" has notifications
-    Given user "test1" has notifications
-    Then user "test1" has 3 notifications
-    And delete last notification
-    And user "test1" has 2 notifications missing the last one
+    When user "test1" is sent a notification
+    And user "test1" is sent another notification
+    And user "test1" is sent another notification
+    Then user "test1" should have 3 notifications
+    When the user deletes the last notification
+    Then user "test1" should have 2 notifications missing the last one
