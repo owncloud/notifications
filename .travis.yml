@@ -34,7 +34,7 @@ before_install:
 
   # Setup behat for integration tests
   - cd apps/$APP_NAME/
-  - cd tests/Integration/
+  - cd tests/integration/
   - sh -c "if [ '$INTEGRATION' = '1' ]; then composer install; fi"
   - cd ../../
 
@@ -52,7 +52,7 @@ script:
   - cd ../..
 
   # Integration tests
-  - cd tests/Integration
+  - cd tests/integration
   - sh -c "if [ '$INTEGRATION' = '1' ]; then bash run.sh; fi"
   - cd ../..
 
