@@ -8,7 +8,7 @@ php:
 
 env:
   global:
-    - CORE_BRANCH=stable10
+    - CORE_BRANCH=stable10-rename-integration-to-acceptance
     - APP_NAME=notifications
   matrix:
     - DB=sqlite
@@ -84,17 +84,17 @@ matrix:
     - php: 5.6
       env: DB=mysql INTEGRATION=1
     - php: 7.1
-      env: DB=oracle CORE_BRANCH=master
+      env: DB=oracle CORE_BRANCH=rename-integration-to-acceptance
     - php: 7.1
-      env: DB=mysql CORE_BRANCH=master
+      env: DB=mysql CORE_BRANCH=rename-integration-to-acceptance
     - php: 7.1
-      env: DB=pgsql CORE_BRANCH=master
+      env: DB=pgsql CORE_BRANCH=rename-integration-to-acceptance
     - php: 7.1
-      env: DB=mysql CODECHECK=1 CORE_BRANCH=master
+      env: DB=mysql CODECHECK=1 CORE_BRANCH=rename-integration-to-acceptance
     - php: 7.1
-      env: DB=mysql CODECHECK=2 CORE_BRANCH=master
+      env: DB=mysql CODECHECK=2 CORE_BRANCH=rename-integration-to-acceptance
     - php: 7.1
-      env: DB=mysql INTEGRATION=1 CORE_BRANCH=master
+      env: DB=mysql INTEGRATION=1 CORE_BRANCH=rename-integration-to-acceptance
   allow_failures:
     - env: DB=mysql;CODECHECK=2
   fast_finish: true
