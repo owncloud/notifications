@@ -19,20 +19,15 @@
  *
  */
 
-$controller = new \OCA\NotificationsIntegrationTesting\Controller(
-	'notificationsintegrationtesting',
-	\OC::$server->getRequest(),
-	\OC::$server->getNotificationManager()
-);
-\OCP\API::register(
-	'delete',
-	'/apps/notificationsintegrationtesting',
-	[$controller, 'deleteNotifications'],
-	'notifications'
-);
-\OCP\API::register(
-	'post',
-	'/apps/notificationsintegrationtesting/notifications',
-	[$controller, 'addNotification'],
-	'notifications'
-);
+namespace OCA\NotificationsAcceptanceTesting\AppInfo;
+
+use OCA\NotificationsAcceptanceTesting\Notifier;
+
+\OC::$server->getNotificationManager()->registerNotifier(function() {
+	return new Notifier();
+}, function() {
+	return [
+		'id' => 'testing',
+		'name' => 'testing',
+	];
+});

@@ -19,7 +19,7 @@
  *
  */
 
-namespace OCA\NotificationsIntegrationTesting;
+namespace OCA\NotificationsAcceptanceTesting;
 
 
 use OCP\Notification\INotification;
@@ -34,7 +34,7 @@ class Notifier implements INotifier {
 	 * @throws \InvalidArgumentException When the notification was not prepared by a notifier
 	 */
 	public function prepare(INotification $notification, $languageCode) {
-		if ($notification->getApp() === 'notificationsintegrationtesting') {
+		if ($notification->getApp() === 'notificationsacceptancetesting') {
 			$notification->setParsedSubject($notification->getSubject());
 			$notification->setParsedMessage($notification->getMessage());
 			return $notification;

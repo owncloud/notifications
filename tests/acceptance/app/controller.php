@@ -19,7 +19,7 @@
  *
  */
 
-namespace OCA\NotificationsIntegrationTesting;
+namespace OCA\NotificationsAcceptanceTesting;
 
 use OCP\AppFramework\Http;
 use OCP\IRequest;
@@ -48,7 +48,7 @@ class Controller extends \OCP\AppFramework\Controller {
 	 */
 	public function addNotification() {
 		$notification = $this->manager->createNotification();
-		$notification->setApp($this->request->getParam('app', 'notificationsintegrationtesting'))
+		$notification->setApp($this->request->getParam('app', 'notificationsacceptancetesting'))
 			->setDateTime(\DateTime::createFromFormat('U', $this->request->getParam('timestamp', 1449585176))) // 2015-12-08T14:32:56+00:00
 			->setUser($this->request->getParam('user', 'test1'))
 			->setSubject($this->request->getParam('subject', 'testing'))
