@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <info>
-	<id>notificationsintegrationtesting</id>
-	<name>Notifications Integration Testing</name>
+	<id>notificationsacceptancetesting</id>
+	<name>Notifications Acceptance Testing</name>
 	<description/>
 
 	<licence>AGPL</licence>
