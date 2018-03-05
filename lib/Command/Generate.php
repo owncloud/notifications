@@ -19,15 +19,14 @@
  *
  */
 
-
 namespace OCA\Notifications\Command;
 
-
-use OCA\Notifications\AppInfo\Application;
-use OCP\IGroup;
+use OCP\IGroupManager;
 use OCP\IURLGenerator;
+use OCP\IUser;
 use OCP\Notification\IManager;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -39,14 +38,17 @@ class Generate extends Command {
 	private $manager;
 	/** @var IURLGenerator */
 	private $urlGenerator;
+	/** @var IGroupManager  */
+	protected $groupManager;
 
 	/**
 	 * @param IManager $manager
 	 */
-	function __construct(IManager $manager, IURLGenerator $urlGenerator) {
+	function __construct(IManager $manager, IURLGenerator $urlGenerator, IGroupManager $groupManager) {
 		parent::__construct();
 		$this->manager = $manager;
 		$this->urlGenerator = $urlGenerator;
+		$this->groupManager = $groupManager;
 	}
 
 	protected function configure() {
@@ -71,16 +73,17 @@ class Generate extends Command {
 
 		$users = [$user];
 		if ($group !== null) {
-			$group = \OC::$server->getGroupManager()->get($group);
+			$group = $this->groupManager->get($group);
 			if ($group === null) {
 				throw new \Exception('Group is not known.');
 			}
-			$users = array_map(function($g) {
-				/** @var IGroup $g */
-				return $g->getGID();
+			$users = array_map(function(IUser $u) {
+				return $u->getUID();
 			}, $group->getUsers());
 		}
 
+		$progress = new ProgressBar($output, count($users));
+		$progress->start();
 		foreach($users as $user) {
 			$time = time();
 			$datetime = new \DateTime();
@@ -100,6 +103,8 @@ class Generate extends Command {
 
 			$notification->setUser($user);
 			$this->manager->notify($notification);
+			$progress->advance();
 		}
+		$progress->finish();
 	}
 }
