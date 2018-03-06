@@ -23,27 +23,28 @@ namespace OCA\Notifications\Panels\Personal;
 
 use OCP\Settings\ISettings;
 use OCP\Template;
-use OCP\IConfig;
 use OCP\IUserSession;
 use OCP\IL10N;
+use OCA\Notifications\Configuration\OptionsStorage;
 
 class NotificationsPanel implements ISettings {
-	/** @var IConfig */
-	private $config;
+	/** @var OptionsStorage */
+	private $optionStorage;
 	/** @var IUserSession */
 	private $userSession;
 	/** @var IL10N */
 	private $l10n;
 
-	public function __construct(IConfig $config, IUserSession $userSession, IL10N $l10n) {
-		$this->config = $config;
+	public function __construct(OptionsStorage $optionStorage, IUserSession $userSession, IL10N $l10n) {
+		$this->optionStorage = $optionStorage;
 		$this->userSession = $userSession;
 		$this->l10n = $l10n;
 	}
 	public function getPanel() {
 		$userObject = $this->userSession->getUser();
 		if ($userObject !== null) {
-			$emailSendingOption = $this->config->getUserValue($userObject->getUID(), 'notifications', 'email_sending_option', 'action');
+			$optionList = $this->optionStorage->getOptions($userObject->getUID());
+			$emailSendingOption = $optionList['email_sending_option'];
 			$possibleOptions = [
 				'never' => [
 					'visibleText' => (string)$this->l10n->t('Do not notify via mail'),
@@ -60,8 +61,12 @@ class NotificationsPanel implements ISettings {
 			];
 
 			if (!isset($possibleOptions[$emailSendingOption])) {
-				$this->config->setUserValue($userObject->getUID(), 'notifications', 'email_sending_option', 'action');
-				$emailSendingOption = 'action';
+				$possibleOptions = array_merge([
+					$emailSendingOption => [
+						'visibleText' => (string)$this->l10n->t('Choose an option'),
+						'selected' => true,
+					],
+				], $possibleOptions);
 			}
 			$possibleOptions[$emailSendingOption]['selected'] = true;
 		} else {
