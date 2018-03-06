@@ -25,6 +25,9 @@
 	<commands>
 		<command>OCA\Notifications\Command\Generate</command>
 	</commands>
+	<settings>
+		<personal>OCA\Notifications\Panels\Personal\NotificationsPanel</personal>
+	</settings>
 
 	<dependencies>
 		<owncloud min-version="10.0" max-version="10.0" />

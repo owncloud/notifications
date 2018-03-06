@@ -24,10 +24,14 @@ namespace OCA\Notifications\AppInfo;
 use OCA\Notifications\Capabilities;
 use OCA\Notifications\Controller\EndpointController;
 use OCA\Notifications\Handler;
+use OCA\Notifications\App as NotificationApp;
+use OCA\Notifications\Notifier;
 use OCP\AppFramework\App;
 use OCP\IContainer;
 use OCP\IUser;
 use OCP\IUserSession;
+use OCP\Notification\Events\RegisterConsumerEvent;
+use OCP\Notification\Events\RegisterNotifierEvent;
 
 class Application extends App {
 	public function __construct (array $urlParams = array()) {
@@ -56,18 +60,16 @@ class Application extends App {
 		});
 
 		$container->registerCapability('Capabilities');
-	}
 
-	/**
-	 * @param IUserSession $session
-	 * @return string
-	 */
-	protected function getCurrentUser(IUserSession $session) {
-		$user = $session->getUser();
-		if ($user instanceof IUser) {
-			$user = $user->getUID();
-		}
+		$dispatcher = $container->getServer()->getEventDispatcher();
 
-		return (string) $user;
+		$dispatcher->addListener(RegisterConsumerEvent::NAME, function(RegisterConsumerEvent $event) use ($container) {
+			$event->registerNotificationConsumer($container->query(NotificationApp::class));
+		});
+
+		$dispatcher->addListener(RegisterNotifierEvent::NAME, function(RegisterNotifierEvent $event) use ($container) {
+			$l10n = $container->getServer()->getL10N('notifications');
+			$event->registerNotifier($container->query(Notifier::class), 'notifications', $l10n->t('Admin notifications'));
+		});
 	}
 }
