@@ -25,9 +25,9 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IUserSession;
-use OCP\IConfig;
 use OCP\IRequest;
 use OCP\IL10N;
+use OCA\Notifications\Configuration\OptionsStorage;
 
 class NotificationOptionsController extends Controller {
 	const ERROR_CODE_MISSING_USER_SESSION = 1;
@@ -36,32 +36,16 @@ class NotificationOptionsController extends Controller {
 
 	/** @var IUserSession */
 	private $userSession;
-	/** @var IConfig */
-	private $config;
+	/** @var OptionsStorage */
+	private $optionStorage;
 	/** @var IL10N */
 	private $l10n;
 
-	private $validOptionValues = [
-		'email_sending_option' => [
-			'values' => ['never', 'action', 'always'],
-			'default' => 'action',
-		],
-	];
-
-	public function __construct(IUserSession $userSession, IConfig $config, IL10N $l10n, IRequest $request) {
+	public function __construct(IUserSession $userSession, OptionsStorage $optionStorage, IL10N $l10n, IRequest $request) {
 		parent::__construct('notifications', $request);
 		$this->userSession = $userSession;
-		$this->config = $config;
+		$this->optionStorage = $optionStorage;
 		$this->l10n = $l10n;
-	}
-
-	/**
-	 * Get the supported options. It will return an array like the following:
-	 * [ <option-key> => ['values' => [<s1>, <s2>, <s3>], 'default' => <s1> ]]
-	 * The <s1>, <s2>, etc are supported values that can be placed in that key.
-	 */
-	public function getValidOptionValuesInfo() {
-		return $this->validOptionValues;
 	}
 
 	/**
@@ -80,42 +64,36 @@ class NotificationOptionsController extends Controller {
 			], Http::STATUS_FORBIDDEN);
 		}
 
-		$missingKeysError = [];
-		$invalidValuesError = [];
-		$validOptions = [];
+		$userid = $userObject->getUID();
+
+		$rejects = [];
 		foreach ($options as $key => $value) {
-			if (isset($this->validOptionValues[$key])) {
-				if (!in_array($value, $this->validOptionValues[$key]['values'], true)) {
-					$invalidValuesError[$key] = $value;
-				} else {
-					$validOptions[$key] = $value;
-				}
-			} else {
-				$missingKeysError[$key] = $value;
+			if (!$this->optionStorage->isOptionValid($key, $value)) {
+				$rejects[$key] = $value;
 			}
 		}
 
 		// reject everything if any option isn't valid
-		if (!empty($invalidValuesError) || !empty($missingKeysError)) {
+		if (!empty($rejects)) {
 			return new JSONResponse([
 				'data' => [
 					'message' => (string)$this->l10n->t('Option not supported'),
 					'errorCode' => self::ERROR_CODE_OPTION_NOT_SUPPORTED,
-					'invalid' => $invalidValuesError,
-					'missing' => $missingKeysError,
+					'rejects' => $rejects,
 				]
 			], Http::STATUS_UNPROCESSABLE_ENTITY);
 		}
 
-		$userid = $userObject->getUID();
-		foreach ($validOptions as $option => $optionValue) {
-			$this->config->setUserValue($userid, 'notifications', $option, $optionValue);
+		foreach ($options as $key => $value) {
+			$this->optionStorage->setOption($userid, $key, $value);
 		}
+
+		$data = array_merge(['id' => $userid], $this->optionStorage->getOptions($userid));
 
 		return new JSONResponse([
 			'data' => [
 				'message' => (string)$this->l10n->t('Saved'),
-				'options' => $this->getOptionsFromConfig($userid),
+				'options' => $data,
 			]
 		]);
 	}
@@ -136,7 +114,7 @@ class NotificationOptionsController extends Controller {
 	public function setNotificationOptions() {
 		$options = $this->fetchParamsFromRequest();
 		// check that all the keys are filled
-		foreach ($this->validOptionValues as $key => $value) {
+		foreach ($this->optionStorage->getValidOptionValuesInfo() as $key => $value) {
 			if (!isset($options[$key])) {
 				return new JSONResponse([
 					'data' => [
@@ -164,26 +142,14 @@ class NotificationOptionsController extends Controller {
 			], Http::STATUS_FORBIDDEN);
 		}
 
-		$data = $this->getOptionsFromConfig($userObject->getUID());
+		$userid = $userObject->getUID();
+		$data = array_merge(['id' => $userid], $this->optionStorage->getOptions($userid));
 
 		return new JSONResponse([
 			'data' => [
 				'options' => $data,
 			],
 		]);
-	}
-
-	/**
-	 * Get the options for the user from the DB. An "id" key with the user name will be added
-	 * @return array [optionKey => optionValue]. An additional "id" => $userid key-value pair will be
-	 * included.
-	 */
-	private function getOptionsFromConfig($userid) {
-		$data = ['id' => $userid];
-		foreach ($this->validOptionValues as $option => $optionValue) {
-			$data[$option] = $this->config->getUserValue($userid, 'notifications', $option, $optionValue['default']);
-		}
-		return $data;
 	}
 
 	private function fetchParamsFromRequest() {
