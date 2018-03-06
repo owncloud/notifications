@@ -1,0 +1,95 @@
+<?php
+/**
+ * @author Juan Pablo Villafáñez <jvillafanez@solidgear.es>
+ *
+ * @copyright Copyright (c) 2018, ownCloud GmbH
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *
+ */
+
+namespace OCA\Notifications\Mailer;
+
+use OCP\Notification\IApp;
+use OCP\Notification\INotification;
+use OCP\IUserManager;
+use OCP\ILogger;
+use OCP\IURLGenerator;
+use OCA\Notifications\Mailer\NotificationMailer;
+
+class NotificationMailerAdapter {
+	/** @var NotificationMailer */
+	private $sender;
+
+	/** @var IUserManager */
+	private $userManager;
+
+	/** @var ILogger */
+	private $logger;
+
+	/** @var IURLGenerator */
+	private $urlGenerator;
+
+	private $appName = 'notifications';
+
+	public function __construct(NotificationMailer $sender, IUserManager $userManager, ILogger $logger, IURLGenerator $urlGenerator) {
+		$this->sender = $sender;
+		$this->userManager = $userManager;
+		$this->logger = $logger;
+		$this->urlGenerator = $urlGenerator;
+	}
+
+	public function sendMail(INotification $notification) {
+		$nObjectType = $notification->getObjectType();
+		$nObjectId = $notification->getObjectId();
+
+		if (!$this->sender->willSendNotification($notification)) {
+			$this->logger->debug("notification $nObjectType#$nObjectId ignored. Prevented by configuration",
+				['app' => $this->appName]);
+			return;
+		}
+
+		$targetUser = $notification->getUser();
+		$userObject = $this->userManager->get($targetUser);
+
+		if ($userObject === null) {
+			$this->logger->warning("notification $nObjectType#$nObjectId can't be sent to $targetUser: the user is missing",
+				['app' => $this->appName]);
+			return;
+		}
+
+		$targetEmail = $userObject->getEMailAddress();
+		if ($targetEmail === null) {
+			$this->logger->warning("notification $nObjectType#$nObjectId can't be sent to $targetUser: email for the user isn't set",
+				['app' => $this->appName]);
+			return;
+		}
+
+		if ($this->sender->validateEmail($targetEmail)) {
+			try {
+				$serverUrl = $notification->getLink();
+				if (empty($serverUrl)) {
+					$serverUrl = $this->urlGenerator->getAbsoluteURL('/');
+				}
+
+				$this->sender->sendNotification($notification, $serverUrl, $targetEmail);
+			} catch (\Exception $ex) {
+				$this->logger->logException($ex, ['app' => $this->appName]);
+			}
+		} else {
+			$this->logger->warning("notification $nObjectType#$nObjectId can't be sent to $targetUser: email \"$targetEmail\" isn't valid");
+		}
+	}
+}
+
