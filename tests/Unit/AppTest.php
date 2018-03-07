@@ -22,8 +22,10 @@
 
 namespace OCA\Notifications\Tests\Unit;
 
-
+use OCP\Notification\INotification;
 use OCA\Notifications\App;
+use OCA\Notifications\Handler;
+use OCA\Notifications\Mailer\NotificationMailerAdapter;
 
 class AppTest extends TestCase {
 	/** @var \OCA\Notifications\Handler|\PHPUnit_Framework_MockObject_MockObject */
@@ -32,28 +34,39 @@ class AppTest extends TestCase {
 	/** @var \OCP\Notification\INotification|\PHPUnit_Framework_MockObject_MockObject */
 	protected $notification;
 
+	/** @var NotificationMailerAdapter|\PHPUnit_Framework_MockObject_MockObject */
+	protected $mailerAdapter;
+
 	/** @var \OCA\Notifications\App */
 	protected $app;
 
 	protected function setUp() {
 		parent::setUp();
 
-		$this->handler = $this->getMockBuilder('OCA\Notifications\Handler')
+		$this->handler = $this->getMockBuilder(Handler::class)
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->notification = $this->getMockBuilder('OCP\Notification\INotification')
+		$this->notification = $this->getMockBuilder(INotification::class)
+			->disableOriginalConstructor()
+			->getMock();
+
+		$this->mailerAdapter = $this->getMockBuilder(NotificationMailerAdapter::class)
 			->disableOriginalConstructor()
 			->getMock();
 
 		$this->app = new App(
-			$this->handler
+			$this->handler,
+			$this->mailerAdapter
 		);
 	}
 
 	public function testNotify() {
 		$this->handler->expects($this->once())
 			->method('add')
+			->with($this->notification);
+		$this->mailerAdapter->expects($this->once())
+			->method('sendMail')
 			->with($this->notification);
 
 		$this->app->notify($this->notification);
