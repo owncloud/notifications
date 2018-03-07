@@ -27,6 +27,7 @@ use OCP\Mail\IMailer;
 use OCP\IConfig;
 use OCP\L10N\IFactory;
 use OCP\Util;
+use OCA\Notifications\Configuration\OptionsStorage;
 
 class NotificationMailer {
 	/** @var IMailer */
@@ -35,16 +36,16 @@ class NotificationMailer {
 	/** @var IManager */
 	private $manager;
 
-	/** @var IConfig */
-	private $config;
+	/** @var OptionsStorage */
+	private $optionsStorage;
 
 	/** @var IFactory */
 	private $l10nFactory;
 
-	public function __construct(IManager $manager, IMailer $mailer, IConfig $config, IFactory $l10nFactory) {
+	public function __construct(IManager $manager, IMailer $mailer, OptionsStorage $optionsStorage, IFactory $l10nFactory) {
 		$this->manager = $manager;
 		$this->mailer = $mailer;
-		$this->config = $config;
+		$this->optionsStorage = $optionsStorage;
 		$this->l10nFactory = $l10nFactory;
 	}
 
@@ -66,7 +67,7 @@ class NotificationMailer {
 		}
 
 		$targetUser = $notification->getUser();
-		$language = $this->config->getUserValue($targetUser, 'core', 'lang', null);
+		$language = $this->optionsStorage->getUserLanguage($targetUser);
 
 		$notification = $this->manager->prepare($notification, $language);
 
@@ -123,7 +124,8 @@ class NotificationMailer {
 	 * @return true if the notification will be sent by the sendNotification method, false otherwise
 	 */
 	public function willSendNotification(INotification $notification) {
-		$option = $this->config->getUserValue($notification->getUser(), 'notifications', 'email_sending_option', 'action');
+		$options = $this->optionsStorage->getOptions($notification->getUser());
+		$option = $options['email_sending_option'];
 		switch ($option) {
 			case 'never':
 				return false;

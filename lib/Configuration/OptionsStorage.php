@@ -53,6 +53,7 @@ class OptionsStorage {
 	 * @return array [optionKey => optionValue].
 	 */
 	public function getOptions($userid) {
+		$data = [];
 		foreach ($this->validOptionValues as $option => $optionValue) {
 			$data[$option] = $this->config->getUserValue($userid, 'notifications', $option, $optionValue['default']);
 		}
@@ -89,5 +90,14 @@ class OptionsStorage {
 		}
 		// we don't have any additional case for now, so return false. More cases could be added later
 		return false;
+	}
+
+	/**
+	 * Get the language of the user. NOTE: This is fetched from the user's preferences, and the value
+	 * won't be set from here.
+	 * @return string|null the language set for the user or null if it isn't set.
+	 */
+	public function getUserLanguage($userid) {
+		return $this->config->getUserValue($userid, 'core', 'lang', null);
 	}
 }

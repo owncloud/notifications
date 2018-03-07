@@ -37,14 +37,14 @@ class NotificationOptionsController extends Controller {
 	/** @var IUserSession */
 	private $userSession;
 	/** @var OptionsStorage */
-	private $optionStorage;
+	private $optionsStorage;
 	/** @var IL10N */
 	private $l10n;
 
-	public function __construct(IUserSession $userSession, OptionsStorage $optionStorage, IL10N $l10n, IRequest $request) {
+	public function __construct(IUserSession $userSession, OptionsStorage $optionsStorage, IL10N $l10n, IRequest $request) {
 		parent::__construct('notifications', $request);
 		$this->userSession = $userSession;
-		$this->optionStorage = $optionStorage;
+		$this->optionsStorage = $optionsStorage;
 		$this->l10n = $l10n;
 	}
 
@@ -68,7 +68,7 @@ class NotificationOptionsController extends Controller {
 
 		$rejects = [];
 		foreach ($options as $key => $value) {
-			if (!$this->optionStorage->isOptionValid($key, $value)) {
+			if (!$this->optionsStorage->isOptionValid($key, $value)) {
 				$rejects[$key] = $value;
 			}
 		}
@@ -85,10 +85,10 @@ class NotificationOptionsController extends Controller {
 		}
 
 		foreach ($options as $key => $value) {
-			$this->optionStorage->setOption($userid, $key, $value);
+			$this->optionsStorage->setOption($userid, $key, $value);
 		}
 
-		$data = array_merge(['id' => $userid], $this->optionStorage->getOptions($userid));
+		$data = array_merge(['id' => $userid], $this->optionsStorage->getOptions($userid));
 
 		return new JSONResponse([
 			'data' => [
@@ -114,7 +114,7 @@ class NotificationOptionsController extends Controller {
 	public function setNotificationOptions() {
 		$options = $this->fetchParamsFromRequest();
 		// check that all the keys are filled
-		foreach ($this->optionStorage->getValidOptionValuesInfo() as $key => $value) {
+		foreach ($this->optionsStorage->getValidOptionValuesInfo() as $key => $value) {
 			if (!isset($options[$key])) {
 				return new JSONResponse([
 					'data' => [
@@ -143,7 +143,7 @@ class NotificationOptionsController extends Controller {
 		}
 
 		$userid = $userObject->getUID();
-		$data = array_merge(['id' => $userid], $this->optionStorage->getOptions($userid));
+		$data = array_merge(['id' => $userid], $this->optionsStorage->getOptions($userid));
 
 		return new JSONResponse([
 			'data' => [

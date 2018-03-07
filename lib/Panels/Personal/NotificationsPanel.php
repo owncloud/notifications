@@ -29,21 +29,21 @@ use OCA\Notifications\Configuration\OptionsStorage;
 
 class NotificationsPanel implements ISettings {
 	/** @var OptionsStorage */
-	private $optionStorage;
+	private $optionsStorage;
 	/** @var IUserSession */
 	private $userSession;
 	/** @var IL10N */
 	private $l10n;
 
-	public function __construct(OptionsStorage $optionStorage, IUserSession $userSession, IL10N $l10n) {
-		$this->optionStorage = $optionStorage;
+	public function __construct(OptionsStorage $optionsStorage, IUserSession $userSession, IL10N $l10n) {
+		$this->optionsStorage = $optionsStorage;
 		$this->userSession = $userSession;
 		$this->l10n = $l10n;
 	}
 	public function getPanel() {
 		$userObject = $this->userSession->getUser();
 		if ($userObject !== null) {
-			$optionList = $this->optionStorage->getOptions($userObject->getUID());
+			$optionList = $this->optionsStorage->getOptions($userObject->getUID());
 			$emailSendingOption = $optionList['email_sending_option'];
 			$possibleOptions = [
 				'never' => [

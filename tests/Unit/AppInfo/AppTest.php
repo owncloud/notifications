@@ -67,18 +67,6 @@ class AppTest extends TestCase {
 		parent::tearDown();
 	}
 
-	public function testRegisterApp() {
-		$this->manager->expects($this->once())
-			->method('registerApp')
-			->willReturnCallback(function($closure) {
-				$this->assertInstanceOf('\Closure', $closure);
-				$navigation = $closure();
-				$this->assertInstanceOf('\OCA\Notifications\App', $navigation);
-			});
-
-		include(__DIR__ . '/../../../appinfo/app.php');
-	}
-
 	public function dataLoadingJSAndCSS() {
 		$user = $this->getMockBuilder('OCP\IUser')
 			->disableOriginalClone()
