@@ -39,8 +39,41 @@ return [
 	],
 
 	'routes' => [
-		['name' => 'NotificationOptions#getNotificationOptions', 'url' => '/settings/personal/notifications/options', 'verb' => 'GET'],
-		['name' => 'NotificationOptions#setNotificationOptions', 'url' => '/settings/personal/notifications/options', 'verb' => 'PUT'],
-		['name' => 'NotificationOptions#setNotificationOptionsPartial', 'url' => '/settings/personal/notifications/options', 'verb' => 'PATCH'],
-	],
+		[
+			'name' => 'NotificationOptions#getNotificationOptions',
+			'url' => '/settings/personal/notifications/options',
+			'verb' => 'GET'
+		],
+		[
+			'name' => 'NotificationOptions#setNotificationOptions',
+			'url' => '/settings/personal/notifications/options',
+			'verb' => 'PUT'
+		],
+		[
+			'name' => 'NotificationOptions#setNotificationOptionsPartial',
+			'url' => '/settings/personal/notifications/options',
+			'verb' => 'PATCH'
+		],
+
+		[
+			'name' => 'EndpointV2#listNotifications',
+			'url' => '/api/v2/notifications',
+			'verb' => 'GET'
+		],
+		[
+			'name' => 'EndpointV2#getNotification',
+			'url' => '/api/v2/notifications/{id}',
+			'verb' => 'GET'
+		],
+		[
+			'name' => 'EndpointV2#deleteNotification',
+			'url' => '/api/v2/notifications/{id}',
+			'verb' => 'DELETE'
+		],
+		[
+			'name' => 'EndpointV2#getLastNotificationId',
+			'url' => '/api/v2/tracker/notifications/polling',
+			'verb' => 'GET'
+		],
+	]
 ];
