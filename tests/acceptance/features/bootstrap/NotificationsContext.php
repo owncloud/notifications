@@ -188,9 +188,7 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	protected function setTestingValue($verb, $url, $body) {
 		$fullUrl = $this->baseUrl . 'v2.php/' . $url;
 		$client = new Client();
-		$options = [
-			'auth' => ['admin', 'admin'],
-		];
+		$options['auth'] = $this->getAuthOptionForAdmin();
 		if ($body instanceof \Behat\Gherkin\Node\TableNode) {
 			$fd = $body->getRowsHash();
 			$options['body'] = $fd;
