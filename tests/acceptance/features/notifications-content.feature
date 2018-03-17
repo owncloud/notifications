@@ -1,3 +1,4 @@
+@api
 Feature: notifications-content
 
   Background:
