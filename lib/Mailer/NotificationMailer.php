@@ -29,6 +29,10 @@ use OCP\L10N\IFactory;
 use OCP\Util;
 use OCA\Notifications\Configuration\OptionsStorage;
 
+/**
+ * The class will focus on sending notifications via email. In addition, some email-related
+ * functions have been added.
+ */
 class NotificationMailer {
 	/** @var IMailer */
 	private $mailer;
@@ -54,9 +58,7 @@ class NotificationMailer {
 	 * @param INotification $notification the notification to be sent
 	 * @param string $serverUrl the url of the server so the user can access to his instance from the
 	 * email. Make sure the url is safe to be used as a clickable link (in case encoding is needed)
-	 * @param string $emailAddress the list of email addresses where the notification should be
-	 * sent. Normally only one email is needed. Note that in case of several emails, the same email
-	 * message will be sent to each of them.
+	 * @param string $emailAddress the  email addresses where the notification should be sent.
 	 * @return \OC\Mail\Message|bool the message sent, or false if the mail isn't sent
 	 * @throws \Exception if the mail couldn't be sent or some recipients didn't
 	 * receive the mail (according to \OCP\Mail\IMailer::send method)
