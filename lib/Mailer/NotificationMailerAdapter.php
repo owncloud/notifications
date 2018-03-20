@@ -28,6 +28,13 @@ use OCP\ILogger;
 use OCP\IURLGenerator;
 use OCA\Notifications\Mailer\NotificationMailer;
 
+/**
+ * Send notifications via mail. This class acts as an adapter of the NotificationMailer and the
+ * application. It will provide logging and additional verifications on top of the
+ * NotificationMailer class, as well as use a simpler interface.
+ * This is intended to be used inside the notification consumer (see \OCA\Notifications\App), so
+ * there is barely any error handling other than logging.
+ */
 class NotificationMailerAdapter {
 	/** @var NotificationMailer */
 	private $sender;

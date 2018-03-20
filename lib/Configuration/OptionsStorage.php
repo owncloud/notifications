@@ -23,6 +23,13 @@ namespace OCA\Notifications\Configuration;
 
 use OCP\IConfig;
 
+/**
+ * Store the configuration options per user for the "notifications" app. The class will provide
+ * a simple and clear interface to access and modify those options, as well as handle default
+ * values consistenly.
+ * The implementation currently uses the "preferences" DB table but might be changed to another
+ * table if needed.
+ */
 class OptionsStorage {
 	/** @var IConfig */
 	private $config;
