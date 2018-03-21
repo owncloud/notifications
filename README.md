@@ -31,3 +31,5 @@ For information how to make your app interact with the notifications app, see
 in the wiki.
 
 If you want to present notifications as a client, see [Reading and deleting notifications as an ownCloud Client](https://github.com/owncloud/notifications/blob/master/docs/ocs-endpoint-v1.md).
+
+Touch to verify CI
