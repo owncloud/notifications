@@ -88,6 +88,9 @@ class EndpointV2Controller extends Controller {
 
 		// fetch the max id before getting the list of notifications
 		$maxId = $this->handler->getMaxNotificationId($userid);
+		if ($maxId === null) {
+			$maxId = -1;
+		}
 
 		if ($order === 'ASC') {
 			// try to get an additional result to check if there is more results available or not
@@ -194,6 +197,9 @@ class EndpointV2Controller extends Controller {
 
 
 		$maxId = $this->handler->getMaxNotificationId($userid);
+		if ($maxId === null) {
+			$maxId = -1;
+		}
 
 		$jsonResponse = new JSONResponse([
 			'id' => $maxId,
