@@ -48,7 +48,7 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	 */
 	public function hasBeenSentANotification($user) {
 		if ($user === 'test1') {
-			$response = $this->setTestingValue('POST', 'apps/notificationsacceptancetesting/notifications', null);
+			$response = $this->setTestingValue('POST', 'apps/testing/api/v1/notifications', null);
 			PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
 			PHPUnit_Framework_Assert::assertEquals(200, (int) $this->getOCSResponseStatusCode($response));
 		}
@@ -63,7 +63,7 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	 */
 	public function hasBeenSentANotificationWith($user, \Behat\Gherkin\Node\TableNode $formData) {
 		if ($user === 'test1') {
-			$response = $this->setTestingValue('POST', 'apps/notificationsacceptancetesting/notifications', $formData);
+			$response = $this->setTestingValue('POST', 'apps/testing/api/v1/notifications', $formData);
 			PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
 			PHPUnit_Framework_Assert::assertEquals(200, (int) $this->getOCSResponseStatusCode($response));
 		}
@@ -174,7 +174,7 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	 * @AfterScenario
 	 */
 	public function clearNotifications() {
-		$response = $this->setTestingValue('DELETE', 'apps/notificationsacceptancetesting', null);
+		$response = $this->setTestingValue('DELETE', 'apps/testing/api/v1/notifications', null);
 		PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
 		PHPUnit_Framework_Assert::assertEquals(200, (int) $this->getOCSResponseStatusCode($response));
 	}

@@ -36,9 +36,7 @@ $OCC config:system:set mail_smtpport --value="1025"
 $OCC config:system:set csrf.disabled --value="true"
 
 #Enable needed app
-cp -R ./app ../../../notificationsacceptancetesting
 $OCC app:enable notifications
-$OCC app:enable notificationsacceptancetesting
 $OCC app:enable testing
 
 vendor/bin/behat --strict -f junit -f pretty $SCENARIO_TO_RUN
@@ -48,9 +46,7 @@ kill $PHPPID
 
 #Disable apps
 $OCC app:disable notifications
-$OCC app:disable notificationsacceptancetesting
 $OCC app:disable testing
-rm -rf ../../../notificationsacceptancetesting
 
 if [ -z $HIDE_OC_LOGS ]; then
 	tail "${OC_PATH}/data/owncloud.log"
