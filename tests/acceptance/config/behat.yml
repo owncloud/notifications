@@ -1,20 +1,36 @@
 default:
   autoload:
-     - %paths.base%/../vendor/autoload.php
+     '': %paths.base%/../features/bootstrap
 
   suites:
     default:
       paths:
-        - %paths.base%/../features
+        - %paths.base%/../features/apiNotifications
       contexts:
         - NotificationsContext:
+        - FeatureContext: &common_feature_context_params
             baseUrl:  http://localhost:8080/ocs/
             adminUsername: admin
             adminPassword: admin
             regularUserPassword: 123456
             mailhogUrl: http://127.0.0.1:8025/api/v2/messages
             ocPath: ../../../../
-
+    webUINotifications:
+      paths:
+        - %paths.base%/../features/webUINotifications
+      context:
+        parameters:
+          ocPath: apps/testing/api/v1/occ
+          adminUsername: admin
+          adminPassword: admin
+          regularUserPassword: 123456
+      contexts:
+        - NotificationsContext:
+        - FeatureContext: *common_feature_context_params
+        - WebUINotificationsContext:
+        - WebUIGeneralContext:
+        - WebUILoginContext:
+        
   extensions:
       jarnaiz\JUnitFormatter\JUnitFormatterExtension:
           filename: report.xml
