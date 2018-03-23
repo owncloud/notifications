@@ -39,7 +39,7 @@ $OCC config:system:set csrf.disabled --value="true"
 $OCC app:enable notifications
 $OCC app:enable testing
 
-vendor/bin/behat --strict -f junit -f pretty $SCENARIO_TO_RUN
+vendor/bin/behat --strict -f junit -f pretty --tags "@api" $SCENARIO_TO_RUN
 RESULT=$?
 
 kill $PHPPID

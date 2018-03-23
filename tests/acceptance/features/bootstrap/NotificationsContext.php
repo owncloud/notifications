@@ -22,17 +22,17 @@
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
-use GuzzleHttp\Client;
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
+use Behat\Gherkin\Node\TableNode;
 use GuzzleHttp\Message\ResponseInterface;
+use TestHelpers\OcsApiHelper;
 
-require __DIR__ . '/../../vendor/autoload.php';
 require_once 'bootstrap.php';
 
 /**
  * Defines application features from the specific context.
  */
 class NotificationsContext implements Context, SnippetAcceptingContext {
-	use BasicStructure;
 
 	/** @var array[] */
 	protected $notificationIds;
@@ -41,17 +41,26 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	protected $deletedNotification;
 
 	/**
+	 * @var FeatureContext
+	 */
+	private $featureContext;
+	
+	/**
 	 * @When /^user "([^"]*)" is sent (?:a|another) notification$/
 	 * @Given /^user "([^"]*)" has been sent (?:a|another) notification$/
 	 *
 	 * @param string $user
 	 */
 	public function hasBeenSentANotification($user) {
-		if ($user === 'test1') {
-			$response = $this->setTestingValue('POST', 'apps/testing/api/v1/notifications', null);
-			PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
-			PHPUnit_Framework_Assert::assertEquals(200, (int) $this->getOCSResponseStatusCode($response));
-		}
+		$this->featureContext->userSendingTo(
+			$user,
+			'POST', '/apps/testing/api/v1/notifications'
+		);
+		$response = $this->featureContext->getResponse();
+		PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
+		PHPUnit_Framework_Assert::assertEquals(
+			200, (int) $this->featureContext->getOCSResponseStatusCode($response)
+		);
 	}
 
 	/**
@@ -61,12 +70,22 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	 * @param string $user
 	 * @param \Behat\Gherkin\Node\TableNode|null $formData
 	 */
-	public function hasBeenSentANotificationWith($user, \Behat\Gherkin\Node\TableNode $formData) {
-		if ($user === 'test1') {
-			$response = $this->setTestingValue('POST', 'apps/testing/api/v1/notifications', $formData);
-			PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
-			PHPUnit_Framework_Assert::assertEquals(200, (int) $this->getOCSResponseStatusCode($response));
-		}
+	public function hasBeenSentANotificationWith($user, TableNode $formData) {
+		//add username to the TableNode,
+		//so it does not need to be mentioned in the table
+		$rows = $formData->getRows();
+		$rows[] = ["user", $user];
+		$formData = new TableNode($rows);
+		
+		$this->featureContext->userSendsHTTPMethodToAPIEndpointWithBody(
+			$this->featureContext->getAdminUsername(),
+			'POST', '/apps/testing/api/v1/notifications', $formData
+		);
+		$response = $this->featureContext->getResponse();
+		PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
+		PHPUnit_Framework_Assert::assertEquals(
+			200, (int) $this->featureContext->getOCSResponseStatusCode($response)
+		);
 	}
 
 	/**
@@ -75,7 +94,9 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	 * @param int $numNotifications
 	 */
 	public function checkNumNotifications($numNotifications) {
-		$notifications = $this->getArrayOfNotificationsResponded($this->response);
+		$notifications = $this->getArrayOfNotificationsResponded(
+			$this->featureContext->getResponse()
+		);
 		PHPUnit_Framework_Assert::assertCount((int) $numNotifications, $notifications);
 
 		$notificationIds = [];
@@ -94,38 +115,43 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	 * @param string $missingLast
 	 */
 	public function userNumNotifications($user, $numNotifications, $missingLast) {
-		if ($user === 'test1') {
-			$this->sendingTo('GET', '/apps/notifications/api/v1/notifications?format=json');
-			PHPUnit_Framework_Assert::assertEquals(200, $this->response->getStatusCode());
+		$this->featureContext->userSendingTo(
+			$user, 'GET', '/apps/notifications/api/v1/notifications?format=json'
+		);
+		PHPUnit_Framework_Assert::assertEquals(
+			200, $this->featureContext->getResponse()->getStatusCode()
+		);
 
-			$previousNotificationIds = [];
-			if ($missingLast) {
-				PHPUnit_Framework_Assert::assertNotEmpty($this->notificationIds);
-				$previousNotificationIds = end($this->notificationIds);
+		$previousNotificationIds = [];
+		if ($missingLast) {
+			PHPUnit_Framework_Assert::assertNotEmpty($this->notificationIds);
+			$previousNotificationIds = end($this->notificationIds);
+		}
+
+		$this->checkNumNotifications((int) $numNotifications);
+
+		if ($missingLast) {
+			$now = end($this->notificationIds);
+			if ($missingLast === ' missing the last one') {
+				array_unshift($now, $this->deletedNotification);
+			} else {
+				$now[] = $this->deletedNotification;
 			}
 
-			$this->checkNumNotifications((int) $numNotifications);
-
-			if ($missingLast) {
-				$now = end($this->notificationIds);
-				if ($missingLast === ' missing the last one') {
-					array_unshift($now, $this->deletedNotification);
-				} else {
-					$now[] = $this->deletedNotification;
-				}
-
-				PHPUnit_Framework_Assert::assertEquals($previousNotificationIds, $now);
-			}
-
+			PHPUnit_Framework_Assert::assertEquals($previousNotificationIds, $now);
 		}
 	}
 
 	/**
-	 * @Then /^the (first|last) notification should match$/
+	 * @Then /^the (first|last) notification of user "([^"]*)" should match$/
 	 *
-	 * @param \Behat\Gherkin\Node\TableNode|null $formData
+	 * @param string $notification first|last
+	 * @param string $user
+	 * @param \Behat\Gherkin\Node\TableNode $formData
+	 * 
+	 * @return void
 	 */
-	public function matchNotification($notification, $formData) {
+	public function matchNotification($notification, $user, $formData) {
 		$lastNotifications = end($this->notificationIds);
 		if ($notification === 'first') {
 			$notificationId = reset($lastNotifications);
@@ -133,9 +159,16 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 			$notificationId = end($lastNotifications);
 		}
 
-		$this->sendingTo('GET', '/apps/notifications/api/v1/notifications/' . $notificationId . '?format=json');
-		PHPUnit_Framework_Assert::assertEquals(200, $this->response->getStatusCode());
-		$response = json_decode($this->response->getBody()->getContents(), true);
+		$this->featureContext->userSendingTo(
+			$user, 'GET', '/apps/notifications/api/v1/notifications/' .
+			$notificationId . '?format=json'
+		);
+		PHPUnit_Framework_Assert::assertEquals(
+			200, $this->featureContext->getResponse()->getStatusCode()
+		);
+		$response = json_decode(
+			$this->featureContext->getResponse()->getBody()->getContents(), true
+		);
 
 		foreach ($formData->getRowsHash() as $key => $value) {
 			PHPUnit_Framework_Assert::assertArrayHasKey($key, $response['ocs']['data']);
@@ -144,11 +177,12 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @When /^the user deletes the (first|last) notification$/
+	 * @When /^user "([^"]*)" deletes the (first|last) notification$/
 	 *
+	 * @param string $user
 	 * @param string $firstOrLast
 	 */
-	public function deleteNotification($firstOrLast) {
+	public function deleteNotification($user, $firstOrLast) {
 		PHPUnit_Framework_Assert::assertNotEmpty($this->notificationIds);
 		$lastNotificationIds = end($this->notificationIds);
 		if ($firstOrLast === 'first') {
@@ -156,7 +190,11 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 		} else {
 			$this->deletedNotification = reset($lastNotificationIds);
 		}
-		$this->sendingTo('DELETE', '/apps/notifications/api/v1/notifications/' . $this->deletedNotification);
+		$this->featureContext->userSendingTo(
+			$user,
+			'DELETE',
+			'/apps/notifications/api/v1/notifications/' . $this->deletedNotification
+		);
 	}
 
 	/**
@@ -170,35 +208,36 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @BeforeScenario
+	 * 
 	 * @AfterScenario
 	 */
 	public function clearNotifications() {
-		$response = $this->setTestingValue('DELETE', 'apps/testing/api/v1/notifications', null);
+		$response = OcsApiHelper::sendRequest(
+			$this->featureContext->baseUrlWithoutOCSAppendix(),
+			$this->featureContext->getAdminUsername(),
+			$this->featureContext->getAdminPassword(),
+			"DELETE",
+			'/apps/testing/api/v1/notifications'
+		);
 		PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
-		PHPUnit_Framework_Assert::assertEquals(200, (int) $this->getOCSResponseStatusCode($response));
+		PHPUnit_Framework_Assert::assertEquals(
+			200, (int) $this->featureContext->getOCSResponseStatusCode($response)
+		);
 	}
 
 	/**
-	 * @param $verb
-	 * @param $url
-	 * @param $body
-	 * @return \GuzzleHttp\Message\FutureResponse|ResponseInterface|null
+	 * @BeforeScenario
+	 *
+	 * @param BeforeScenarioScope $scope
+	 *
+	 * @return void
 	 */
-	protected function setTestingValue($verb, $url, $body) {
-		$fullUrl = $this->baseUrl . 'v2.php/' . $url;
-		$client = new Client();
-		$options['auth'] = $this->getAuthOptionForAdmin();
-		if ($body instanceof \Behat\Gherkin\Node\TableNode) {
-			$fd = $body->getRowsHash();
-			$options['body'] = $fd;
-		}
-
-		try {
-			return $client->send($client->createRequest($verb, $fullUrl, $options));
-		} catch (\GuzzleHttp\Exception\ClientException $ex) {
-			return $ex->getResponse();
-		}
+	public function setUpScenario(BeforeScenarioScope $scope) {
+		// Get the environment
+		$environment = $scope->getEnvironment();
+		// Get all the contexts you need in this context
+		$this->featureContext = $environment->getContext('FeatureContext');
+		$this->clearNotifications();
 	}
 
 	/**
