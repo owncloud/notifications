@@ -3,7 +3,8 @@ Feature: statuscodes
 
   Background:
     Given user "test1" has been created
-    Given as user "test1"
+    And as user "test1"
+    And using API version "2"
 
   Scenario: Status code when reading notifications with notifiers and without notifications
     When the user sends HTTP method "GET" to API endpoint "/apps/notifications/api/v1/notifications?format=json"
