@@ -60,11 +60,11 @@
 			// Initial call to the notification endpoint
 			var self = this;
 			this.fetchDescendentV2(
-				OC.generateUrl('apps/notifications/api/v2/notifications?limit=3'),
+				OC.generateUrl('apps/notifications/api/v2/notifications?limit=3&format=json'),
 				function(result, textStatus, jqxhr) {
 					self.updateLastKnowId(jqxhr.getResponseHeader('OC-Last-Notification'));
-					if (result.data.length > 0) {
-						self.updateLastShownId(result.data[0].notification_id);
+					if (result.ocs.data.notifications.length > 0) {
+						self.updateLastShownId(result.ocs.data.notifications[0].notification_id);
 					}
 			});
 
@@ -178,13 +178,13 @@
 				type: 'GET'
 			}).done(function(result, textStatus, jqxhr) {
 					// Fill Array
-					$.each(result.data, function(index) {
-						var n = new self.Notif(result.data[index]);
+					$.each(result.ocs.data.notifications, function(index) {
+						var n = new self.Notif(result.ocs.data.notifications[index]);
 						self.notifications[n.getId()] = n;
 						self.appendToUI(n);
 					});
-					if (typeof result.next !== 'undefined') {
-						self.addShowMoreNotificationsButton(result.next);
+					if (typeof result.ocs.data.next !== 'undefined') {
+						self.addShowMoreNotificationsButton(result.ocs.data.next);
 					}
 					// Check if we have any, and notify the UI
 					if (self.numNotifications() !== 0) {
@@ -221,13 +221,13 @@
 				type: 'GET'
 			}).done(function(result, textStatus, jqxhr){
 					// Fill Array
-					$.each(result.data, function(index) {
-						var n = new self.Notif(result.data[index]);
+					$.each(result.ocs.data.notifications, function(index) {
+						var n = new self.Notif(result.ocs.data.notifications[index]);
 						self.notifications[n.getId()] = n;
 						self.addToUI(n);
 					});
-					if (typeof result.next !== 'undefined') {
-						self.addShowNewerNotificationsButton(result.next);
+					if (typeof result.ocs.data.next !== 'undefined') {
+						self.addShowNewerNotificationsButton(result.ocs.data.next);
 					}
 					// Check if we have any, and notify the UI
 					if (self.numNotifications() !== 0) {
@@ -255,7 +255,7 @@
 		pollingV2: function() {
 			var self = this;
 			var request = $.ajax({
-				url: OC.generateUrl('apps/notifications/api/v2/tracker/notifications/polling'),
+				url: OC.generateUrl('apps/notifications/api/v2/tracker/notifications/polling?format=json'),
 				type: 'GET'
 			}).done(function(result, textStatus, jqxhr){
 				var lastNotificationId = jqxhr.getResponseHeader('OC-Last-Notification');
@@ -310,7 +310,7 @@
 				// if we don't know the id shown, rely on the stored one
 				lastShownId = this.getLastShownId();
 			}
-			var targetUrl = OC.generateUrl('apps/notifications/api/v2/notifications?id=' + lastShownId + '&fetch=asc&limit=3');
+			var targetUrl = OC.generateUrl('apps/notifications/api/v2/notifications?id=' + lastShownId + '&fetch=asc&limit=3&format=json');
 			this.addShowNewerNotificationsButton(targetUrl);
 		},
 

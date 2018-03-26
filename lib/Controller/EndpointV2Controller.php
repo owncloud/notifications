@@ -22,7 +22,7 @@ namespace OCA\Notifications\Controller;
 
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\OCSResponse;
 use OCP\IConfig;
 use OCP\IRequest;
 use OCP\IUserSession;
@@ -67,11 +67,12 @@ class EndpointV2Controller extends Controller {
 	 * @param int $id the id of the notification
 	 * @param string $fetch the fetch order
 	 * @param int $limit the limit for the number of notifications to be returned
+	 * @param string $format the format of the result: 'json' or 'xml'
 	 */
-	public function listNotifications($id = null, $fetch = 'desc', $limit = self::ENFORCED_LIST_LIMIT) {
+	public function listNotifications($id = null, $fetch = 'desc', $limit = self::ENFORCED_LIST_LIMIT, $format = 'json') {
 		$userObject = $this->userSession->getUser();
 		if ($userObject === null) {
-			return new JSONResponse(null, Http::STATUS_FORBIDDEN);
+			return new OCSResponse($format, Http::STATUS_FORBIDDEN, null, [], null, null, true);
 		}
 		$userid = $userObject->getUID();
 
@@ -118,19 +119,20 @@ class EndpointV2Controller extends Controller {
 				'id' => $data[count($data) - 1]['notification_id'],
 				'fetch' => strtolower($order),
 				'limit' => $maxResults,
+				'format' => $format,
 			]);
 
-			$jsonResponse = new JSONResponse([
-				'data' => $data,
+			$ocsResponse = new OCSResponse($format, Http::STATUS_OK, null, [
+				'notifications' => $data,
 				'next' => $url,
-			]);
+			], null, null, true);
 		} else {
-			$jsonResponse = new JSONResponse([
-				'data' => $data,
-			]);
+			$ocsResponse = new OCSResponse($format, Http::STATUS_OK, null, [
+				'notifications' => $data,
+			], null, null, true);
 		}
-		$jsonResponse->addHeader('OC-Last-Notification', $maxId);
-		return $jsonResponse;
+		$ocsResponse->addHeader('OC-Last-Notification', $maxId);
+		return $ocsResponse;
 	}
 
 	/**
@@ -138,19 +140,20 @@ class EndpointV2Controller extends Controller {
 	 * @NoCSRFRequired
 	 *
 	 * @param int $id
+	 * @param string $format either 'json' or 'xml'
 	 * @return Result
 	 */
-	public function getNotification($id) {
+	public function getNotification($id, $format = 'json') {
 		$userObject = $this->userSession->getUser();
 		if ($userObject === null) {
-			return new JSONResponse(null, Http::STATUS_FORBIDDEN);
+			return new OCSResponse($format, Http::STATUS_FORBIDDEN, null, [], null, null, true);
 		}
 		$userid = $userObject->getUID();
 
 		$notification = $this->handler->getById($id, $userid);
 
 		if (!($notification instanceof INotification)) {
-			return new JSONResponse(null, HTTP::STATUS_NOT_FOUND);
+			return new OCSResponse($format, Http::STATUS_NOT_FOUND, null, [], null, null, true);
 		}
 
 		$language = $this->config->getUserValue($userid, 'core', 'lang', null);
@@ -159,10 +162,11 @@ class EndpointV2Controller extends Controller {
 			$notification = $this->manager->prepare($notification, $language);
 		} catch (\InvalidArgumentException $e) {
 			// The app was disabled
-			return new JSONResponse(null, HTTP::STATUS_NOT_FOUND);
+			return new OCSResponse($format, Http::STATUS_NOT_FOUND, null, [], null, null, true);
 		}
 
-		return new JSONResponse($this->notificationToArray($id, $notification));
+		return new OCSResponse($format, Http::STATUS_OK, null,
+			$this->notificationToArray($id, $notificationToArray), null, null, true);
 	}
 
 	/**
@@ -170,28 +174,31 @@ class EndpointV2Controller extends Controller {
 	 * @NoCSRFRequired
 	 *
 	 * @param int $id
+	 * @param string $format either 'json' or 'xml'
 	 * @return Result
 	 */
-	public function deleteNotification($id) {
+	public function deleteNotification($id, $format = 'json') {
 		$userObject = $this->userSession->getUser();
 		if ($userObject === null) {
-			return new JSONResponse(null, Http::STATUS_FORBIDDEN);
+			return new OCSResponse($format, Http::STATUS_FORBIDDEN, null, [], null, null, true);
 		}
 		$userid = $userObject->getUID();
 
 		$this->handler->deleteById($id, $userid);
-		return new JSONResponse();
+		return new OCSResponse($format, Http::STATUS_OK, null, [], null, null, true);
 	}
 
 
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+
+	 * @param string $format either 'json' or 'xml'
 	 */
-	public function getLastNotificationId() {
+	public function getLastNotificationId($format = 'json') {
 		$userObject = $this->userSession->getUser();
 		if ($userObject === null) {
-			return new JSONResponse(null, Http::STATUS_FORBIDDEN);
+			return new OCSResponse($format, Http::STATUS_FORBIDDEN, null, [], null, null, true);
 		}
 		$userid = $userObject->getUID();
 
@@ -201,11 +208,9 @@ class EndpointV2Controller extends Controller {
 			$maxId = -1;
 		}
 
-		$jsonResponse = new JSONResponse([
-			'id' => $maxId,
-		]);
-		$jsonResponse->addHeader('OC-Last-Notification', $maxId);
-		return $jsonResponse;
+		$ocsResponse = new OCSResponse($format, Http::STATUS_OK, null, ['id' => $maxId], null, null, true);
+		$ocsResponse->addHeader('OC-Last-Notification', $maxId);
+		return $ocsResponse;
 	}
 
 	/**
