@@ -24,13 +24,18 @@ namespace OCA\Notifications;
 
 use OCP\Notification\IApp;
 use OCP\Notification\INotification;
+use OCA\Notifications\Mailer\NotificationMailerAdapter;
 
 class App implements IApp {
 	/** @var Handler */
 	protected $handler;
 
-	public function __construct(Handler $handler) {
+	/** @var NotificationMailerAdapter */
+	protected $mailerAdapter;
+
+	public function __construct(Handler $handler, NotificationMailerAdapter $mailerAdapter) {
 		$this->handler = $handler;
+		$this->mailerAdapter = $mailerAdapter;
 	}
 
 	/**
@@ -41,6 +46,7 @@ class App implements IApp {
 	 */
 	public function notify(INotification $notification) {
 		$this->handler->add($notification);
+		$this->mailerAdapter->sendMail($notification);
 	}
 
 	/**

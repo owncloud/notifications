@@ -36,6 +36,11 @@ return [
 			'url' => '/api/v1/notifications/{id}',
 			'verb' => 'DELETE'
 		],
-	]
+	],
 
+	'routes' => [
+		['name' => 'NotificationOptions#getNotificationOptions', 'url' => '/settings/personal/notifications/options', 'verb' => 'GET'],
+		['name' => 'NotificationOptions#setNotificationOptions', 'url' => '/settings/personal/notifications/options', 'verb' => 'PUT'],
+		['name' => 'NotificationOptions#setNotificationOptionsPartial', 'url' => '/settings/personal/notifications/options', 'verb' => 'PATCH'],
+	],
 ];
