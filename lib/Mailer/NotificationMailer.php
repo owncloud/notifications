@@ -27,6 +27,7 @@ use OCP\Mail\IMailer;
 use OCP\IConfig;
 use OCP\L10N\IFactory;
 use OCP\Util;
+use OCP\Template;
 use OCA\Notifications\Configuration\OptionsStorage;
 
 /**
@@ -85,17 +86,12 @@ class NotificationMailer {
 		$translatedSubject = (string)$l10n->t('You\'ve received a new notification in %s : "%s"', [$serverUrl, $generatedId]);
 		$emailMessage->setSubject($translatedSubject);
 
-		$translatedPlainBody = (string)$l10n->t('Go to %s to check the notification', [$serverUrl]);
-		$serverUrlLink = "<a href=\"$serverUrl\">$serverUrl<a/>";
-		$translatedHtmlBody = (string)$l10n->t('Go to %s to check the notification', [$serverUrlLink]);
-
-		// TODO: use email template
 		$parsedSubject = $notification->getParsedSubject();
 		$parsedMessage = $notification->getParsedMessage();
-		$plainText = "$parsedSubject\n\n$parsedMessage\n\n$translatedPlainBody";
-		$sanitizedParsedSubject = Util::sanitizeHTML($parsedSubject);
-		$sanitizedParsedMessage = Util::sanitizeHTML($parsedMessage);
-		$htmlText = "$sanitizedParsedSubject</br></br>$sanitizedParsedMessage</br></br>$translatedHtmlBody";
+
+		$htmlText = $this->getMailBody($parsedSubject, $parsedMessage, $serverUrl, 'mail/htmlmail');
+		$plainText = $this->getMailBody($parsedSubject, $parsedMessage, $serverUrl, 'mail/plaintextmail');
+
 		$emailMessage->setPlainBody($plainText);
 		$emailMessage->setHtmlBody($htmlText);
 
@@ -138,5 +134,13 @@ class NotificationMailer {
 			default:
 				return false;
 		}
+	}
+
+	private function getMailBody($subject, $message, $serverUrl, $targetTemplate) {
+		$tmpl = new Template('notifications', $targetTemplate);
+		$tmpl->assign('subject', $subject);
+		$tmpl->assign('message', $message);
+		$tmpl->assign('serverUrl', $serverUrl);
+		return $tmpl->fetchPage();
 	}
 }
