@@ -159,16 +159,17 @@ class EndpointV2ControllerTest extends \Test\TestCase {
 			->willReturn('http://server/owncloud/route?id=20&fetch=desc&limit=20');
 		// we won't check the url returned by the urlGenerator, any path will do
 
-		$jsonResult = $this->controller->listNotifications();
-		$this->assertEquals(Http::STATUS_OK, $jsonResult->getStatus());
+		$ocsResult = $this->controller->listNotifications();
+		$this->assertEquals(Http::STATUS_OK, $ocsResult->getStatus());
 
-		$rawData = $jsonResult->getData();
-		$this->assertEquals($maxResults, count($rawData['data']));
-		$this->assertTrue($this->isKeySortedTopToBottom($rawData['data']));
+		$rawData = json_decode($ocsResult->render(), true);
+		$rawData = $rawData['ocs']['data'];
+		$this->assertEquals($maxResults, count($rawData['notifications']));
+		$this->assertTrue($this->isKeySortedTopToBottom($rawData['notifications']));
 		$this->assertArrayHasKey('next', $rawData);
 		$this->assertEquals('http://server/owncloud/route?id=20&fetch=desc&limit=20', $rawData['next']);
 
-		$resultHeaders = $jsonResult->getHeaders();
+		$resultHeaders = $ocsResult->getHeaders();
 		$this->assertArrayHasKey('OC-Last-Notification', $resultHeaders);
 		$this->assertEquals(123, $resultHeaders['OC-Last-Notification']);
 	}
@@ -202,16 +203,17 @@ class EndpointV2ControllerTest extends \Test\TestCase {
 			->willReturn('http://server/owncloud/route?id=20&fetch=asc&limit=20');
 		// we won't check the url returned by the urlGenerator, any path will do
 
-		$jsonResult = $this->controller->listNotifications(null, 'asc');
-		$this->assertEquals(Http::STATUS_OK, $jsonResult->getStatus());
+		$ocsResult = $this->controller->listNotifications(null, 'asc');
+		$this->assertEquals(Http::STATUS_OK, $ocsResult->getStatus());
 
-		$rawData = $jsonResult->getData();
-		$this->assertEquals($maxResults, count($rawData['data']));
-		$this->assertTrue($this->isKeySortedBottomToTop($rawData['data']));
+		$rawData = json_decode($ocsResult->render(), true);
+		$rawData = $rawData['ocs']['data'];
+		$this->assertEquals($maxResults, count($rawData['notifications']));
+		$this->assertTrue($this->isKeySortedBottomToTop($rawData['notifications']));
 		$this->assertArrayHasKey('next', $rawData);
 		$this->assertEquals('http://server/owncloud/route?id=20&fetch=asc&limit=20', $rawData['next']);
 
-		$resultHeaders = $jsonResult->getHeaders();
+		$resultHeaders = $ocsResult->getHeaders();
 		$this->assertArrayHasKey('OC-Last-Notification', $resultHeaders);
 		$this->assertEquals(123, $resultHeaders['OC-Last-Notification']);
 	}
@@ -239,15 +241,16 @@ class EndpointV2ControllerTest extends \Test\TestCase {
 		$this->manager->method('prepare')
 			->willReturn($this->returnArgument(0));
 
-		$jsonResult = $this->controller->listNotifications();
-		$this->assertEquals(Http::STATUS_OK, $jsonResult->getStatus());
+		$ocsResult = $this->controller->listNotifications();
+		$this->assertEquals(Http::STATUS_OK, $ocsResult->getStatus());
 
-		$rawData = $jsonResult->getData();
-		$this->assertLessThan($maxResults, count($rawData['data']));
-		$this->assertTrue($this->isKeySortedTopToBottom($rawData['data']));
+		$rawData = json_decode($ocsResult->render(), true);
+		$rawData = $rawData['ocs']['data'];
+		$this->assertLessThan($maxResults, count($rawData['notifications']));
+		$this->assertTrue($this->isKeySortedTopToBottom($rawData['notifications']));
 		$this->assertArrayNotHasKey('next', $rawData);
 
-		$resultHeaders = $jsonResult->getHeaders();
+		$resultHeaders = $ocsResult->getHeaders();
 		$this->assertArrayHasKey('OC-Last-Notification', $resultHeaders);
 		$this->assertEquals(123, $resultHeaders['OC-Last-Notification']);
 	}
@@ -334,10 +337,11 @@ class EndpointV2ControllerTest extends \Test\TestCase {
 		$this->manager->method('prepare')
 			->willReturn($notification);
 
-		$jsonResponse = $this->controller->getNotification(5);
-		$this->assertEquals(Http::STATUS_OK, $jsonResponse->getStatus());
+		$ocsResult = $this->controller->getNotification(5);
+		$this->assertEquals(Http::STATUS_OK, $ocsResult->getStatus());
 
-		$rawData = $jsonResponse->getData();
+		$rawData = json_decode($ocsResult->render(), true);
+		$rawData = $rawData['ocs']['data'];
 		$this->assertEquals('5', $rawData['notification_id']);
 		$this->assertEquals($datetime->format('c'), $rawData['datetime']);
 		$this->assertEquals('the parsed subject', $rawData['subject']);
@@ -382,13 +386,14 @@ class EndpointV2ControllerTest extends \Test\TestCase {
 		$this->handler->method('getMaxNotificationId')
 			->willReturn(321);
 
-		$jsonResponse = $this->controller->getLastNotificationId();
-		$this->assertEquals(Http::STATUS_OK, $jsonResponse->getStatus());
+		$ocsResult = $this->controller->getLastNotificationId();
+		$this->assertEquals(Http::STATUS_OK, $ocsResult->getStatus());
 
-		$rawData = $jsonResponse->getData();
+		$rawData = json_decode($ocsResult->render(), true);
+		$rawData = $rawData['ocs']['data'];
 		$this->assertEquals(['id' => 321], $rawData);
 
-		$resultHeaders = $jsonResponse->getHeaders();
+		$resultHeaders = $ocsResult->getHeaders();
 		$this->assertArrayHasKey('OC-Last-Notification', $resultHeaders);
 		$this->assertEquals(321, $resultHeaders['OC-Last-Notification']);
 	}

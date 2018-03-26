@@ -72,7 +72,9 @@ class EndpointV2Controller extends Controller {
 	public function listNotifications($id = null, $fetch = 'desc', $limit = self::ENFORCED_LIST_LIMIT, $format = 'json') {
 		$userObject = $this->userSession->getUser();
 		if ($userObject === null) {
-			return new OCSResponse($format, Http::STATUS_FORBIDDEN, null, [], null, null, true);
+			$ocsResponse = new OCSResponse($format, Http::STATUS_FORBIDDEN, null, [], null, null, true);
+			$ocsResponse->setStatus(Http::STATUS_FORBIDDEN);
+			return $ocsResponse;
 		}
 		$userid = $userObject->getUID();
 
@@ -146,14 +148,18 @@ class EndpointV2Controller extends Controller {
 	public function getNotification($id, $format = 'json') {
 		$userObject = $this->userSession->getUser();
 		if ($userObject === null) {
-			return new OCSResponse($format, Http::STATUS_FORBIDDEN, null, [], null, null, true);
+			$ocsResponse = new OCSResponse($format, Http::STATUS_FORBIDDEN, null, [], null, null, true);
+			$ocsResponse->setStatus(Http::STATUS_FORBIDDEN);
+			return $ocsResponse;
 		}
 		$userid = $userObject->getUID();
 
 		$notification = $this->handler->getById($id, $userid);
 
 		if (!($notification instanceof INotification)) {
-			return new OCSResponse($format, Http::STATUS_NOT_FOUND, null, [], null, null, true);
+			$ocsResponse = new OCSResponse($format, Http::STATUS_NOT_FOUND, null, [], null, null, true);
+			$ocsResponse->setStatus(Http::STATUS_NOT_FOUND);
+			return $ocsResponse;
 		}
 
 		$language = $this->config->getUserValue($userid, 'core', 'lang', null);
@@ -162,11 +168,13 @@ class EndpointV2Controller extends Controller {
 			$notification = $this->manager->prepare($notification, $language);
 		} catch (\InvalidArgumentException $e) {
 			// The app was disabled
-			return new OCSResponse($format, Http::STATUS_NOT_FOUND, null, [], null, null, true);
+			$ocsResponse = new OCSResponse($format, Http::STATUS_NOT_FOUND, null, [], null, null, true);
+			$ocsResponse->setStatus(Http::STATUS_NOT_FOUND);
+			return $ocsResponse;
 		}
 
 		return new OCSResponse($format, Http::STATUS_OK, null,
-			$this->notificationToArray($id, $notificationToArray), null, null, true);
+			$this->notificationToArray($id, $notification), null, null, true);
 	}
 
 	/**
@@ -180,7 +188,9 @@ class EndpointV2Controller extends Controller {
 	public function deleteNotification($id, $format = 'json') {
 		$userObject = $this->userSession->getUser();
 		if ($userObject === null) {
-			return new OCSResponse($format, Http::STATUS_FORBIDDEN, null, [], null, null, true);
+			$ocsResponse = new OCSResponse($format, Http::STATUS_FORBIDDEN, null, [], null, null, true);
+			$ocsResponse->setStatus(Http::STATUS_FORBIDDEN);
+			return $ocsResponse;
 		}
 		$userid = $userObject->getUID();
 
@@ -198,7 +208,9 @@ class EndpointV2Controller extends Controller {
 	public function getLastNotificationId($format = 'json') {
 		$userObject = $this->userSession->getUser();
 		if ($userObject === null) {
-			return new OCSResponse($format, Http::STATUS_FORBIDDEN, null, [], null, null, true);
+			$ocsResponse = new OCSResponse($format, Http::STATUS_FORBIDDEN, null, [], null, null, true);
+			$ocsResponse->setStatus(Http::STATUS_FORBIDDEN);
+			return $ocsResponse;
 		}
 		$userid = $userObject->getUID();
 
