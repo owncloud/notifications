@@ -268,12 +268,10 @@ class Handler {
 	}
 
 	private function processByCallback(INotification $notification, $callable = null) {
-		if ($callable === null) {
-			return $notification;
+		if (is_callable($callable)) {
+			return $callable($notification);
 		} else {
-			if (is_callable($callable)) {
-				return $callable($notification);
-			}
+			return $notification;
 		}
 	}
 

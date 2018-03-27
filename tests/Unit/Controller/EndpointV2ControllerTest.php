@@ -79,6 +79,17 @@ class EndpointV2ControllerTest extends \Test\TestCase {
 
 	private function getNotificationList() {
 		$result = [];
+		$action = $this->getMockBuilder(IAction::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$action->method('getParsedLabel')
+			->willReturn('qwerty');
+		$action->method('getLink')
+			->willReturn('link');
+		$action->method('getRequestType')
+			->willReturn('HEAD');
+		$action->method('isPrimary')
+			->willReturn(false);
 		for ($i = 5; $i <= 40; $i++) {
 			$notification = $this->getMockBuilder(INotification::class)
 				->disableOriginalConstructor()
@@ -89,8 +100,14 @@ class EndpointV2ControllerTest extends \Test\TestCase {
 				->willReturn(strval($i));
 			$notification->method('getDateTime')
 				->willReturn(new \DateTime());
-			$notification->method('getParsedActions')
-				->willReturn([]);
+
+			if ($i > 30) {
+				$notification->method('getParsedActions')
+					->willReturn([$action]);
+			} else {
+				$notification->method('getParsedActions')
+					->willReturn([]);
+			}
 			$result[$i] = $notification;
 		}
 		return $result;
@@ -130,7 +147,7 @@ class EndpointV2ControllerTest extends \Test\TestCase {
 	}
 
 	/**
-	 * the id is forwarded directly to the handler, so need to test with different ids
+	 * the id is forwarded directly to the handler, so no need to test with different ids
 	 */
 	public function testListNotificationsDescendent() {
 		$maxResults = EndpointV2Controller::ENFORCED_LIST_LIMIT;
@@ -153,7 +170,7 @@ class EndpointV2ControllerTest extends \Test\TestCase {
 			->willReturn($notificationList);
 
 		$this->manager->method('prepare')
-			->willReturn($this->returnArgument(0));
+			->will($this->returnArgument(0));
 
 		$this->urlGenerator->method('linkToRoute')
 			->willReturn('http://server/owncloud/route?id=20&fetch=desc&limit=20');
@@ -172,6 +189,47 @@ class EndpointV2ControllerTest extends \Test\TestCase {
 		$resultHeaders = $ocsResult->getHeaders();
 		$this->assertArrayHasKey('OC-Last-Notification', $resultHeaders);
 		$this->assertEquals(123, $resultHeaders['OC-Last-Notification']);
+	}
+
+	public function testListNotificationsDescendentNoNotifications() {
+		$maxResults = EndpointV2Controller::ENFORCED_LIST_LIMIT;
+		$notificationList = $this->getNotificationList();
+		krsort($notificationList);
+		$notificationList = array_slice($notificationList, 0, $maxResults + 1, true);
+
+		$user = $this->getMockBuilder(IUser::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$user->method('getUID')
+			->willReturn('test_user1');
+		$this->userSession->method('getUser')
+			->willReturn($user);
+
+		$this->handler->method('getMaxNotificationId')
+			->willReturn(null);  // purposely use a different max id than the one returned in the list
+		$this->handler->method('fetchDescendentList')
+			->with('test_user1', null, $maxResults + 1, $this->anything())
+			->willReturn([]);
+
+		$this->manager->method('prepare')
+			->will($this->returnArgument(0));
+
+		$this->urlGenerator->method('linkToRoute')
+			->willReturn('http://server/owncloud/route?id=20&fetch=desc&limit=20');
+		// we won't check the url returned by the urlGenerator, any path will do
+
+		$ocsResult = $this->controller->listNotifications();
+		$this->assertEquals(Http::STATUS_OK, $ocsResult->getStatus());
+
+		$rawData = json_decode($ocsResult->render(), true);
+		$rawData = $rawData['ocs']['data'];
+		$this->assertEquals(0, count($rawData['notifications']));
+		$this->assertTrue($this->isKeySortedTopToBottom($rawData['notifications']));
+		$this->assertArrayNotHasKey('next', $rawData);
+
+		$resultHeaders = $ocsResult->getHeaders();
+		$this->assertArrayHasKey('OC-Last-Notification', $resultHeaders);
+		$this->assertEquals(-1, $resultHeaders['OC-Last-Notification']);  // header should return -1 instead of null
 	}
 
 	/**
@@ -197,7 +255,7 @@ class EndpointV2ControllerTest extends \Test\TestCase {
 			->willReturn($notificationList);
 
 		$this->manager->method('prepare')
-			->willReturn($this->returnArgument(0));
+			->will($this->returnArgument(0));
 
 		$this->urlGenerator->method('linkToRoute')
 			->willReturn('http://server/owncloud/route?id=20&fetch=asc&limit=20');
@@ -216,6 +274,46 @@ class EndpointV2ControllerTest extends \Test\TestCase {
 		$resultHeaders = $ocsResult->getHeaders();
 		$this->assertArrayHasKey('OC-Last-Notification', $resultHeaders);
 		$this->assertEquals(123, $resultHeaders['OC-Last-Notification']);
+	}
+
+	public function testListNotificationsAscendentNoNotifications() {
+		$maxResults = EndpointV2Controller::ENFORCED_LIST_LIMIT;
+		$notificationList = $this->getNotificationList();
+		$notificationList = array_slice($notificationList, 0, $maxResults + 1, true);
+
+		$user = $this->getMockBuilder(IUser::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$user->method('getUID')
+			->willReturn('test_user1');
+		$this->userSession->method('getUser')
+			->willReturn($user);
+
+		$this->handler->method('getMaxNotificationId')
+			->willReturn(null);
+		$this->handler->method('fetchAscendentList')
+			->with('test_user1', null, $maxResults + 1, $this->anything())
+			->willReturn([]);
+
+		$this->manager->method('prepare')
+			->will($this->returnArgument(0));
+
+		$this->urlGenerator->method('linkToRoute')
+			->willReturn('http://server/owncloud/route?id=20&fetch=asc&limit=20');
+		// we won't check the url returned by the urlGenerator, any path will do
+
+		$ocsResult = $this->controller->listNotifications(null, 'asc');
+		$this->assertEquals(Http::STATUS_OK, $ocsResult->getStatus());
+
+		$rawData = json_decode($ocsResult->render(), true);
+		$rawData = $rawData['ocs']['data'];
+		$this->assertEquals(0, count($rawData['notifications']));
+		$this->assertTrue($this->isKeySortedBottomToTop($rawData['notifications']));
+		$this->assertArrayNotHasKey('next', $rawData);
+
+		$resultHeaders = $ocsResult->getHeaders();
+		$this->assertArrayHasKey('OC-Last-Notification', $resultHeaders);
+		$this->assertEquals(-1, $resultHeaders['OC-Last-Notification']);
 	}
 
 	public function testListNotificationsDescendentNoMoreResults() {
@@ -239,7 +337,7 @@ class EndpointV2ControllerTest extends \Test\TestCase {
 			->willReturn(array_slice($notificationList, 0, 3, true));
 
 		$this->manager->method('prepare')
-			->willReturn($this->returnArgument(0));
+			->will($this->returnArgument(0));
 
 		$ocsResult = $this->controller->listNotifications();
 		$this->assertEquals(Http::STATUS_OK, $ocsResult->getStatus());
@@ -396,5 +494,47 @@ class EndpointV2ControllerTest extends \Test\TestCase {
 		$resultHeaders = $ocsResult->getHeaders();
 		$this->assertArrayHasKey('OC-Last-Notification', $resultHeaders);
 		$this->assertEquals(321, $resultHeaders['OC-Last-Notification']);
+	}
+
+	public function testGetLastNotificationNoNotifications() {
+		$user = $this->getMockBuilder(IUser::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$user->method('getUID')
+			->willReturn('test_user1');
+		$this->userSession->method('getUser')
+			->willReturn($user);
+
+		$this->handler->method('getMaxNotificationId')
+			->willReturn(null);
+
+		$ocsResult = $this->controller->getLastNotificationId();
+		$this->assertEquals(Http::STATUS_OK, $ocsResult->getStatus());
+
+		$rawData = json_decode($ocsResult->render(), true);
+		$rawData = $rawData['ocs']['data'];
+		$this->assertEquals(['id' => -1], $rawData);
+
+		$resultHeaders = $ocsResult->getHeaders();
+		$this->assertArrayHasKey('OC-Last-Notification', $resultHeaders);
+		$this->assertEquals(-1, $resultHeaders['OC-Last-Notification']);
+	}
+
+	public function testPrepareNotification() {
+		$notification = $this->getMockBuilder(INotification::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$this->manager->method('prepare')
+			->will($this->returnArgument(0));
+		$this->assertInstanceOf(INotification::class, $this->controller->prepareNotification($notification, 'en_US'));
+	}
+
+	public function testPrepareNotificationInvalid() {
+		$notification = $this->getMockBuilder(INotification::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$this->manager->method('prepare')
+			->will($this->throwException(new \InvalidArgumentException()));
+		$this->assertNull($this->controller->prepareNotification($notification, 'en_US'));
 	}
 }

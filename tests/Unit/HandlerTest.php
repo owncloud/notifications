@@ -442,6 +442,92 @@ class HandlerTest extends TestCase {
 		$this->handler->delete($notification4);
 	}
 
+	public function testGetMaxNotificationIdNoNotifications() {
+		$user = uniqid('test_user_');  // any non-existing user is good
+		$this->assertNull($this->handler->getMaxNotificationId($user));
+	}
+
+	public function testGetMaxNotificationId() {
+		$notification1 = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+			'getDateTime' => new \DateTime(),
+			'getObjectType' => 'notification',
+			'getObjectId' => '1337',
+			'getSubject' => 'subject',
+			'getSubjectParameters' => [],
+			'getMessage' => 'message',
+			'getMessageParameters' => [],
+			'getLink' => 'link',
+			'getActions' => [
+				[
+					'getLabel' => 'action_label',
+					'getLink' => 'action_link',
+					'getRequestType' => 'GET',
+					'isPrimary' => true,
+				]
+			],
+		]);
+		$notification3 = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+			'getDateTime' => new \DateTime(),
+			'getObjectType' => 'blondification',
+			'getObjectId' => '1339',
+			'getSubject' => 'subject',
+			'getSubjectParameters' => [],
+			'getMessage' => 'message',
+			'getMessageParameters' => [],
+			'getLink' => 'link',
+			'getActions' => [
+				[
+					'getLabel' => 'action_label',
+					'getLink' => 'action_link',
+					'getRequestType' => 'GET',
+					'isPrimary' => true,
+				]
+			],
+		]);
+		$notification4 = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+			'getDateTime' => new \DateTime(),
+			'getObjectType' => 'nonefination',
+			'getObjectId' => '1340',
+			'getSubject' => 'subject',
+			'getSubjectParameters' => [],
+			'getMessage' => 'message',
+			'getMessageParameters' => [],
+			'getLink' => 'link',
+			'getActions' => [
+				[
+					'getLabel' => 'action_label',
+					'getLink' => 'action_link',
+					'getRequestType' => 'GET',
+					'isPrimary' => true,
+				]
+			],
+		]);
+		$this->handler->add($notification1);
+		$this->handler->add($notification3);
+		$this->handler->add($notification4);
+
+		$maxId = $this->handler->getMaxNotificationId('test_user1');
+
+		$limitedNotification = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+		]);
+		$notificationList = $this->handler->get($limitedNotification);
+		$expectedMaxId = -1;
+		foreach ($notificationList as $key => $value) {
+			if ($key > $expectedMaxId) {
+				$expectedMaxId = $key;
+			}
+		}
+		$this->assertEquals($expectedMaxId, $maxId);
+	}
+
 	/**
 	 * @param array $values
 	 * @return \OCP\Notification\INotification|\PHPUnit_Framework_MockObject_MockObject
