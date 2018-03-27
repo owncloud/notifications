@@ -71,4 +71,23 @@ class NotificationsAppDialog extends OwncloudPage {
 		}
 		return $notificationsArray;
 	}
+
+	/**
+	 * 
+	 * @return \Page\Notification[]
+	 */
+	public function getAllNoficationObjects() {
+		$notificationsElement = $this->findAll("xpath", $this->notificationContainerXpath);
+		$notificationObjects = [];
+		foreach ($notificationsElement as $notificationElement) {
+			/**
+			 * 
+			 * @var Notification $notificationObject
+			 */
+			$notificationObject = $this->getPage("Notification");
+			$notificationObject->setElement($notificationElement);
+			$notificationObjects[] = $notificationObject;
+		}
+		return $notificationObjects;
+	}
 }
