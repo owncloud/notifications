@@ -255,7 +255,7 @@ class Handler {
 	 */
 	public function getMaxNotificationId($user) {
 		$sql = $this->connection->getQueryBuilder();
-		$sql->select($sql->createFunction('max(notification_id) as `max_id`'))
+		$sql->select($sql->createFunction('max(`notification_id`) as `max_id`'))
 			->from('notifications')
 			->where($sql->expr()->eq('user', $sql->createNamedParameter($user)));
 
