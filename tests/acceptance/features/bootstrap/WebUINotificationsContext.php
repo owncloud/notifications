@@ -94,4 +94,31 @@ class WebUINotificationsContext extends RawMinkContext implements Context {
 			}
 		}
 	}
+
+	/**
+	 * @When /^the user reacts with "(Accept|Decline)" to all notifications on the webUI$/
+	 *
+	 * @param string $reaction
+	 *
+	 * @return void
+	 */
+	public function userReactsToAllNotificationsOnTheWebUI($reaction) {
+			$this->getSession()->reload();
+			$this->owncloudPage->waitTillPageIsLoaded($this->getSession());
+			$this->owncloudPage->waitForNotifications();
+			$notificationsDialog = $this->owncloudPage->openNotifications();
+			$notifications = $notificationsDialog->getAllNoficationObjects();
+		foreach ($notifications as $notification) {
+			$notification->react($reaction, $this->getSession());
+		}
+	}
+	
+	/**
+	 * @When the user accepts all shares displayed in the notifications on the webUI
+	 * 
+	 * @return void
+	 */
+	public function userAcceptsAllShares() {
+		$this->userReactsToAllNotificationsOnTheWebUI("Accept");
+	}
 }
