@@ -71,11 +71,28 @@ class WebUINotificationsContext extends RawMinkContext implements Context {
 			"expected $number notifications, found " . count($notifications)
 		);
 		foreach ($expectedNotifications as $expectedNotification) {
-			PHPUnit_Framework_Assert::assertContains(
-				$expectedNotification, $notifications,
-				"could not find expected message in \n" .
-				print_r($notifications, true)
-			);
+			foreach ($notifications as $notification) {
+				$found = false;
+				foreach ($expectedNotification as $expectedKey => $expectedValue) {
+					if ($notification[$expectedKey] === $expectedValue) {
+						$found = true;
+					} else {
+						$found = false;
+						break;
+					}
+				}
+				if ($found) {
+					break;
+				}
+			}
+			if (!$found) {
+				PHPUnit_Framework_Assert::fail(
+					"could not find expected notification: " .
+					print_r($expectedNotification, true) .
+					" in viewed notifications: " .
+					print_r($notifications, true)
+				);
+			}
 		}
 	}
 }
