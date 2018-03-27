@@ -53,7 +53,7 @@ class NotificationsAppDialog extends OwncloudPage {
 			if ($link === null) {
 				throw new ElementNotFoundException(
 					__METHOD__ . " could not find notification link " .
-					"with xpath " . $this->$notificationLinkXpath
+					"with xpath " . $this->notificationLinkXpath
 				);
 			}
 			$message = $notification->find("xpath", $this->notificationMessageXpath);
