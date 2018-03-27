@@ -49,16 +49,15 @@ class WebUINotificationsContext extends RawMinkContext implements Context {
 	
 	/**
 	 * 
-	 * @Then /^user "([^"]*)" should see (\d+) notification(?:s|) on the webUI with these details$/
+	 * @Then /^the user should see (\d+) notification(?:s|) on the webUI with these details$/
 	 * 
-	 * @param string $user
 	 * @param int $number
 	 * @param TableNode $expectedNotifications
 	 * 
 	 * @return void
 	 */
 	public function assertNotificationsOnWebUI(
-		$user, $number, TableNode $expectedNotifications
+		$number, TableNode $expectedNotifications
 	) {
 		$this->getSession()->reload();
 		$this->owncloudPage->waitTillPageIsLoaded($this->getSession());
