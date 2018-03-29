@@ -108,11 +108,13 @@ class WebUINotificationsContext extends RawMinkContext implements Context {
 			$this->owncloudPage->waitForNotifications();
 			$notificationsDialog = $this->owncloudPage->openNotifications();
 			$notifications = $notificationsDialog->getAllNoficationObjects();
-		foreach ($notifications as $notification) {
-			$notification->react($reaction, $this->getSession());
+		while (count($notifications) > 0) {
+			$notifications[0]->react($reaction, $this->getSession());
+			//we need to rescan again, because the DOM changes
+			$notifications = $notificationsDialog->getAllNoficationObjects();
 		}
 	}
-	
+
 	/**
 	 * @When the user accepts all shares displayed in the notifications on the webUI
 	 * 
@@ -120,5 +122,14 @@ class WebUINotificationsContext extends RawMinkContext implements Context {
 	 */
 	public function userAcceptsAllShares() {
 		$this->userReactsToAllNotificationsOnTheWebUI("Accept");
+	}
+
+	/**
+	 * @When the user declines all shares displayed in the notifications on the webUI
+	 *
+	 * @return void
+	 */
+	public function userDeclinesAllShares() {
+		$this->userReactsToAllNotificationsOnTheWebUI("Decline");
 	}
 }

@@ -44,7 +44,7 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	 * @var FeatureContext
 	 */
 	private $featureContext;
-	
+
 	/**
 	 * @When /^user "([^"]*)" is sent (?:a|another) notification$/
 	 * @Given /^user "([^"]*)" has been sent (?:a|another) notification$/

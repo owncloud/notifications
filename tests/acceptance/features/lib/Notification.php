@@ -61,13 +61,14 @@ class Notification extends OwncloudPage {
 	 * @return void
 	 */
 	public function react($reaction, Session $session) {
+		$buttonXpath = sprintf($this->buttonByTextXpath, $reaction);
 		$button = $this->notificationElement->find(
-			"xpath", sprintf($this->buttonByTextXpath, $reaction)
+			"xpath", $buttonXpath
 		);
 		if (is_null($button)) {
 			throw new ElementNotFoundException(
 				__METHOD__ .
-				" xpath $this->buttonByTextXpath" .
+				" xpath " . $buttonXpath . 
 				" could not find button with the given text"
 			);
 		}
