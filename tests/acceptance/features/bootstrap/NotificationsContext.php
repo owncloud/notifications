@@ -213,7 +213,7 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	 */
 	public function clearNotifications() {
 		$response = OcsApiHelper::sendRequest(
-			$this->featureContext->baseUrlWithoutOCSAppendix(),
+			$this->featureContext->getBaseUrl(),
 			$this->featureContext->getAdminUsername(),
 			$this->featureContext->getAdminPassword(),
 			"DELETE",
