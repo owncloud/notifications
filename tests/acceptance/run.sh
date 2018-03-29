@@ -21,7 +21,7 @@ php -S localhost:$PORT -t ../../../../ &
 PHPPID=$!
 echo $PHPPID
 
-export TEST_SERVER_URL="http://localhost:$PORT/ocs/"
+export TEST_SERVER_URL="http://localhost:$PORT"
 
 #Set up personalized skeleton
 $OCC config:system:set skeletondirectory --value="$(pwd)/$OC_PATH""$CORE_INT_TESTS_PATH""skeleton"
