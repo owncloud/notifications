@@ -143,7 +143,7 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then /^the (first|last) notification of user "([^"]*)" should match$/
+	 * @Then /^the (first|last) notification of user "([^"]*)" should match\s?(?:these)?\s?(regular expressions)?$/
 	 *
 	 * @param string $notification first|last
 	 * @param string $user
@@ -151,7 +151,10 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	 * 
 	 * @return void
 	 */
-	public function matchNotification($notification, $user, $formData) {
+	public function matchNotification(
+		$notification, $user, $regexOrNot, $formData
+	) {
+		$regex = ($regexOrNot === 'regular expressions');
 		$lastNotifications = end($this->notificationIds);
 		if ($notification === 'first') {
 			$notificationId = reset($lastNotifications);
@@ -172,7 +175,19 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 
 		foreach ($formData->getRowsHash() as $key => $value) {
 			PHPUnit_Framework_Assert::assertArrayHasKey($key, $response['ocs']['data']);
-			PHPUnit_Framework_Assert::assertEquals($value, $response['ocs']['data'][$key]);
+			if ($regex) {
+				$value = $this->featureContext->substituteInLineCodes(
+					$value, ['preg_quote' => ['/'] ]
+				);
+				PHPUnit_Framework_Assert::assertNotFalse(
+					(bool)preg_match($value, $response['ocs']['data'][$key])
+				);
+			} else {
+				$value = $this->featureContext->substituteInLineCodes($value);
+				PHPUnit_Framework_Assert::assertEquals(
+					$value, $response['ocs']['data'][$key]
+				);
+			}
 		}
 	}
 
