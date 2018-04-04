@@ -36,7 +36,7 @@ class WebUINotificationsContext extends RawMinkContext implements Context {
 	 * @var NotificationsEnabledOwncloudPage
 	 */
 	private $owncloudPage;
-	
+
 	/**
 	 * 
 	 * @param NotificationsEnabledOwncloudPage $owncloudPage
@@ -59,10 +59,7 @@ class WebUINotificationsContext extends RawMinkContext implements Context {
 	public function assertNotificationsOnWebUI(
 		$number, TableNode $expectedNotifications
 	) {
-		$this->getSession()->reload();
-		$this->owncloudPage->waitTillPageIsLoaded($this->getSession());
-		$this->owncloudPage->waitForNotifications();
-		$notificationsDialog = $this->owncloudPage->openNotifications();
+		$notificationsDialog = $this->openNotificationsDialog();
 		$notifications = $notificationsDialog->getAllNotifications();
 		PHPUnit_Framework_Assert::assertEquals(
 			$number,
@@ -103,10 +100,7 @@ class WebUINotificationsContext extends RawMinkContext implements Context {
 	 * @return void
 	 */
 	public function userReactsToAllNotificationsOnTheWebUI($reaction) {
-			$this->getSession()->reload();
-			$this->owncloudPage->waitTillPageIsLoaded($this->getSession());
-			$this->owncloudPage->waitForNotifications();
-			$notificationsDialog = $this->owncloudPage->openNotifications();
+			$notificationsDialog = $this->openNotificationsDialog();
 			$notifications = $notificationsDialog->getAllNoficationObjects();
 		while (count($notifications) > 0) {
 			$notifications[0]->react($reaction, $this->getSession());
@@ -131,5 +125,16 @@ class WebUINotificationsContext extends RawMinkContext implements Context {
 	 */
 	public function userDeclinesAllShares() {
 		$this->userReactsToAllNotificationsOnTheWebUI("Decline");
+	}
+
+	/**
+	 * 
+	 * @return \Page\NotificationsAppDialog
+	 */
+	protected function openNotificationsDialog() {
+		$this->getSession()->reload();
+		$this->owncloudPage->waitTillPageIsLoaded($this->getSession());
+		$this->owncloudPage->waitForNotifications();
+		return $this->owncloudPage->openNotifications();
 	}
 }
