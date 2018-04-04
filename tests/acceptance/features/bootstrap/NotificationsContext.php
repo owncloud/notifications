@@ -44,7 +44,7 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	 * @var FeatureContext
 	 */
 	private $featureContext;
-	
+
 	/**
 	 * @When /^user "([^"]*)" is sent (?:a|another) notification$/
 	 * @Given /^user "([^"]*)" has been sent (?:a|another) notification$/
@@ -148,10 +148,45 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	 * @param string $notification first|last
 	 * @param string $user
 	 * @param \Behat\Gherkin\Node\TableNode $formData
+	 *
+	 * @return void
+	 */
+	public function matchNotificationPlain(
+		$notification, $user, $formData
+	) {
+		$this->matchNotification(
+			$notification, $user, false, $formData
+		);
+	}
+
+	/**
+	 * @Then /^the (first|last) notification of user "([^"]*)" should match these regular expressions$/
+	 *
+	 * @param string $notification first|last
+	 * @param string $user
+	 * @param \Behat\Gherkin\Node\TableNode $formData
 	 * 
 	 * @return void
 	 */
-	public function matchNotification($notification, $user, $formData) {
+	public function matchNotificationRegularExpression(
+		$notification, $user, $formData
+	) {
+		$this->matchNotification(
+			$notification, $user, true, $formData
+		);
+	}
+
+	/**
+	 * @param string $notification first|last
+	 * @param string $user
+	 * @param bool $regex
+	 * @param \Behat\Gherkin\Node\TableNode $formData
+	 *
+	 * @return void
+	 */
+	public function matchNotification(
+		$notification, $user, $regex, $formData
+	) {
 		$lastNotifications = end($this->notificationIds);
 		if ($notification === 'first') {
 			$notificationId = reset($lastNotifications);
@@ -172,7 +207,19 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 
 		foreach ($formData->getRowsHash() as $key => $value) {
 			PHPUnit_Framework_Assert::assertArrayHasKey($key, $response['ocs']['data']);
-			PHPUnit_Framework_Assert::assertEquals($value, $response['ocs']['data'][$key]);
+			if ($regex) {
+				$value = $this->featureContext->substituteInLineCodes(
+					$value, ['preg_quote' => ['/'] ]
+				);
+				PHPUnit_Framework_Assert::assertNotFalse(
+					(bool)preg_match($value, $response['ocs']['data'][$key])
+				);
+			} else {
+				$value = $this->featureContext->substituteInLineCodes($value);
+				PHPUnit_Framework_Assert::assertEquals(
+					$value, $response['ocs']['data'][$key]
+				);
+			}
 		}
 	}
 
