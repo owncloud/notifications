@@ -143,7 +143,24 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then /^the (first|last) notification of user "([^"]*)" should match\s?(?:these)?\s?(regular expressions)?$/
+	 * @Then /^the (first|last) notification of user "([^"]*)" should match$/
+	 *
+	 * @param string $notification first|last
+	 * @param string $user
+	 * @param \Behat\Gherkin\Node\TableNode $formData
+	 *
+	 * @return void
+	 */
+	public function matchNotificationPlain(
+		$notification, $user, $formData
+	) {
+		$this->matchNotification(
+			$notification, $user, false, $formData
+		);
+	}
+
+	/**
+	 * @Then /^the (first|last) notification of user "([^"]*)" should match these regular expressions$/
 	 *
 	 * @param string $notification first|last
 	 * @param string $user
@@ -151,10 +168,25 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	 * 
 	 * @return void
 	 */
-	public function matchNotification(
-		$notification, $user, $regexOrNot, $formData
+	public function matchNotificationRegularExpression(
+		$notification, $user, $formData
 	) {
-		$regex = ($regexOrNot === 'regular expressions');
+		$this->matchNotification(
+			$notification, $user, true, $formData
+		);
+	}
+
+	/**
+	 * @param string $notification first|last
+	 * @param string $user
+	 * @param bool $regex
+	 * @param \Behat\Gherkin\Node\TableNode $formData
+	 *
+	 * @return void
+	 */
+	public function matchNotification(
+		$notification, $user, $regex, $formData
+	) {
 		$lastNotifications = end($this->notificationIds);
 		if ($notification === 'first') {
 			$notificationId = reset($lastNotifications);
