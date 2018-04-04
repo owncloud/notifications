@@ -22,6 +22,8 @@
 
 namespace Page;
 
+use SensioLabs\Behat\PageObjectExtension\PageObject\Exception\ElementNotFoundException;
+
 /**
  * PageObject for the Notifications area
  */

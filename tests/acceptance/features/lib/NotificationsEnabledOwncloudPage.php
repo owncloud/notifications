@@ -22,6 +22,9 @@
 
 namespace Page;
 
+use Behat\Mink\Element\NodeElement;
+use SensioLabs\Behat\PageObjectExtension\PageObject\Exception\ElementNotFoundException;
+
 /**
  * PageObject that has everything the general OwncloudPage does
  * plus what the notifications App adds to it
@@ -36,8 +39,7 @@ class NotificationsEnabledOwncloudPage extends OwncloudPage {
 	 * @return NodeElement
 	 */
 	private function findNotificationsButton() {
-		$button = $this->find("xpath", $this->notificationsButtonXpath);
-		
+		$button = $this->waitTillElementIsNotNull($this->notificationsButtonXpath);
 		if ($button === null) {
 			throw new ElementNotFoundException(
 				__METHOD__ . " could not find notifications button " .
