@@ -99,6 +99,16 @@ pipeline:
       matrix:
         TEST_SUITE: phpunit
 
+  scrutinizer:
+    image: owncloudci/php:${PHP_VERSION}
+    pull: true
+    commands:
+      - wget -q https://scrutinizer-ci.com/ocular.phar
+      - php ocular.phar code-coverage:upload --format=php-clover tests/Unit/clover.xml
+    when:
+      matrix:
+        TEST_SUITE: phpunit
+
   codecov:
     image: plugins/codecov:2
     secrets: [codecov_token]
