@@ -44,7 +44,7 @@ class WebUINotificationsContext extends RawMinkContext implements Context {
 	public function __construct(
 		NotificationsEnabledOwncloudPage $owncloudPage
 	) {
-			$this->owncloudPage = $owncloudPage;
+		$this->owncloudPage = $owncloudPage;
 	}
 	
 	/**
@@ -100,8 +100,8 @@ class WebUINotificationsContext extends RawMinkContext implements Context {
 	 * @return void
 	 */
 	public function userReactsToAllNotificationsOnTheWebUI($reaction) {
-			$notificationsDialog = $this->openNotificationsDialog();
-			$notifications = $notificationsDialog->getAllNoficationObjects();
+		$notificationsDialog = $this->openNotificationsDialog();
+		$notifications = $notificationsDialog->getAllNoficationObjects();
 		while (count($notifications) > 0) {
 			$notifications[0]->react($reaction, $this->getSession());
 			//we need to rescan again, because the DOM changes

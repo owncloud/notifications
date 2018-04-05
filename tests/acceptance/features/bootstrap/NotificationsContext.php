@@ -15,8 +15,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU Affero General Public License, version 3,
- * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ * You should have received a copy of the GNU Affero General Public License,
+ * version 3, along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
 
@@ -34,10 +34,14 @@ require_once 'bootstrap.php';
  */
 class NotificationsContext implements Context, SnippetAcceptingContext {
 
-	/** @var array[] */
+	/**
+	 * @var array[] 
+	 */
 	protected $notificationIds;
 
-	/** @var int */
+	/**
+	 * @var int 
+	 */
 	protected $deletedNotification;
 
 	/**
@@ -50,6 +54,8 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	 * @Given /^user "([^"]*)" has been sent (?:a|another) notification$/
 	 *
 	 * @param string $user
+	 *
+	 * @return void
 	 */
 	public function hasBeenSentANotification($user) {
 		$this->featureContext->userSendingTo(
@@ -69,6 +75,8 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	 *
 	 * @param string $user
 	 * @param \Behat\Gherkin\Node\TableNode|null $formData
+	 *
+	 * @return void
 	 */
 	public function hasBeenSentANotificationWith($user, TableNode $formData) {
 		//add username to the TableNode,
@@ -92,12 +100,16 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	 * @Then /^the list of notifications should have (\d+) (?:entry|entries)$/
 	 *
 	 * @param int $numNotifications
+	 *
+	 * @return void
 	 */
 	public function checkNumNotifications($numNotifications) {
 		$notifications = $this->getArrayOfNotificationsResponded(
 			$this->featureContext->getResponse()
 		);
-		PHPUnit_Framework_Assert::assertCount((int) $numNotifications, $notifications);
+		PHPUnit_Framework_Assert::assertCount(
+			(int) $numNotifications, $notifications
+		);
 
 		$notificationIds = [];
 		foreach ($notifications as $notification) {
@@ -113,6 +125,8 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	 * @param string $user
 	 * @param int $numNotifications
 	 * @param string $missingLast
+	 *
+	 * @return void
 	 */
 	public function userNumNotifications($user, $numNotifications, $missingLast) {
 		$this->featureContext->userSendingTo(
@@ -206,7 +220,9 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 		);
 
 		foreach ($formData->getRowsHash() as $key => $value) {
-			PHPUnit_Framework_Assert::assertArrayHasKey($key, $response['ocs']['data']);
+			PHPUnit_Framework_Assert::assertArrayHasKey(
+				$key, $response['ocs']['data']
+			);
 			if ($regex) {
 				$value = $this->featureContext->substituteInLineCodes(
 					$value, ['preg_quote' => ['/'] ]
@@ -228,6 +244,8 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	 *
 	 * @param string $user
 	 * @param string $firstOrLast
+	 *
+	 * @return void
 	 */
 	public function deleteNotification($user, $firstOrLast) {
 		PHPUnit_Framework_Assert::assertNotEmpty($this->notificationIds);
@@ -246,7 +264,9 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 
 	/**
 	 * Parses the xml answer to get the array of users returned.
+	 *
 	 * @param ResponseInterface $resp
+	 *
 	 * @return array
 	 */
 	public function getArrayOfNotificationsResponded(ResponseInterface $resp) {
@@ -257,6 +277,8 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	/**
 	 * 
 	 * @AfterScenario
+	 *
+	 * @return void
 	 */
 	public function clearNotifications() {
 		$response = OcsApiHelper::sendRequest(
@@ -289,6 +311,9 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 
 	/**
 	 * Abstract method implemented from Core's FeatureContext
+	 *
+	 * @return void
 	 */
-	protected function resetAppConfigs() {}
+	protected function resetAppConfigs() {
+	}
 }
