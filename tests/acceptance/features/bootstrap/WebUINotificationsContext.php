@@ -25,6 +25,7 @@ use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Page\NotificationsEnabledOwncloudPage;
+use Page\Notification;
 
 /**
  * Context for Notifications App
@@ -90,6 +91,36 @@ class WebUINotificationsContext extends RawMinkContext implements Context {
 				);
 			}
 		}
+	}
+
+	/**
+	 * @When /^the user follows the link of the (first|last) notification on the webUI$/
+	 * 
+	 * @param string $firstOrLast first|last
+	 * 
+	 * @throws InvalidArgumentException
+	 * @throws \Exception
+	 * 
+	 * @return void
+	 */
+	public function userFollowsLink($firstOrLast) {
+		$notificationsDialog = $this->openNotificationsDialog();
+		$notifications = $notificationsDialog->getAllNoficationObjects();
+		if ($firstOrLast === 'first') {
+			/**
+			 * 
+			 * @var Notification $notification
+			 */
+			$notification = reset($notifications);
+		} elseif ($firstOrLast === 'last') {
+			$notification = end($notifications);
+		} else {
+			throw new InvalidArgumentException();
+		}
+		if ($notification === false) {
+			throw new \Exception(__METHOD__ . " no notifications found");
+		}
+		$notification->followLink($this->getSession());
 	}
 
 	/**
