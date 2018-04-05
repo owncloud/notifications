@@ -35,10 +35,11 @@ class Notification extends OwncloudPage {
 	 * 
 	 * @var NodeElement
 	 */
-	protected $notificationElement;
+	private $notificationElement;
 	
-	protected $buttonByTextXpath = "//button[text()='%s']";
-
+	private $buttonByTextXpath = "//button[text()='%s']";
+	private $notificationLinkXpath = "//a[@class='notification-link']";
+	
 	/**
 	 * sets the NodeElement for the current notification
 	 * a little bit like __construct() but as we access this "sub-page-object"
@@ -51,6 +52,39 @@ class Notification extends OwncloudPage {
 	 */
 	public function setElement(NodeElement $notificationElement) {
 		$this->notificationElement = $notificationElement;
+	}
+
+	/**
+	 * 
+	 * @param Session $session
+	 * @param int $timeout_msec
+	 * 
+	 * @throws ElementNotFoundException
+	 * 
+	 * @return void
+	 */
+	public function followLink(
+		Session $session, $timeout_msec = STANDARDUIWAITTIMEOUTMILLISEC
+	) {
+		$link = $this->notificationElement->find(
+			"xpath", $this->notificationLinkXpath
+		);
+		if ($link === null) {
+			throw new ElementNotFoundException(
+				__METHOD__ . " could not find notification link " .
+				"with xpath " . $this->notificationLinkXpath
+			);
+		}
+		$destination = $link->getAttribute('href');
+		$link->click();
+		$currentTime = microtime(true);
+		$end = $currentTime + ($timeout_msec / 1000);
+		while ($currentTime <= $end) {
+			if ($destination === $session->getCurrentUrl()) {
+				break;
+			}
+			$currentTime = microtime(true);
+		}
 	}
 
 	/**

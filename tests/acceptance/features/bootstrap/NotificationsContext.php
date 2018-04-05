@@ -73,6 +73,9 @@ class NotificationsContext implements Context {
 		//so it does not need to be mentioned in the table
 		$rows = $formData->getRows();
 		$rows[] = ["user", $user];
+		for ($rowCount = 0; $rowCount < count($rows); $rowCount ++) {
+			$rows[$rowCount] = $this->featureContext->substituteInLineCodes($rows[$rowCount]);
+		}
 		$formData = new TableNode($rows);
 		
 		$this->featureContext->userSendsHTTPMethodToOcsApiEndpointWithBody(
