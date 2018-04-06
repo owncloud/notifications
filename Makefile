@@ -62,6 +62,7 @@ appstore:
 	img \
 	js \
 	lib \
+	templates \
 	$(appstore_package_name)
 
 ifdef CAN_SIGN
