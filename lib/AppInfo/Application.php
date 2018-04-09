@@ -58,8 +58,12 @@ class Application extends App {
 		$container->registerService('Capabilities', function(IContainer $c) {
 			return new Capabilities();
 		});
-
 		$container->registerCapability('Capabilities');
+
+	}
+
+	public function setupConsumerAndNotifier() {
+		$container = $this->getContainer();
 
 		$dispatcher = $container->getServer()->getEventDispatcher();
 
