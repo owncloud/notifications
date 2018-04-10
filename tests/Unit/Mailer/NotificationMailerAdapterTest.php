@@ -72,10 +72,11 @@ class NotificationMailerAdapterTest extends \Test\TestCase {
 		$mockedNotification->method('getActions')->willReturn([]);
 		$mockedNotification->method('getObjectType')->willReturn('testobject');
 		$mockedNotification->method('getObjectId')->willReturn('467');
+		$mockedNotification->method('getUser')->willReturn('missingUser');
 
 		$this->logger->expects($this->once())
 			->method('debug')
-			->with($this->stringContains('testobject#467 ignored'));
+			->with($this->stringContains('personal configuration for missingUser prevents it'));
 
 		$this->notificationMailer->method('willSendNotification')->willReturn(false);
 		$this->notificationMailer->expects($this->never())
