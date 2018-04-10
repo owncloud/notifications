@@ -61,24 +61,25 @@ class NotificationMailerAdapter {
 		$nObjectType = $notification->getObjectType();
 		$nObjectId = $notification->getObjectId();
 
+		$targetUser = $notification->getUser();
+
 		if (!$this->sender->willSendNotification($notification)) {
-			$this->logger->debug("notification $nObjectType#$nObjectId ignored. Prevented by configuration",
+			$this->logger->debug("notification $nObjectType#$nObjectId won't be sent to $targetUser via email: personal configuration for $targetUser prevents it",
 				['app' => $this->appName]);
 			return;
 		}
 
-		$targetUser = $notification->getUser();
 		$userObject = $this->userManager->get($targetUser);
 
 		if ($userObject === null) {
-			$this->logger->warning("notification $nObjectType#$nObjectId can't be sent to $targetUser: the user is missing",
+			$this->logger->warning("notification $nObjectType#$nObjectId can't be sent to $targetUser via email: the user is missing",
 				['app' => $this->appName]);
 			return;
 		}
 
 		$targetEmail = $userObject->getEMailAddress();
 		if ($targetEmail === null) {
-			$this->logger->warning("notification $nObjectType#$nObjectId can't be sent to $targetUser: email for the user isn't set",
+			$this->logger->warning("notification $nObjectType#$nObjectId can't be sent to $targetUser via email: email for the user isn't set",
 				['app' => $this->appName]);
 			return;
 		}
@@ -95,7 +96,7 @@ class NotificationMailerAdapter {
 				$this->logger->logException($ex, ['app' => $this->appName]);
 			}
 		} else {
-			$this->logger->warning("notification $nObjectType#$nObjectId can't be sent to $targetUser: email \"$targetEmail\" isn't valid");
+			$this->logger->warning("notification $nObjectType#$nObjectId can't be sent to $targetUser via email: user's email \"$targetEmail\" isn't valid");
 		}
 	}
 }
