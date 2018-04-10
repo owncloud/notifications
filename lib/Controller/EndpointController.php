@@ -67,6 +67,7 @@ class EndpointController extends OCSController {
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @CORS
 	 *
 	 * @return Result
 	 */
