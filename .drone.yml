@@ -15,8 +15,8 @@ pipeline:
 
   install-server:
     image: owncloudci/core
-    pull: true
     version: ${OC_VERSION}
+    pull: true
     db_type: ${DB_TYPE}
     db_name: ${DB_NAME}
     db_host: ${DB_TYPE}
@@ -80,9 +80,11 @@ pipeline:
   api-acceptance-tests:
     image: owncloudci/php:${PHP_VERSION}
     pull: true
+    environment:
+      - MAILHOG_HOST=email
     commands:
       - cd /var/www/owncloud/apps/notifications/tests/acceptance
-      - bash ./run.sh apiNotifications
+      - su-exec www-data ./run.sh apiNotifications
     when:
       matrix:
         TEST_SUITE: api-acceptance
@@ -172,6 +174,13 @@ services:
     when:
       matrix:
         TEST_SUITE: web-acceptance
+
+  email:
+    image: mailhog/mailhog
+    pull: true
+    when:
+      matrix:
+        TEST_SUITE: api-acceptance
 
 matrix:
   include:
