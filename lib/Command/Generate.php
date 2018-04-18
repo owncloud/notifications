@@ -57,6 +57,7 @@ class Generate extends Command {
 			->setDescription('Generates a notification')
 			->addOption('user', 'u', InputOption::VALUE_REQUIRED, 'User id to whom the notification shall be sent to')
 			->addOption('group', 'g', InputOption::VALUE_REQUIRED, 'Group id to whom the notification shall be sent to')
+			->addOption('link', 'l', InputOption::VALUE_REQUIRED, 'A link associated with the notification', null)
 			->addArgument('subject', InputArgument::REQUIRED, 'The notification subject - maximum 255 characters')
 			->addArgument('message', InputArgument::OPTIONAL, 'A longer message - maximum 4000 characters')
 		;
@@ -70,6 +71,7 @@ class Generate extends Command {
 		}
 		$subject = $input->getArgument('subject');
 		$message = $input->getArgument('message');
+		$link = $input->getOption('link');
 
 		$users = [$user];
 		if ($group !== null) {
@@ -96,6 +98,10 @@ class Generate extends Command {
 				$notification->setMessage('admin-notification', [$message]);
 			}
 			$notification->setSubject('admin-notification', [$subject]);
+			if (!empty($link)) {
+				$notification->setLink($link);
+			}
+
 			$notification->setObject('admin-notification', $time);
 			if (method_exists($notification, 'setIcon')) {
 				$notification->setIcon($this->urlGenerator->imagePath('notifications', 'icon.png'));
