@@ -275,7 +275,8 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 					$value, ['preg_quote' => ['/'] ]
 				);
 				PHPUnit_Framework_Assert::assertNotFalse(
-					(bool)preg_match($value, $response['ocs']['data'][$key])
+					(bool)preg_match($value, $response['ocs']['data'][$key]),
+					"'$value' does not match '" . $response['ocs']['data'][$key] . "'"
 				);
 			} else {
 				$value = $this->featureContext->substituteInLineCodes($value);
