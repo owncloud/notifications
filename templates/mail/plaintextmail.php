@@ -1,10 +1,10 @@
-<?php print_unescaped($_['subject']); ?>
-
-
+<?php if ($_['message'] !== ''): ?>
 <?php print_unescaped($_['message']); ?>
 
 
-<?php print_unescaped($l->t('Go to %s to check the notification', [$_['serverUrl']])); ?>
+<?php endif; ?>
+<?php print_unescaped($l->t('See %s for more information', [$_['serverUrl']])); ?>
+
 
 --
 <?php p($theme->getName() . ' - ' . $theme->getSlogan()); ?>

@@ -44,14 +44,10 @@ class NotificationMailer {
 	/** @var OptionsStorage */
 	private $optionsStorage;
 
-	/** @var IFactory */
-	private $l10nFactory;
-
-	public function __construct(IManager $manager, IMailer $mailer, OptionsStorage $optionsStorage, IFactory $l10nFactory) {
+	public function __construct(IManager $manager, IMailer $mailer, OptionsStorage $optionsStorage) {
 		$this->manager = $manager;
 		$this->mailer = $mailer;
 		$this->optionsStorage = $optionsStorage;
-		$this->l10nFactory = $l10nFactory;
 	}
 
 	/**
@@ -77,20 +73,18 @@ class NotificationMailer {
 		$emailMessage = $this->mailer->createMessage();
 		$emailMessage->setTo([$emailAddress]);
 
-		$l10n = $this->l10nFactory->get('notifications', $language);
-
-		$notificationObjectType = $notification->getObjectType();
-		$notificationObjectId = $notification->getObjectId();
-		$generatedId = "$notificationObjectType#$notificationObjectId";
-
-		$translatedSubject = (string)$l10n->t('You\'ve received a new notification in %s : "%s"', [$serverUrl, $generatedId]);
-		$emailMessage->setSubject($translatedSubject);
+		$notificationLink = $notification->getLink();
+		if ($notificationLink === '') {
+			$notificationLink = $serverUrl;
+		}
 
 		$parsedSubject = $notification->getParsedSubject();
 		$parsedMessage = $notification->getParsedMessage();
 
-		$htmlText = $this->getMailBody($parsedSubject, $parsedMessage, $serverUrl, 'mail/htmlmail');
-		$plainText = $this->getMailBody($parsedSubject, $parsedMessage, $serverUrl, 'mail/plaintextmail');
+		$emailMessage->setSubject($parsedSubject);
+
+		$htmlText = $this->getMailBody($parsedMessage, $notificationLink, 'mail/htmlmail');
+		$plainText = $this->getMailBody($parsedMessage, $notificationLink, 'mail/plaintextmail');
 
 		$emailMessage->setPlainBody($plainText);
 		$emailMessage->setHtmlBody($htmlText);
@@ -136,9 +130,8 @@ class NotificationMailer {
 		}
 	}
 
-	private function getMailBody($subject, $message, $serverUrl, $targetTemplate) {
-		$tmpl = new Template('notifications', $targetTemplate);
-		$tmpl->assign('subject', $subject);
+	private function getMailBody($message, $serverUrl, $targetTemplate) {
+		$tmpl = new Template('notifications', $targetTemplate, '', false);
 		$tmpl->assign('message', $message);
 		$tmpl->assign('serverUrl', $serverUrl);
 		return $tmpl->fetchPage();
