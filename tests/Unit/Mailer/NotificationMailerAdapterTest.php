@@ -272,7 +272,7 @@ class NotificationMailerAdapterTest extends \Test\TestCase {
 			->willReturn(true);
 		$this->notificationMailer->expects($this->once())
 			->method('sendNotification')
-			->with($mockedNotification, 'http://notification.com/link/here', 'we@we.we');
+			->with($mockedNotification, 'http://what.ever/oc', 'we@we.we');
 
 		$this->adapter->sendMail($mockedNotification);
 	}
