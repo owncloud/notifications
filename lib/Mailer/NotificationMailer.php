@@ -137,7 +137,7 @@ class NotificationMailer {
 	}
 
 	private function getMailBody($subject, $message, $serverUrl, $targetTemplate) {
-		$tmpl = new Template('notifications', $targetTemplate);
+		$tmpl = new Template('notifications', $targetTemplate, '', false);
 		$tmpl->assign('subject', $subject);
 		$tmpl->assign('message', $message);
 		$tmpl->assign('serverUrl', $serverUrl);
