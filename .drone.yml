@@ -249,6 +249,13 @@ matrix:
 
     - PHP_VERSION: 7.1
       OC_VERSION: daily-master-qa
+      TEST_SUITE: web-acceptance
+      BEHAT_SUITE: webUINotifications
+      DB_TYPE: oci
+      DB_NAME: XE
+
+    - PHP_VERSION: 7.1
+      OC_VERSION: daily-master-qa
       TEST_SUITE: api-acceptance
       BEHAT_SUITE: apiNotifications
       DB_TYPE: mysql
@@ -261,6 +268,13 @@ matrix:
       DB_TYPE: pgsql
       DB_NAME: owncloud
 
+    - PHP_VERSION: 7.1
+      OC_VERSION: daily-master-qa
+      TEST_SUITE: api-acceptance
+      BEHAT_SUITE: apiNotifications
+      DB_TYPE: oci
+      DB_NAME: XE
+
     - PHP_VERSION: 5.6
       OC_VERSION: daily-stable10-qa
       TEST_SUITE: web-acceptance
@@ -277,6 +291,13 @@ matrix:
 
     - PHP_VERSION: 5.6
       OC_VERSION: daily-stable10-qa
+      TEST_SUITE: web-acceptance
+      BEHAT_SUITE: webUINotifications
+      DB_TYPE: oci
+      DB_NAME: XE
+
+    - PHP_VERSION: 5.6
+      OC_VERSION: daily-stable10-qa
       TEST_SUITE: api-acceptance
       BEHAT_SUITE: apiNotifications
       DB_TYPE: mysql
@@ -288,3 +309,10 @@ matrix:
       BEHAT_SUITE: apiNotifications
       DB_TYPE: pgsql
       DB_NAME: owncloud
+
+    - PHP_VERSION: 5.6
+      OC_VERSION: daily-stable10-qa
+      TEST_SUITE: api-acceptance
+      BEHAT_SUITE: apiNotifications
+      DB_TYPE: oci
+      DB_NAME: XE
