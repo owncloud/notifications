@@ -207,18 +207,6 @@ matrix:
       DB_TYPE: mysql
       DB_NAME: owncloud
 
-    - PHP_VERSION: 5.6
-      OC_VERSION: daily-stable10-qa
-      TEST_SUITE: phpunit
-      DB_TYPE: pgsql
-      DB_NAME: owncloud
-
-    - PHP_VERSION: 5.6
-      OC_VERSION: daily-stable10-qa
-      TEST_SUITE: phpunit
-      DB_TYPE: oci
-      DB_NAME: XE
-
     - PHP_VERSION: 7.0
       OC_VERSION: daily-stable10-qa
       TEST_SUITE: phpunit
@@ -229,6 +217,18 @@ matrix:
       OC_VERSION: daily-stable10-qa
       TEST_SUITE: phpunit
       DB_TYPE: pgsql
+      DB_NAME: owncloud
+
+    - PHP_VERSION: 7.0
+      OC_VERSION: daily-stable10-qa
+      TEST_SUITE: phpunit
+      DB_TYPE: oci
+      DB_NAME: XE
+
+    - PHP_VERSION: 7.1
+      OC_VERSION: daily-stable10-qa
+      TEST_SUITE: phpunit
+      DB_TYPE: mysql
       DB_NAME: owncloud
 
     # Acceptance Tests
