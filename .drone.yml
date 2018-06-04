@@ -5,14 +5,6 @@ workspace:
 branches: [master, stable10, release*]
 
 pipeline:
-  wait-for-oracle:
-    image: owncloudci/php:${PHP_VERSION}
-    commands:
-      - sleep 20
-    when:
-      matrix:
-        DB_TYPE: oci
-
   install-server:
     image: owncloudci/core
     version: ${OC_VERSION}
