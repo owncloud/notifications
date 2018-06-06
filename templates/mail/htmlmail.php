@@ -11,11 +11,11 @@
 <tr>
 <td width="20px">&nbsp;</td>
 <td style="font-weight:normal; font-size:0.8em; line-height:1.2em; font-family:verdana,'arial',sans;">
-<?php p($_['subject']); ?>
-<br /><br />
-<?php p($_['message']); ?>
-<br /><br />
-<?php print_unescaped($l->t('Go to <a href="%s">%s</a> to check the notification', [$_['serverUrl'], $_['serverUrl']])); ?>
+<?php if ($_['message'] !== ''): ?>
+	<?php p($_['message']); ?>
+	<br><br>
+<?php endif; ?>
+<?php print_unescaped($l->t('See <a href="%s">%s</a> for more information', [$_['serverUrl'], $_['serverUrl']])); ?>
 </td>
 </tr>
 <tr><td colspan="2">&nbsp;</td></tr>

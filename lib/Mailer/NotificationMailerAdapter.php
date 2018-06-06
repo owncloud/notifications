@@ -86,11 +86,7 @@ class NotificationMailerAdapter {
 
 		if ($this->sender->validateEmail($targetEmail)) {
 			try {
-				$serverUrl = $notification->getLink();
-				if (empty($serverUrl)) {
-					$serverUrl = $this->urlGenerator->getAbsoluteURL('/');
-				}
-
+				$serverUrl = $this->urlGenerator->getAbsoluteURL('/');
 				$this->sender->sendNotification($notification, $serverUrl, $targetEmail);
 			} catch (\Exception $ex) {
 				$this->logger->logException($ex, ['app' => $this->appName]);
