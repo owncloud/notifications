@@ -8,6 +8,7 @@ default:
         - %paths.base%/../features/apiNotifications
       contexts:
         - NotificationsContext:
+        - NotificationsCoreContext:
         - EmailContext:
         - FeatureContext: &common_feature_context_params
             baseUrl:  http://localhost:8080
@@ -26,6 +27,7 @@ default:
           regularUserPassword: 123456
       contexts:
         - NotificationsContext:
+        - NotificationsCoreContext:
         - FeatureContext: *common_feature_context_params
         - WebUINotificationsContext:
         - WebUIGeneralContext:
