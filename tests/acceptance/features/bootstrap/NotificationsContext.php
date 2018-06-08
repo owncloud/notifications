@@ -21,7 +21,6 @@
  */
 
 use Behat\Behat\Context\Context;
-use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use GuzzleHttp\Message\ResponseInterface;
@@ -34,7 +33,7 @@ require_once 'bootstrap.php';
 /**
  * Defines application features from the specific context.
  */
-class NotificationsContext implements Context, SnippetAcceptingContext {
+class NotificationsContext implements Context {
 
 	/**
 	 * @var FeatureContext
