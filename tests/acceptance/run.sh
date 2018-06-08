@@ -27,11 +27,17 @@ export TEST_SERVER_URL="http://localhost:$PORT"
 $OCC config:system:set skeletondirectory --value="$(pwd)/$OC_PATH""$CORE_INT_TESTS_PATH""skeleton"
 
 #Set up mailhog to send emails
+if [ -z "$MAILHOG_HOST" ]; then
+    MAILHOG_HOST="127.0.0.1"
+fi
+if [ -z "$MAILHOG_SMTP_PORT" ]; then
+    MAILHOG_SMTP_PORT="1025"
+fi
 $OCC config:system:set mail_domain --value="foobar.com"
 $OCC config:system:set mail_from_address --value="owncloud"
 $OCC config:system:set mail_smtpmode --value="smtp"
-$OCC config:system:set mail_smtphost --value="127.0.0.1"
-$OCC config:system:set mail_smtpport --value="1025"
+$OCC config:system:set mail_smtphost --value=$MAILHOG_HOST
+$OCC config:system:set mail_smtpport --value=$MAILHOG_SMTP_PORT
 #We cannot set password with csrf enabled
 $OCC config:system:set csrf.disabled --value="true"
 
