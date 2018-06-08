@@ -2,7 +2,7 @@ workspace:
   base: /var/www/owncloud
   path: apps/notifications
 
-branches: [master, release*]
+branches: [master, stable10, release*]
 
 pipeline:
   wait-for-oracle:
