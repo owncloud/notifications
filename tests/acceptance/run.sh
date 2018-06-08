@@ -2,11 +2,10 @@
 
 mkdir -p output
 
-composer install
-
 OC_PATH=../../../../
 CORE_INT_TESTS_PATH=tests/acceptance/
 OCC=${OC_PATH}occ
+BEHAT=${OC_PATH}lib/composer/behat/behat/bin/behat
 
 SCENARIO_TO_RUN=$1
 HIDE_OC_LOGS=$2
@@ -39,7 +38,7 @@ $OCC config:system:set csrf.disabled --value="true"
 $OCC app:enable notifications
 $OCC app:enable testing
 
-vendor/bin/behat --strict -f junit -f pretty --tags "@api" $SCENARIO_TO_RUN
+$BEHAT --strict -f junit -f pretty --tags "@api" --suite $SCENARIO_TO_RUN
 RESULT=$?
 
 kill $PHPPID

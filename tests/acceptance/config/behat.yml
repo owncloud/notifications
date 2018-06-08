@@ -3,7 +3,7 @@ default:
      '': %paths.base%/../features/bootstrap
 
   suites:
-    default:
+    apiNotifications:
       paths:
         - %paths.base%/../features/apiNotifications
       contexts:
