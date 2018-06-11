@@ -3,11 +3,12 @@ default:
      '': %paths.base%/../features/bootstrap
 
   suites:
-    default:
+    apiNotifications:
       paths:
         - %paths.base%/../features/apiNotifications
       contexts:
         - NotificationsContext:
+        - EmailContext:
         - FeatureContext: &common_feature_context_params
             baseUrl:  http://localhost:8080
             adminUsername: admin

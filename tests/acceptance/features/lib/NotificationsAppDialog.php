@@ -22,6 +22,8 @@
 
 namespace Page;
 
+use SensioLabs\Behat\PageObjectExtension\PageObject\Exception\ElementNotFoundException;
+
 /**
  * PageObject for the Notifications area
  */
@@ -51,7 +53,7 @@ class NotificationsAppDialog extends OwncloudPage {
 			if ($link === null) {
 				throw new ElementNotFoundException(
 					__METHOD__ . " could not find notification link " .
-					"with xpath " . $this->$notificationLinkXpath
+					"with xpath " . $this->notificationLinkXpath
 				);
 			}
 			$message = $notification->find("xpath", $this->notificationMessageXpath);
@@ -68,5 +70,24 @@ class NotificationsAppDialog extends OwncloudPage {
 			];
 		}
 		return $notificationsArray;
+	}
+
+	/**
+	 * 
+	 * @return \Page\Notification[]
+	 */
+	public function getAllNoficationObjects() {
+		$notificationsElement = $this->findAll("xpath", $this->notificationContainerXpath);
+		$notificationObjects = [];
+		foreach ($notificationsElement as $notificationElement) {
+			/**
+			 * 
+			 * @var Notification $notificationObject
+			 */
+			$notificationObject = $this->getPage("Notification");
+			$notificationObject->setElement($notificationElement);
+			$notificationObjects[] = $notificationObject;
+		}
+		return $notificationObjects;
 	}
 }

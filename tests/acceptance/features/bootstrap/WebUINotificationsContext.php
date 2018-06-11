@@ -36,7 +36,7 @@ class WebUINotificationsContext extends RawMinkContext implements Context {
 	 * @var NotificationsEnabledOwncloudPage
 	 */
 	private $owncloudPage;
-	
+
 	/**
 	 * 
 	 * @param NotificationsEnabledOwncloudPage $owncloudPage
@@ -49,21 +49,17 @@ class WebUINotificationsContext extends RawMinkContext implements Context {
 	
 	/**
 	 * 
-	 * @Then /^user "([^"]*)" should see (\d+) notification(?:s|) on the webUI with these details$/
+	 * @Then /^the user should see (\d+) notification(?:s|) on the webUI with these details$/
 	 * 
-	 * @param string $user
 	 * @param int $number
 	 * @param TableNode $expectedNotifications
 	 * 
 	 * @return void
 	 */
 	public function assertNotificationsOnWebUI(
-		$user, $number, TableNode $expectedNotifications
+		$number, TableNode $expectedNotifications
 	) {
-		$this->getSession()->reload();
-		$this->owncloudPage->waitTillPageIsLoaded($this->getSession());
-		$this->owncloudPage->waitForNotifications();
-		$notificationsDialog = $this->owncloudPage->openNotifications();
+		$notificationsDialog = $this->openNotificationsDialog();
 		$notifications = $notificationsDialog->getAllNotifications();
 		PHPUnit_Framework_Assert::assertEquals(
 			$number,
@@ -71,11 +67,74 @@ class WebUINotificationsContext extends RawMinkContext implements Context {
 			"expected $number notifications, found " . count($notifications)
 		);
 		foreach ($expectedNotifications as $expectedNotification) {
-			PHPUnit_Framework_Assert::assertContains(
-				$expectedNotification, $notifications,
-				"could not find expected message in \n" .
-				print_r($notifications, true)
-			);
+			foreach ($notifications as $notification) {
+				$found = false;
+				foreach ($expectedNotification as $expectedKey => $expectedValue) {
+					if ($notification[$expectedKey] === $expectedValue) {
+						$found = true;
+					} else {
+						$found = false;
+						break;
+					}
+				}
+				if ($found) {
+					break;
+				}
+			}
+			if (!$found) {
+				PHPUnit_Framework_Assert::fail(
+					"could not find expected notification: " .
+					print_r($expectedNotification, true) .
+					" in viewed notifications: " .
+					print_r($notifications, true)
+				);
+			}
 		}
+	}
+
+	/**
+	 * @When /^the user reacts with "(Accept|Decline)" to all notifications on the webUI$/
+	 *
+	 * @param string $reaction
+	 *
+	 * @return void
+	 */
+	public function userReactsToAllNotificationsOnTheWebUI($reaction) {
+			$notificationsDialog = $this->openNotificationsDialog();
+			$notifications = $notificationsDialog->getAllNoficationObjects();
+		while (count($notifications) > 0) {
+			$notifications[0]->react($reaction, $this->getSession());
+			//we need to rescan again, because the DOM changes
+			$notifications = $notificationsDialog->getAllNoficationObjects();
+		}
+	}
+
+	/**
+	 * @When the user accepts all shares displayed in the notifications on the webUI
+	 * 
+	 * @return void
+	 */
+	public function userAcceptsAllShares() {
+		$this->userReactsToAllNotificationsOnTheWebUI("Accept");
+	}
+
+	/**
+	 * @When the user declines all shares displayed in the notifications on the webUI
+	 *
+	 * @return void
+	 */
+	public function userDeclinesAllShares() {
+		$this->userReactsToAllNotificationsOnTheWebUI("Decline");
+	}
+
+	/**
+	 * 
+	 * @return \Page\NotificationsAppDialog
+	 */
+	protected function openNotificationsDialog() {
+		$this->getSession()->reload();
+		$this->owncloudPage->waitTillPageIsLoaded($this->getSession());
+		$this->owncloudPage->waitForNotifications();
+		return $this->owncloudPage->openNotifications();
 	}
 }

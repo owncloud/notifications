@@ -30,7 +30,7 @@ So that I can stay informed
 			| message     | second notification             |
 			| object_type | blog                            |
 			| object_id   | 9484                            |
-		Then user "user1" should see 2 notifications on the webUI with these details
+		Then the user should see 2 notifications on the webUI with these details
 			| title               | link                       | message                   |
 			| Acceptance Testing  | https://owncloud.org/blog  | Notifications in ownCloud |
 			| UI tests            | http://owncloud.org/       | second notification       |

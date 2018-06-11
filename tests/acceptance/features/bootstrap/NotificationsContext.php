@@ -26,6 +26,8 @@ use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use GuzzleHttp\Message\ResponseInterface;
 use TestHelpers\OcsApiHelper;
+use GuzzleHttp\Client;
+use TestHelpers\EmailHelper;
 
 require_once 'bootstrap.php';
 
@@ -44,7 +46,7 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	 * @var FeatureContext
 	 */
 	private $featureContext;
-	
+
 	/**
 	 * @When /^user "([^"]*)" is sent (?:a|another) notification$/
 	 * @Given /^user "([^"]*)" has been sent (?:a|another) notification$/
@@ -85,6 +87,48 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 		PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
 		PHPUnit_Framework_Assert::assertEquals(
 			200, (int) $this->featureContext->getOCSResponseStatusCode($response)
+		);
+	}
+
+	/**
+	 * @When the user :user sets the email notification option to :setting using the API
+	 * 
+	 * @param string $user
+	 * @param string $setting
+	 * 
+	 * @return void
+	 */
+	public function setEmailNotificationOption($user, $setting) {
+		$fullUrl = $this->featureContext->getBaseUrl() .
+				   "/index.php/apps/notifications/settings/personal/" .
+				   "notifications/options";
+		$client = new Client();
+		$options = [];
+		$options['auth'] = [$user, $this->featureContext->getUserPassword($user)];
+		$options['headers'] = ['Content-Type' => 'application/json'];
+		$options['body'] = '{"email_sending_option":"' . $setting . '"}';
+		
+		$response = $client->send(
+			$client->createRequest("PATCH", $fullUrl, $options)
+		);
+		PHPUnit_Framework_Assert::assertEquals(
+			200, $response->getStatusCode(),
+			"could not set notification option " . $response->getReasonPhrase()
+		);
+		$responseDecoded = json_decode($response->getBody());
+		PHPUnit_Framework_Assert::assertEquals(
+			$responseDecoded->data->options->id, $user,
+			"Could not set notification option! " .
+			"'user' in the response is:'" .
+			$responseDecoded->data->options->id . "' " .
+			"but should be: '$user'"
+		);
+		PHPUnit_Framework_Assert::assertEquals(
+			$responseDecoded->data->options->email_sending_option, $setting,
+			"Could not set notification option! " .
+			"'email_sending_option' in the response is:'" .
+			$responseDecoded->data->options->email_sending_option . "' " .
+			"but should be: '$setting'"
 		);
 	}
 
@@ -148,10 +192,45 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	 * @param string $notification first|last
 	 * @param string $user
 	 * @param \Behat\Gherkin\Node\TableNode $formData
+	 *
+	 * @return void
+	 */
+	public function matchNotificationPlain(
+		$notification, $user, $formData
+	) {
+		$this->matchNotification(
+			$notification, $user, false, $formData
+		);
+	}
+
+	/**
+	 * @Then /^the (first|last) notification of user "([^"]*)" should match these regular expressions$/
+	 *
+	 * @param string $notification first|last
+	 * @param string $user
+	 * @param \Behat\Gherkin\Node\TableNode $formData
 	 * 
 	 * @return void
 	 */
-	public function matchNotification($notification, $user, $formData) {
+	public function matchNotificationRegularExpression(
+		$notification, $user, $formData
+	) {
+		$this->matchNotification(
+			$notification, $user, true, $formData
+		);
+	}
+
+	/**
+	 * @param string $notification first|last
+	 * @param string $user
+	 * @param bool $regex
+	 * @param \Behat\Gherkin\Node\TableNode $formData
+	 *
+	 * @return void
+	 */
+	public function matchNotification(
+		$notification, $user, $regex, $formData
+	) {
 		$lastNotifications = end($this->notificationIds);
 		if ($notification === 'first') {
 			$notificationId = reset($lastNotifications);
@@ -172,7 +251,20 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 
 		foreach ($formData->getRowsHash() as $key => $value) {
 			PHPUnit_Framework_Assert::assertArrayHasKey($key, $response['ocs']['data']);
-			PHPUnit_Framework_Assert::assertEquals($value, $response['ocs']['data'][$key]);
+			if ($regex) {
+				$value = $this->featureContext->substituteInLineCodes(
+					$value, ['preg_quote' => ['/'] ]
+				);
+				PHPUnit_Framework_Assert::assertNotFalse(
+					(bool)preg_match($value, $response['ocs']['data'][$key]),
+					"'$value' does not match '" . $response['ocs']['data'][$key] . "'"
+				);
+			} else {
+				$value = $this->featureContext->substituteInLineCodes($value);
+				PHPUnit_Framework_Assert::assertEquals(
+					$value, $response['ocs']['data'][$key]
+				);
+			}
 		}
 	}
 
