@@ -19,13 +19,11 @@ Feature: notifications-content
 			| object_id   | 9483                                                                      |
 		Then the email address "u1@oc.com.np" should have received an email with the body containing
 			"""
-			Acceptance Testing
-			
 			About Activities and Notifications in ownCloud
 			
-			Go to https://owncloud.org/blog/about-activities-and-notifications-in-owncloud/ to check the notification
+			See https://owncloud.org/blog/about-activities-and-notifications-in-owncloud/ for more information
 			"""
 		And the email address "u1@oc.com.np" should have received an email with the body containing
 			"""
-			Go to <a href="https://owncloud.org/blog/about-activities-and-notifications-in-owncloud/">https://owncloud.org/blog/about-activities-and-notifications-in-owncloud/</a> to check the notification</td>
+			See <a href="https://owncloud.org/blog/about-activities-and-notifications-in-owncloud/">https://owncloud.org/blog/about-activities-and-notifications-in-owncloud/</a> for more information</td>
 			"""
