@@ -131,64 +131,6 @@ class NotificationsContext implements Context {
 	}
 
 	/**
-	 * @param string $user
-	 * @param string $setting
-	 * 
-	 * @return void
-	 */
-	public function setEmailNotificationOption($user, $setting) {
-		$fullUrl = $this->featureContext->getBaseUrl() .
-				   "/index.php/apps/notifications/settings/personal/" .
-				   "notifications/options";
-		$client = new Client();
-		$options = [];
-		$options['auth'] = [$user, $this->featureContext->getUserPassword($user)];
-		$options['headers'] = ['Content-Type' => 'application/json'];
-		$options['body'] = '{"email_sending_option":"' . $setting . '"}';
-		
-		$response = $client->send(
-			$client->createRequest("PATCH", $fullUrl, $options)
-		);
-		PHPUnit_Framework_Assert::assertEquals(
-			200, $response->getStatusCode(),
-			"could not set notification option " . $response->getReasonPhrase()
-		);
-		$responseDecoded = json_decode($response->getBody());
-		PHPUnit_Framework_Assert::assertEquals(
-			$responseDecoded->data->options->id, $user,
-			"Could not set notification option! " .
-			"'user' in the response is:'" .
-			$responseDecoded->data->options->id . "' " .
-			"but should be: '$user'"
-		);
-		PHPUnit_Framework_Assert::assertEquals(
-			$responseDecoded->data->options->email_sending_option, $setting,
-			"Could not set notification option! " .
-			"'email_sending_option' in the response is:'" .
-			$responseDecoded->data->options->email_sending_option . "' " .
-			"but should be: '$setting'"
-		);
-
-		foreach ($formData->getRowsHash() as $key => $value) {
-			PHPUnit_Framework_Assert::assertArrayHasKey($key, $response['ocs']['data']);
-			if ($regex) {
-				$value = $this->featureContext->substituteInLineCodes(
-					$value, ['preg_quote' => ['/'] ]
-				);
-				PHPUnit_Framework_Assert::assertNotFalse(
-					(bool)preg_match($value, $response['ocs']['data'][$key]),
-					"'$value' does not match '" . $response['ocs']['data'][$key] . "'"
-				);
-			} else {
-				$value = $this->featureContext->substituteInLineCodes($value);
-				PHPUnit_Framework_Assert::assertEquals(
-					$value, $response['ocs']['data'][$key]
-				);
-			}
-		}
-	}
-
-	/**
 	 * @When /^user "([^"]*)" deletes the (first|last) notification$/
 	 *
 	 * @param string $user
