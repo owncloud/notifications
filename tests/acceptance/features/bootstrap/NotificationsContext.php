@@ -21,35 +21,26 @@
  */
 
 use Behat\Behat\Context\Context;
-use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
-use GuzzleHttp\Message\ResponseInterface;
-use TestHelpers\OcsApiHelper;
 use GuzzleHttp\Client;
-use TestHelpers\EmailHelper;
 
 require_once 'bootstrap.php';
 
 /**
  * Defines application features from the specific context.
  */
-class NotificationsContext implements Context, SnippetAcceptingContext {
-
-	/**
-	 * @var array[] 
-	 */
-	protected $notificationIds;
-
-	/**
-	 * @var int 
-	 */
-	protected $deletedNotification;
+class NotificationsContext implements Context {
 
 	/**
 	 * @var FeatureContext
 	 */
 	private $featureContext;
+
+	/**
+	 * @var NotificationsCoreContext
+	 */
+	private $notificationsCoreContext;
 
 	/**
 	 * @When /^user "([^"]*)" is sent (?:a|another) notification$/
@@ -144,150 +135,6 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then /^the list of notifications should have (\d+) (?:entry|entries)$/
-	 *
-	 * @param int $numNotifications
-	 *
-	 * @return void
-	 */
-	public function checkNumNotifications($numNotifications) {
-		$notifications = $this->getArrayOfNotificationsResponded(
-			$this->featureContext->getResponse()
-		);
-		PHPUnit_Framework_Assert::assertCount(
-			(int) $numNotifications, $notifications
-		);
-
-		$notificationIds = [];
-		foreach ($notifications as $notification) {
-			$notificationIds[] = (int) $notification['notification_id'];
-		}
-
-		$this->notificationIds[] = $notificationIds;
-	}
-
-	/**
-	 * @Then /^user "([^"]*)" should have (\d+) notification(?:s|)(| missing the last one| missing the first one)$/
-	 *
-	 * @param string $user
-	 * @param int $numNotifications
-	 * @param string $missingLast
-	 *
-	 * @return void
-	 */
-	public function userNumNotifications($user, $numNotifications, $missingLast) {
-		$this->featureContext->userSendingTo(
-			$user, 'GET', '/apps/notifications/api/v1/notifications?format=json'
-		);
-		PHPUnit_Framework_Assert::assertEquals(
-			200, $this->featureContext->getResponse()->getStatusCode()
-		);
-
-		$previousNotificationIds = [];
-		if ($missingLast) {
-			PHPUnit_Framework_Assert::assertNotEmpty($this->notificationIds);
-			$previousNotificationIds = end($this->notificationIds);
-		}
-
-		$this->checkNumNotifications((int) $numNotifications);
-
-		if ($missingLast) {
-			$now = end($this->notificationIds);
-			if ($missingLast === ' missing the last one') {
-				array_unshift($now, $this->deletedNotification);
-			} else {
-				$now[] = $this->deletedNotification;
-			}
-
-			PHPUnit_Framework_Assert::assertEquals($previousNotificationIds, $now);
-		}
-	}
-
-	/**
-	 * @Then /^the (first|last) notification of user "([^"]*)" should match$/
-	 *
-	 * @param string $notification first|last
-	 * @param string $user
-	 * @param \Behat\Gherkin\Node\TableNode $formData
-	 *
-	 * @return void
-	 */
-	public function matchNotificationPlain(
-		$notification, $user, $formData
-	) {
-		$this->matchNotification(
-			$notification, $user, false, $formData
-		);
-	}
-
-	/**
-	 * @Then /^the (first|last) notification of user "([^"]*)" should match these regular expressions$/
-	 *
-	 * @param string $notification first|last
-	 * @param string $user
-	 * @param \Behat\Gherkin\Node\TableNode $formData
-	 * 
-	 * @return void
-	 */
-	public function matchNotificationRegularExpression(
-		$notification, $user, $formData
-	) {
-		$this->matchNotification(
-			$notification, $user, true, $formData
-		);
-	}
-
-	/**
-	 * @param string $notification first|last
-	 * @param string $user
-	 * @param bool $regex
-	 * @param \Behat\Gherkin\Node\TableNode $formData
-	 *
-	 * @return void
-	 */
-	public function matchNotification(
-		$notification, $user, $regex, $formData
-	) {
-		$lastNotifications = end($this->notificationIds);
-		if ($notification === 'first') {
-			$notificationId = reset($lastNotifications);
-		} else/* if ($notification === 'last')*/ {
-			$notificationId = end($lastNotifications);
-		}
-
-		$this->featureContext->userSendingTo(
-			$user, 'GET', '/apps/notifications/api/v1/notifications/' .
-			$notificationId . '?format=json'
-		);
-		PHPUnit_Framework_Assert::assertEquals(
-			200, $this->featureContext->getResponse()->getStatusCode()
-		);
-		$response = json_decode(
-			$this->featureContext->getResponse()->getBody()->getContents(), true
-		);
-
-		foreach ($formData->getRowsHash() as $key => $value) {
-			PHPUnit_Framework_Assert::assertArrayHasKey(
-				$key, $response['ocs']['data']
-			);
-			if ($regex) {
-				$value = $this->featureContext->substituteInLineCodes(
-					$value, ['preg_quote' => ['/'] ]
-				);
-				PHPUnit_Framework_Assert::assertNotFalse(
-					(bool)preg_match($value, $response['ocs']['data'][$key]),
-					"'$value' does not match '" . $response['ocs']['data'][$key] . "'"
-				);
-			} else {
-				$value = $this->featureContext->substituteInLineCodes($value);
-				PHPUnit_Framework_Assert::assertEquals(
-					$value, $response['ocs']['data'][$key]
-				);
-			}
-		}
-	}
-
-	/**
 	 * @When /^user "([^"]*)" deletes the (first|last) notification$/
 	 *
 	 * @param string $user
@@ -296,49 +143,23 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 	 * @return void
 	 */
 	public function deleteNotification($user, $firstOrLast) {
-		PHPUnit_Framework_Assert::assertNotEmpty($this->notificationIds);
-		$lastNotificationIds = end($this->notificationIds);
+		PHPUnit_Framework_Assert::assertNotEmpty(
+			$this->notificationsCoreContext->getNotificationIds()
+		);
+		$lastNotificationIds = $this->notificationsCoreContext->getLastNotificationIds();
 		if ($firstOrLast === 'first') {
-			$this->deletedNotification = end($lastNotificationIds);
+			$this->notificationsCoreContext->setDeletedNotification(
+				end($lastNotificationIds)
+			);
 		} else {
-			$this->deletedNotification = reset($lastNotificationIds);
+			$this->notificationsCoreContext->setDeletedNotification(
+				reset($lastNotificationIds)
+			);
 		}
 		$this->featureContext->userSendingTo(
 			$user,
 			'DELETE',
-			'/apps/notifications/api/v1/notifications/' . $this->deletedNotification
-		);
-	}
-
-	/**
-	 * Parses the xml answer to get the array of users returned.
-	 *
-	 * @param ResponseInterface $resp
-	 *
-	 * @return array
-	 */
-	public function getArrayOfNotificationsResponded(ResponseInterface $resp) {
-		$jsonResponse = json_decode($resp->getBody()->getContents(), 1);
-		return $jsonResponse['ocs']['data'];
-	}
-
-	/**
-	 * 
-	 * @AfterScenario
-	 *
-	 * @return void
-	 */
-	public function clearNotifications() {
-		$response = OcsApiHelper::sendRequest(
-			$this->featureContext->getBaseUrl(),
-			$this->featureContext->getAdminUsername(),
-			$this->featureContext->getAdminPassword(),
-			"DELETE",
-			'/apps/testing/api/v1/notifications'
-		);
-		PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
-		PHPUnit_Framework_Assert::assertEquals(
-			200, (int) $this->featureContext->getOCSResponseStatusCode($response)
+			'/apps/notifications/api/v1/notifications/' . $this->notificationsCoreContext->getDeletedNotification()
 		);
 	}
 
@@ -354,7 +175,7 @@ class NotificationsContext implements Context, SnippetAcceptingContext {
 		$environment = $scope->getEnvironment();
 		// Get all the contexts you need in this context
 		$this->featureContext = $environment->getContext('FeatureContext');
-		$this->clearNotifications();
+		$this->notificationsCoreContext = $environment->getContext('NotificationsCoreContext');
 	}
 
 	/**
