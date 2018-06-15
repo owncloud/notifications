@@ -6,6 +6,4 @@
 <?php print_unescaped($l->t('See %s for more information', [$_['serverUrl']])); ?>
 
 
---
-<?php p($theme->getName() . ' - ' . $theme->getSlogan()); ?>
-<?php print_unescaped("\n".$theme->getBaseUrl());
+<?php print_unescaped($this->inc('plain.mail.footer', ['app' => 'core'])); ?>
