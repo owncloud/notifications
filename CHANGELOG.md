@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [0.3.4]
+
+- Fix migration from 8.2.11 to 10.0.x with postgresql - [#195](https://github.com/owncloud/notifications/issues/195)
+- Adjust email message for notifications to be more user-friendly - [#188](https://github.com/owncloud/notifications/issues/188)
+
 ## [0.3.3]
 
 - Allow CORS requests to list notifications - [#176](https://github.com/owncloud/notifications/issues/176)
@@ -28,7 +33,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Move OCS calls to app framework - consumes less resources - [#98](https://github.com/owncloud/notifications/pull/98)
 - Don't use escaped message for browser notification - [#100](https://github.com/owncloud/notifications/pull/100)
 
-[Unreleased]: https://github.com/owncloud/notifications/compare/v10.0.8...stable10
+[Unreleased]: https://github.com/owncloud/notifications/compare/v10.0.9...stable10
+[0.3.4]: https://github.com/owncloud/notifications/compare/v10.0.8...v10.0.9
 [0.3.3]: https://github.com/owncloud/notifications/compare/v10.0.4...v10.0.8
 [0.3.2]: https://github.com/owncloud/notifications/compare/v10.0.3...v10.0.4
 [0.3.1]: https://github.com/owncloud/notifications/compare/v10.0.2...v10.0.4RC2
