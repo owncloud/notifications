@@ -19,11 +19,12 @@ Feature: notifications-content
 			| object_id   | 9483                                                                      |
 		Then the email address "u1@oc.com.np" should have received an email with the body containing
 			"""
+			Hello,
 			About Activities and Notifications in ownCloud
 			
-			See https://owncloud.org/blog/about-activities-and-notifications-in-owncloud/ for more information
+			See https://owncloud.org/blog/about-activities-and-notifications-in-owncloud/ on ownCloud for more information
 			"""
 		And the email address "u1@oc.com.np" should have received an email with the body containing
 			"""
-			See <a href="https://owncloud.org/blog/about-activities-and-notifications-in-owncloud/">https://owncloud.org/blog/about-activities-and-notifications-in-owncloud/</a> for more information</td>
+			See <a href="https://owncloud.org/blog/about-activities-and-notifications-in-owncloud/">https://owncloud.org/blog/about-activities-and-notifications-in-owncloud/</a> on ownCloud for more information</td>
 			"""
