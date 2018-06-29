@@ -16,7 +16,7 @@ Hello,<br>
 	<?php p($_['message']); ?>
 	<br><br>
 <?php endif; ?>
-<?php print_unescaped($l->t('See <a href="%s">%s</a> for more information', [$_['serverUrl'], $_['serverUrl']])); ?>
+<?php print_unescaped($l->t('See <a href="%s">%s</a> on %s for more information', [$_['serverUrl'], $_['serverUrl'], $theme->getName()])); ?>
 </td>
 </tr>
 <tr><td colspan="2">&nbsp;</td></tr>
