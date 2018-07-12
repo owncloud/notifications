@@ -11,20 +11,19 @@
 <tr>
 <td width="20px">&nbsp;</td>
 <td style="font-weight:normal; font-size:0.8em; line-height:1.2em; font-family:verdana,'arial',sans;">
-<?php p($_['subject']); ?>
-<br /><br />
-<?php p($_['message']); ?>
-<br /><br />
-<?php print_unescaped($l->t('Go to <a href="%s">%s</a> to check the notification', [$_['serverUrl'], $_['serverUrl']])); ?>
+Hello,<br>
+<?php if ($_['message'] !== ''): ?>
+	<?php p($_['message']); ?>
+	<br><br>
+<?php endif; ?>
+<?php print_unescaped($l->t('See <a href="%s">%s</a> on %s for more information', [$_['serverUrl'], $_['serverUrl'], $theme->getName()])); ?>
 </td>
 </tr>
 <tr><td colspan="2">&nbsp;</td></tr>
 <tr>
 <td width="20px">&nbsp;</td>
-<td style="font-weight:normal; font-size:0.8em; line-height:1.2em; font-family:verdana,'arial',sans;">--<br>
-<?php p($theme->getName()); ?> -
-<?php p($theme->getSlogan()); ?>
-<br><a href="<?php p($theme->getBaseUrl()); ?>"><?php p($theme->getBaseUrl());?></a>
+<td style="font-weight:normal; font-size:0.8em; line-height:1.2em; font-family:verdana,'arial',sans;">
+<?php print_unescaped($this->inc('html.mail.footer', ['app' => 'core'])); ?>
 </td>
 </tr>
 <tr>

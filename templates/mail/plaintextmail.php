@@ -1,11 +1,10 @@
-<?php print_unescaped($_['subject']); ?>
-
-
+Hello,
+<?php if ($_['message'] !== ''): ?>
 <?php print_unescaped($_['message']); ?>
 
 
-<?php print_unescaped($l->t('Go to %s to check the notification', [$_['serverUrl']])); ?>
+<?php endif; ?>
+<?php print_unescaped($l->t('See %s on %s for more information', [$_['serverUrl'], $theme->getName()])); ?>
 
---
-<?php p($theme->getName() . ' - ' . $theme->getSlogan()); ?>
-<?php print_unescaped("\n".$theme->getBaseUrl());
+
+<?php print_unescaped($this->inc('plain.mail.footer', ['app' => 'core'])); ?>
