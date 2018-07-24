@@ -11,7 +11,7 @@ So that I can stay informed
 			|user1   |1234    |User One   |u1@oc.com.np|
 		And the user has browsed to the login page
 		And the user has logged in with username "user1" and password "1234" using the webUI
-		And using API version "2"
+		And using OCS API version "2"
 
 	Scenario: Create notifications
 		When user "user1" is sent a notification with

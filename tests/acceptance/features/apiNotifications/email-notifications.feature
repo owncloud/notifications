@@ -5,7 +5,7 @@ Feature: notifications-content
 		Given these users have been created:
 			|username|password|displayname|email       |
 			|user1   |1234    |User One   |u1@oc.com.np|
-		And using API version "2"
+		And using OCS API version "2"
 
 	Scenario: Create notification
 		When the user "user1" sets the email notification option to "always" using the API

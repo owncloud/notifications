@@ -3,7 +3,7 @@ Feature: notifications-content
 
   Background:
     Given user "test1" has been created
-    And using API version "2"
+    And using OCS API version "2"
 
   Scenario: Create notification
     When user "test1" is sent a notification with
