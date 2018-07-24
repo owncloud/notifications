@@ -49,7 +49,7 @@ class NotificationsContext implements Context {
 	 * @param string $user
 	 */
 	public function hasBeenSentANotification($user) {
-		$this->featureContext->userSendingTo(
+		$this->featureContext->userSendsToOcsApiEndpoint(
 			$user,
 			'POST', '/apps/testing/api/v1/notifications'
 		);
@@ -74,7 +74,7 @@ class NotificationsContext implements Context {
 		$rows[] = ["user", $user];
 		$formData = new TableNode($rows);
 		
-		$this->featureContext->userSendsHTTPMethodToAPIEndpointWithBody(
+		$this->featureContext->userSendsHTTPMethodToOcsApiEndpointWithBody(
 			$this->featureContext->getAdminUsername(),
 			'POST', '/apps/testing/api/v1/notifications', $formData
 		);
@@ -147,7 +147,7 @@ class NotificationsContext implements Context {
 				reset($lastNotificationIds)
 			);
 		}
-		$this->featureContext->userSendingTo(
+		$this->featureContext->userSendsToOcsApiEndpoint(
 			$user,
 			'DELETE',
 			'/apps/notifications/api/v1/notifications/' . $this->notificationsCoreContext->getDeletedNotification()
