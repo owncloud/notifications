@@ -6,6 +6,9 @@ default:
     apiNotifications:
       paths:
         - %paths.base%/../features/apiNotifications
+      context: &common_suite_context
+        parameters:
+          ocPath: apps/testing/api/v1/occ
       contexts:
         - NotificationsContext:
         - NotificationsCoreContext:
@@ -16,15 +19,11 @@ default:
             adminPassword: admin
             regularUserPassword: 123456
             ocPath: ../../../../
+
     webUINotifications:
       paths:
         - %paths.base%/../features/webUINotifications
-      context:
-        parameters:
-          ocPath: apps/testing/api/v1/occ
-          adminUsername: admin
-          adminPassword: admin
-          regularUserPassword: 123456
+      context: *common_suite_context
       contexts:
         - NotificationsContext:
         - NotificationsCoreContext:
@@ -32,7 +31,7 @@ default:
         - WebUINotificationsContext:
         - WebUIGeneralContext:
         - WebUILoginContext:
-        
+
   extensions:
       jarnaiz\JUnitFormatter\JUnitFormatterExtension:
           filename: report.xml
