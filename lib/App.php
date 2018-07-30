@@ -22,6 +22,7 @@
 namespace OCA\Notifications;
 
 
+use OCP\BackgroundJob\IJobList;
 use OCP\Notification\IApp;
 use OCP\Notification\INotification;
 use OCA\Notifications\Mailer\NotificationMailerAdapter;
@@ -33,9 +34,13 @@ class App implements IApp {
 	/** @var NotificationMailerAdapter */
 	protected $mailerAdapter;
 
-	public function __construct(Handler $handler, NotificationMailerAdapter $mailerAdapter) {
+	/** @var IJobList */
+	protected $jobList;
+
+	public function __construct(Handler $handler, NotificationMailerAdapter $mailerAdapter, IJobList $jobList) {
 		$this->handler = $handler;
 		$this->mailerAdapter = $mailerAdapter;
+		$this->jobList = $jobList;
 	}
 
 	/**
@@ -46,7 +51,19 @@ class App implements IApp {
 	 */
 	public function notify(INotification $notification) {
 		$this->handler->add($notification);
-		$this->mailerAdapter->sendMail($notification);
+	}
+
+	/**
+	 * Notification of a share to user(s) by email is achieved by background job
+	 * @param string $shareFullId
+	 * @return null
+	 */
+	public function emailNotify($shareFullId) {
+		$this->jobList->add('OCA\Notifications\BackgroundJob\MailNotificationSender',
+			[
+				'shareFullId' => $shareFullId,
+				'webroot' => \OC::$WEBROOT //This is required to get the url link correctly
+			]);
 	}
 
 	/**

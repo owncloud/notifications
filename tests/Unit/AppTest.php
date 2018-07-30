@@ -22,6 +22,7 @@
 
 namespace OCA\Notifications\Tests\Unit;
 
+use OCP\BackgroundJob\IJobList;
 use OCP\Notification\INotification;
 use OCA\Notifications\App;
 use OCA\Notifications\Handler;
@@ -40,6 +41,8 @@ class AppTest extends TestCase {
 	/** @var \OCA\Notifications\App */
 	protected $app;
 
+	protected $jobList;
+
 	protected function setUp() {
 		parent::setUp();
 
@@ -55,9 +58,12 @@ class AppTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
+		$this->jobList = $this->createMock(IJobList::class);
+
 		$this->app = new App(
 			$this->handler,
-			$this->mailerAdapter
+			$this->mailerAdapter,
+			$this->jobList
 		);
 	}
 
@@ -65,11 +71,15 @@ class AppTest extends TestCase {
 		$this->handler->expects($this->once())
 			->method('add')
 			->with($this->notification);
-		$this->mailerAdapter->expects($this->once())
-			->method('sendMail')
-			->with($this->notification);
 
 		$this->app->notify($this->notification);
+	}
+
+	public function testEmailNotify() {
+		$this->jobList->expects($this->once())
+			->method('add')
+			->with('OCA\Notifications\BackgroundJob\MailNotificationSender', ['shareFullId' => 'ocinternal:12', 'webroot' => \OC::$WEBROOT]);
+		$this->app->emailNotify('ocinternal:12');
 	}
 
 	public function testGetCount() {
