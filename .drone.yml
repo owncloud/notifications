@@ -2,7 +2,7 @@ workspace:
   base: /var/www/owncloud
   path: apps/notifications
 
-branches: [master, release*, release/*]
+branches: [master, stable10, release*, release/*]
 
 pipeline:
   install-server:
