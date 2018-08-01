@@ -182,12 +182,16 @@
 			var actionsData = this.getActions();
 
 			_.each(actionsData, function(actionData) {
-				$('<button>', {
+				var buttonData = {
 					'class'     : cssNameSpace + '-action-button' + (actionData.primary ? ' primary': ''),
 					'data-type' : escapeHTML(actionData.type),
 					'data-href' : escapeHTML(actionData.link),
 					'html'      : escapeHTML(actionData.label)
-				}).appendTo($actions);
+				};
+				if (actionData.redirect) {
+					buttonData['data-redirect'] = escapeHTML(actionData.redirect);
+				}
+				$('<button>', buttonData).appendTo($actions);
 				// TODO create event handler on click for given action type
 			});
 

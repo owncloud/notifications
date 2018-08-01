@@ -196,12 +196,16 @@ class EndpointController extends OCSController {
 	 * @return array
 	 */
 	protected function actionToArray(IAction $action) {
-		return [
+		$actionData = [
 			'label' => $action->getParsedLabel(),
 			'link' => $action->getLink(),
 			'type' => $action->getRequestType(),
 			'primary' => $action->isPrimary(),
 		];
+		if (\method_exists($action, 'getRedirect')) {
+			$actionData['redirect'] = $action->getRedirect();
+		}
+		return $actionData;
 	}
 
 	/**
