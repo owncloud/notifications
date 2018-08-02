@@ -98,7 +98,6 @@
 			var $notification = $target.closest('.notification');
 			var actionType = $target.attr('data-type') || 'GET';
 			var actionUrl = $target.attr('data-href');
-			var shouldRedirect = $target.attr('data-redirect');
 
 			$notification.fadeOut(OC.menuSpeed);
 
@@ -114,7 +113,7 @@
 						}
 					}));
 					self._removeNotification($notification.attr('data-id'));
-					if (shouldRedirect && data.ocs && data.ocs.data && data.ocs.data.redirectTo) {
+					if (data.ocs && data.ocs.data && data.ocs.data.redirectTo) {
 						window.location.href = data.ocs.data.redirectTo;
 					}
 				},

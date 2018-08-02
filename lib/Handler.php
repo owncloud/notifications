@@ -251,17 +251,12 @@ class Handler {
 		$actions = [];
 		foreach ($notification->getActions() as $action) {
 			/** @var IAction $action */
-			$data = [
+			$actions[] = [
 				'label' => $action->getLabel(),
 				'link' => $action->getLink(),
 				'type' => $action->getRequestType(),
 				'primary' => $action->isPrimary(),
 			];
-
-			if (\method_exists($action, 'getRedirect')) {
-				$data['redirect'] = $action->getRedirect();
-			}
-			$actions[] = $data;
 		}
 		$sql->setValue('actions', $sql->createParameter('actions'))
 			->setParameter('actions', json_encode($actions));
@@ -301,9 +296,6 @@ class Handler {
 				->setLink($actionData['link'], $actionData['type']);
 			if (isset($actionData['primary'])) {
 				$action->setPrimary($actionData['primary']);
-			}
-			if (isset($actionData['redirect']) && \method_exists($action, 'setRedirect')) {
-				$action->setRedirect($actionData['redirect']);
 			}
 			$notification->addAction($action);
 		}
