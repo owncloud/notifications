@@ -6,9 +6,6 @@ default:
     apiNotifications:
       paths:
         - %paths.base%/../features/apiNotifications
-      context: &common_suite_context
-        parameters:
-          ocPath: apps/testing/api/v1/occ
       contexts:
         - NotificationsContext:
         - NotificationsCoreContext:
@@ -18,12 +15,11 @@ default:
             adminUsername: admin
             adminPassword: admin
             regularUserPassword: 123456
-            ocPath: ../../../../
+            ocPath: apps/testing/api/v1/occ
 
     webUINotifications:
       paths:
         - %paths.base%/../features/webUINotifications
-      context: *common_suite_context
       contexts:
         - NotificationsContext:
         - NotificationsCoreContext:

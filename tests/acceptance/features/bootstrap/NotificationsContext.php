@@ -223,12 +223,11 @@ class NotificationsContext implements Context {
 		// Get all the contexts you need in this context
 		$this->featureContext = $environment->getContext('FeatureContext');
 		$this->notificationsCoreContext = $environment->getContext('NotificationsCoreContext');
-		$suiteParameters = SetupHelper::getSuiteParameters($scope);
 		SetupHelper::init(
 			$this->featureContext->getAdminUsername(),
 			$this->featureContext->getAdminPassword(),
 			$this->featureContext->getBaseUrl(),
-			$suiteParameters['ocPath']
+			$this->featureContext->getOcPath()
 		);
 	}
 
