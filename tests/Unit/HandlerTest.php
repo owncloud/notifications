@@ -24,6 +24,7 @@ namespace OCA\Notifications\Tests\Unit;
 
 
 use OCA\Notifications\Handler;
+use OCP\Notification\INotification;
 
 /**
  * Class HandlerTest
@@ -108,6 +109,72 @@ class HandlerTest extends TestCase {
 		$this->handler->delete($notification);
 		$this->assertSame(0, $this->handler->count($limitedNotification1), 'Wrong notification count for user1 after deleting');
 		$this->assertSame(0, $this->handler->count($limitedNotification2), 'Wrong notification count for user2 after deleting');
+	}
+
+	public  function testDeleteUserNotifications() {
+		$notification1 = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+			'getDateTime' => new \DateTime(),
+			'getObjectType' => 'notification',
+			'getObjectId' => '1337',
+			'getSubject' => 'subject',
+			'getSubjectParameters' => [],
+			'getMessage' => 'message',
+			'getMessageParameters' => [],
+			'getLink' => 'link',
+			'getActions' => [
+				[
+					'getLabel' => 'action_label',
+					'getLink' => 'action_link',
+					'getRequestType' => 'GET',
+					'isPrimary' => true,
+				]
+			],
+		]);
+		$notification2 = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user2',
+			'getDateTime' => new \DateTime(),
+			'getObjectType' => 'notification',
+			'getObjectId' => '1337',
+			'getSubject' => 'subject',
+			'getSubjectParameters' => [],
+			'getMessage' => 'message',
+			'getMessageParameters' => [],
+			'getLink' => 'link',
+			'getActions' => [
+				[
+					'getLabel' => 'action_label',
+					'getLink' => 'action_link',
+					'getRequestType' => 'GET',
+					'isPrimary' => true,
+				]
+			],
+		]);
+		$limitedNotification = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+		]);
+		$limitedNotification2 = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user2',
+		]);
+
+		$this->handler->add($notification1);
+		$this->handler->add($notification2);
+		$notifications = $this->handler->get($limitedNotification);
+		$notificationId = key($notifications);
+
+		$this->handler->deleteUserNotifications($notification1->getUser());
+
+		$this->assertNull($this->handler->getById($notificationId, 'test_user1'));
+
+		$notifications2 = $this->handler->get($limitedNotification2);
+		$notificationId2 = key($notifications2);
+		$result = $this->handler->getById($notificationId2, 'test_user2');
+		$this->assertInstanceOf(INotification::class, $result);
+		$this->assertEquals('test_user2', $result->getUser());
 	}
 
 	public function testDeleteById() {
