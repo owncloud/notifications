@@ -15,16 +15,11 @@ default:
             adminUsername: admin
             adminPassword: admin
             regularUserPassword: 123456
-            ocPath: ../../../../
+            ocPath: apps/testing/api/v1/occ
+
     webUINotifications:
       paths:
         - %paths.base%/../features/webUINotifications
-      context:
-        parameters:
-          ocPath: apps/testing/api/v1/occ
-          adminUsername: admin
-          adminPassword: admin
-          regularUserPassword: 123456
       contexts:
         - NotificationsContext:
         - NotificationsCoreContext:
@@ -32,7 +27,7 @@ default:
         - WebUINotificationsContext:
         - WebUIGeneralContext:
         - WebUILoginContext:
-        
+
   extensions:
       jarnaiz\JUnitFormatter\JUnitFormatterExtension:
           filename: report.xml
