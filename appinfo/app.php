@@ -24,6 +24,7 @@ use OCP\Util;
 
 $application = new \OCA\Notifications\AppInfo\Application();
 $application->setupConsumerAndNotifier();
+$application->setupSymfonyEventListeners();
 // Only display the app on index.php except for public shares
 $request = \OC::$server->getRequest();
 if (\OC::$server->getUserSession() !== null && \OC::$server->getUserSession()->getUser() !== null

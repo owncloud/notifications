@@ -32,6 +32,7 @@ use OCP\IUser;
 use OCP\IUserSession;
 use OCP\Notification\Events\RegisterConsumerEvent;
 use OCP\Notification\Events\RegisterNotifierEvent;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 class Application extends App {
 	public function __construct (array $urlParams = array()) {
@@ -59,7 +60,6 @@ class Application extends App {
 			return new Capabilities();
 		});
 		$container->registerCapability('Capabilities');
-
 	}
 
 	public function setupConsumerAndNotifier() {
@@ -74,6 +74,16 @@ class Application extends App {
 		$dispatcher->addListener(RegisterNotifierEvent::NAME, function(RegisterNotifierEvent $event) use ($container) {
 			$l10n = $container->getServer()->getL10N('notifications');
 			$event->registerNotifier($container->query(Notifier::class), 'notifications', $l10n->t('Admin notifications'));
+		});
+	}
+
+	public function setupSymfonyEventListeners() {
+		$container = $this->getContainer();
+
+		$container->getServer()->getEventDispatcher()->addListener('user.afterdelete', function (GenericEvent $event) use ($container) {
+			$handler = $container->query(Handler::class);
+
+			$handler->deleteUserNotifications($event->getArgument('uid'));
 		});
 	}
 }
