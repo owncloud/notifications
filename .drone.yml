@@ -57,7 +57,6 @@ pipeline:
       - SELENIUM_HOST=selenium
       - SELENIUM_PORT=4444
       - TEST_SERVER_URL=http://owncloud
-      - SKELETON_DIR=/var/www/owncloud/tests/acceptance/webUISkeleton
       - PLATFORM=Linux
       - BEHAT_SUITE=${BEHAT_SUITE}
       - APPS_TO_ENABLE=notifications
