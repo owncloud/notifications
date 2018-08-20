@@ -221,9 +221,4 @@ class NotificationsContext implements Context {
 			$this->featureContext->getOcPath()
 		);
 	}
-
-	/**
-	 * Abstract method implemented from Core's FeatureContext
-	 */
-	protected function resetAppConfigs() {}
 }
