@@ -24,6 +24,7 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use GuzzleHttp\Client;
+use TestHelpers\SetupHelper;
 
 require_once 'bootstrap.php';
 
@@ -49,7 +50,7 @@ class NotificationsContext implements Context {
 	 * @param string $user
 	 */
 	public function hasBeenSentANotification($user) {
-		$this->featureContext->userSendingTo(
+		$this->featureContext->userSendsToOcsApiEndpoint(
 			$user,
 			'POST', '/apps/testing/api/v1/notifications'
 		);
@@ -74,7 +75,7 @@ class NotificationsContext implements Context {
 		$rows[] = ["user", $user];
 		$formData = new TableNode($rows);
 		
-		$this->featureContext->userSendsHTTPMethodToAPIEndpointWithBody(
+		$this->featureContext->userSendsHTTPMethodToOcsApiEndpointWithBody(
 			$this->featureContext->getAdminUsername(),
 			'POST', '/apps/testing/api/v1/notifications', $formData
 		);
@@ -86,14 +87,57 @@ class NotificationsContext implements Context {
 	}
 
 	/**
+	 * disable CSRF
+	 *
+	 * @throws Exception
+	 * @return string the previous setting of csrf.disabled
+	 */
+	private function disableCSRF() {
+		return $this->setCSRFDotDisabled('true');
+	}
+
+	/**
+	 * set csrf.disabled
+	 *
+	 * @param string $setting "true", "false" or "" to delete the setting
+	 *
+	 * @throws Exception
+	 * @return string the previous setting of csrf.disabled
+	 */
+	private function setCSRFDotDisabled($setting) {
+		$oldCSRFSetting = SetupHelper::runOcc(
+			['config:system:get', 'csrf.disabled']
+		)['stdOut'];
+
+		if ($setting === "") {
+			SetupHelper::runOcc(['config:system:delete', 'csrf.disabled']);
+		} elseif ($setting !== null) {
+			SetupHelper::runOcc(
+				[
+					'config:system:set',
+					'csrf.disabled',
+					'--type',
+					'boolean',
+					'--value',
+					$setting
+				]
+			);
+		}
+		return \trim($oldCSRFSetting);
+	}
+
+	/**
 	 * @When the user :user sets the email notification option to :setting using the API
-	 * 
+	 *
 	 * @param string $user
 	 * @param string $setting
-	 * 
+	 *
+	 * @throws Exception
 	 * @return void
 	 */
 	public function setEmailNotificationOption($user, $setting) {
+		$oldCSRFSetting = $this->disableCSRF();
+
 		$fullUrl = $this->featureContext->getBaseUrl() .
 				   "/index.php/apps/notifications/settings/personal/" .
 				   "notifications/options";
@@ -102,10 +146,13 @@ class NotificationsContext implements Context {
 		$options['auth'] = [$user, $this->featureContext->getUserPassword($user)];
 		$options['headers'] = ['Content-Type' => 'application/json'];
 		$options['body'] = '{"email_sending_option":"' . $setting . '"}';
-		
+
 		$response = $client->send(
 			$client->createRequest("PATCH", $fullUrl, $options)
 		);
+
+		$this->setCSRFDotDisabled($oldCSRFSetting);
+
 		PHPUnit_Framework_Assert::assertEquals(
 			200, $response->getStatusCode(),
 			"could not set notification option " . $response->getReasonPhrase()
@@ -147,7 +194,7 @@ class NotificationsContext implements Context {
 				reset($lastNotificationIds)
 			);
 		}
-		$this->featureContext->userSendingTo(
+		$this->featureContext->userSendsToOcsApiEndpoint(
 			$user,
 			'DELETE',
 			'/apps/notifications/api/v1/notifications/' . $this->notificationsCoreContext->getDeletedNotification()
@@ -167,6 +214,12 @@ class NotificationsContext implements Context {
 		// Get all the contexts you need in this context
 		$this->featureContext = $environment->getContext('FeatureContext');
 		$this->notificationsCoreContext = $environment->getContext('NotificationsCoreContext');
+		SetupHelper::init(
+			$this->featureContext->getAdminUsername(),
+			$this->featureContext->getAdminPassword(),
+			$this->featureContext->getBaseUrl(),
+			$this->featureContext->getOcPath()
+		);
 	}
 
 	/**
