@@ -78,7 +78,9 @@ class NotificationsContext implements Context {
 		$rows = $formData->getRows();
 		$rows[] = ["user", $user];
 		for ($rowCount = 0; $rowCount < \count($rows); $rowCount ++) {
-			$rows[$rowCount] = $this->featureContext->substituteInLineCodes($rows[$rowCount]);
+			$rows[$rowCount] = $this->featureContext->substituteInLineCodes(
+				$rows[$rowCount]
+			);
 		}
 		$formData = new TableNode($rows);
 		
@@ -193,7 +195,8 @@ class NotificationsContext implements Context {
 		PHPUnit_Framework_Assert::assertNotEmpty(
 			$this->notificationsCoreContext->getNotificationIds()
 		);
-		$lastNotificationIds = $this->notificationsCoreContext->getLastNotificationIds();
+		$lastNotificationIds
+			= $this->notificationsCoreContext->getLastNotificationIds();
 		if ($firstOrLast === 'first') {
 			$this->notificationsCoreContext->setDeletedNotification(
 				\end($lastNotificationIds)
@@ -206,7 +209,8 @@ class NotificationsContext implements Context {
 		$this->featureContext->userSendsToOcsApiEndpoint(
 			$user,
 			'DELETE',
-			'/apps/notifications/api/v1/notifications/' . $this->notificationsCoreContext->getDeletedNotification()
+			'/apps/notifications/api/v1/notifications/'
+			. $this->notificationsCoreContext->getDeletedNotification()
 		);
 	}
 
@@ -222,7 +226,9 @@ class NotificationsContext implements Context {
 		$environment = $scope->getEnvironment();
 		// Get all the contexts you need in this context
 		$this->featureContext = $environment->getContext('FeatureContext');
-		$this->notificationsCoreContext = $environment->getContext('NotificationsCoreContext');
+		$this->notificationsCoreContext = $environment->getContext(
+			'NotificationsCoreContext'
+		);
 		SetupHelper::init(
 			$this->featureContext->getAdminUsername(),
 			$this->featureContext->getAdminPassword(),
