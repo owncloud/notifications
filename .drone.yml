@@ -64,7 +64,7 @@ pipeline:
       - cd /var/www/owncloud/tests/acceptance
       - chmod 777 /var/www/owncloud/tests/acceptance/filesForUpload -R
       - chmod +x run.sh
-      - su-exec www-data ./run.sh --remote --config /var/www/owncloud/apps/notifications/tests/acceptance/config/behat.yml
+      - ./run.sh --remote --config /var/www/owncloud/apps/notifications/tests/acceptance/config/behat.yml
     when:
       matrix:
         TEST_SUITE: web-acceptance
@@ -79,7 +79,7 @@ pipeline:
     commands:
       - cd /var/www/owncloud/tests/acceptance
       - chmod +x run.sh
-      - su-exec www-data ./run.sh --config /var/www/owncloud/apps/notifications/tests/acceptance/config/behat.yml
+      - ./run.sh --config /var/www/owncloud/apps/notifications/tests/acceptance/config/behat.yml
     when:
       matrix:
         TEST_SUITE: api-acceptance
