@@ -243,6 +243,12 @@ matrix:
       DB_TYPE: mysql
       DB_NAME: owncloud
 
+    - PHP_VERSION: 7.2
+      OC_VERSION: daily-stable10-qa
+      TEST_SUITE: phpunit
+      DB_TYPE: mysql
+      DB_NAME: owncloud
+
     # Acceptance Tests
 
     - PHP_VERSION: 7.1
