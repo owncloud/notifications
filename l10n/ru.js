@@ -13,6 +13,8 @@ OC.L10N.register(
     "Notify only when an action is required" : "Уведомить только когда потребуется действие",
     "Notify about all events" : "Уведомлять обо всех событиях",
     "Choose an option" : "Выбирете опции",
+    "See <a href=\"%s\">%s</a> on %s for more information" : "Откройте <a href=\"%s\">%s</a> на %s для более подробной инфрмации",
+    "See %s on %s for more information" : "Откройте %s на %s для более подробной информации",
     "Mail Notifications" : "Почтовые уведомления",
     "You can choose to be notified about events via mail. Some events are informative, others require an action (like accept/decline). Select your preference below:" : "Вы можете выбрать получать уведомления о событиях через почту. Некоторые события для информации, другие требуют совершения действия (например принять/отклонить). Выберите ваше предпочтение ниже:",
     "It was not possible to get your session. Please, try reloading the page or logout and login again" : "Не удалось найти вашу сессию. Пожалуйста, попробуйте обновить страницу или перелогиниться.",
