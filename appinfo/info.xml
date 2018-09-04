@@ -9,8 +9,8 @@
 	<screenshot>https://raw.githubusercontent.com/owncloud/promo/e1dd604d66b4c5f765579b4c160de3268169ea3c/ownCloud%20logo%20square.png</screenshot>
 
 	<licence>AGPL</licence>
-	<author>Joas Schilling, Thomas Müller</author>
-	<version>0.3.4</version>
+	<author>Joas Schilling, Thomas Müller, Juan Pablo Villafañez</author>
+	<version>0.3.5</version>
 
 	<types>
 		<logging/>
