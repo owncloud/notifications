@@ -64,7 +64,7 @@ pipeline:
       - cd /var/www/owncloud/tests/acceptance
       - chmod 777 /var/www/owncloud/tests/acceptance/filesForUpload -R
       - chmod +x run.sh
-      - su-exec www-data ./run.sh --remote --config /var/www/owncloud/apps/notifications/tests/acceptance/config/behat.yml
+      - ./run.sh --remote --config /var/www/owncloud/apps/notifications/tests/acceptance/config/behat.yml
     when:
       matrix:
         TEST_SUITE: web-acceptance
@@ -73,13 +73,14 @@ pipeline:
     image: owncloudci/php:${PHP_VERSION}
     pull: true
     environment:
+      - TEST_SERVER_URL=http://owncloud
       - MAILHOG_HOST=email
       - BEHAT_SUITE=${BEHAT_SUITE}
       - APPS_TO_ENABLE=notifications
     commands:
       - cd /var/www/owncloud/tests/acceptance
       - chmod +x run.sh
-      - su-exec www-data ./run.sh --config /var/www/owncloud/apps/notifications/tests/acceptance/config/behat.yml
+      - ./run.sh --config /var/www/owncloud/apps/notifications/tests/acceptance/config/behat.yml
     when:
       matrix:
         TEST_SUITE: api-acceptance
@@ -170,7 +171,7 @@ services:
     command: [ "/usr/local/bin/apachectl", "-e", "debug", "-D", "FOREGROUND" ]
     when:
       matrix:
-        TEST_SUITE: web-acceptance
+        USE_SERVER: true
 
   selenium:
     image: selenium/standalone-chrome-debug:latest
@@ -257,6 +258,7 @@ matrix:
       BEHAT_SUITE: webUINotifications
       DB_TYPE: mysql
       DB_NAME: owncloud
+      USE_SERVER: true
 
     - PHP_VERSION: 7.1
       OC_VERSION: daily-master-qa
@@ -264,6 +266,7 @@ matrix:
       BEHAT_SUITE: webUINotifications
       DB_TYPE: pgsql
       DB_NAME: owncloud
+      USE_SERVER: true
 
     - PHP_VERSION: 7.1
       OC_VERSION: daily-master-qa
@@ -271,6 +274,7 @@ matrix:
       BEHAT_SUITE: webUINotifications
       DB_TYPE: oci
       DB_NAME: XE
+      USE_SERVER: true
 
     - PHP_VERSION: 7.1
       OC_VERSION: daily-master-qa
@@ -278,6 +282,7 @@ matrix:
       BEHAT_SUITE: apiNotifications
       DB_TYPE: mysql
       DB_NAME: owncloud
+      USE_SERVER: true
 
     - PHP_VERSION: 7.1
       OC_VERSION: daily-master-qa
@@ -285,6 +290,7 @@ matrix:
       BEHAT_SUITE: apiNotifications
       DB_TYPE: pgsql
       DB_NAME: owncloud
+      USE_SERVER: true
 
     - PHP_VERSION: 7.1
       OC_VERSION: daily-master-qa
@@ -292,6 +298,7 @@ matrix:
       BEHAT_SUITE: apiNotifications
       DB_TYPE: oci
       DB_NAME: XE
+      USE_SERVER: true
 
     - PHP_VERSION: 5.6
       OC_VERSION: daily-stable10-qa
@@ -299,6 +306,7 @@ matrix:
       BEHAT_SUITE: webUINotifications
       DB_TYPE: mysql
       DB_NAME: owncloud
+      USE_SERVER: true
 
     - PHP_VERSION: 5.6
       OC_VERSION: daily-stable10-qa
@@ -306,6 +314,7 @@ matrix:
       BEHAT_SUITE: webUINotifications
       DB_TYPE: pgsql
       DB_NAME: owncloud
+      USE_SERVER: true
 
     - PHP_VERSION: 5.6
       OC_VERSION: daily-stable10-qa
@@ -313,6 +322,7 @@ matrix:
       BEHAT_SUITE: webUINotifications
       DB_TYPE: oci
       DB_NAME: XE
+      USE_SERVER: true
 
     - PHP_VERSION: 5.6
       OC_VERSION: daily-stable10-qa
@@ -320,6 +330,7 @@ matrix:
       BEHAT_SUITE: apiNotifications
       DB_TYPE: mysql
       DB_NAME: owncloud
+      USE_SERVER: true
 
     - PHP_VERSION: 5.6
       OC_VERSION: daily-stable10-qa
@@ -327,6 +338,7 @@ matrix:
       BEHAT_SUITE: apiNotifications
       DB_TYPE: pgsql
       DB_NAME: owncloud
+      USE_SERVER: true
 
     - PHP_VERSION: 5.6
       OC_VERSION: daily-stable10-qa
@@ -334,3 +346,4 @@ matrix:
       BEHAT_SUITE: apiNotifications
       DB_TYPE: oci
       DB_NAME: XE
+      USE_SERVER: true
