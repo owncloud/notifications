@@ -48,6 +48,7 @@ class ApplicationTest extends TestCase {
 	protected function setUp() {
 		parent::setUp();
 		$this->app = new Application();
+		$this->app->setupSymfonyEventListeners();
 		$this->container = $this->app->getContainer();
 	}
 
