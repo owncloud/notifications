@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ## [0.3.5]
 
 - Added translations - [#233](https://github.com/owncloud/notifications/issues/233)
-- Clear user notifications after user deletion - [#223](https://github.com/owncloud/notifications/issues/223)
+- Clear user notifications after user deletion - [#223](https://github.com/owncloud/notifications/issues/223) [#238](https://github.com/owncloud/notifications/issues/238)
 - Include the product name in the mail for the notifications - [#211](https://github.com/owncloud/notifications/issues/211)
 - Add "hello" in the mail templates - [#209](https://github.com/owncloud/notifications/issues/209)
 - Add common footer to notifications - [#207](https://github.com/owncloud/notifications/issues/207)
