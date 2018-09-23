@@ -13,6 +13,7 @@ OC.L10N.register(
     "Notify only when an action is required" : "Nur benachrichtigen wenn Aktion notwendig ist",
     "Notify about all events" : "Über allen Ereignissen benachrichtigen",
     "Choose an option" : "Wähle eine Option",
+    "See %s on %s for more information" : "Bitte%s auf%s ansehen für weitere Informationen",
     "Mail Notifications" : "Mail-Benachrichtigungen",
     "You can choose to be notified about events via mail. Some events are informative, others require an action (like accept/decline). Select your preference below:" : "Du kannst dich über Ereignissen per Mail benachrichtigen lassen. Einige davon sind informativ, andere erfordern eine Aktion (wie Annehmen oder Zurückweisen). Wähle deine Einstellungen hier:",
     "It was not possible to get your session. Please, try reloading the page or logout and login again" : "Es war nicht möglich deine Sitzung zu identifizieren. Aktualisiere bitte die Seite oder melde dich neu an.",
