@@ -3,8 +3,8 @@ Feature: notifications-content
 
   Background:
     Given these users have been created:
-      | username | password | displayname | email        |
-      | user1    | 1234     | User One    | u1@oc.com.np |
+      | username |
+      | user1    |
     And using OCS API version "2"
 
   Scenario: Create notification
