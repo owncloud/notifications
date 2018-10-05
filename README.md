@@ -3,6 +3,8 @@
 Notification backend and UI for the notification panel/icon.
 Used for notifications of other apps ([announcementcenter](https://github.com/owncloud/announcementcenter), [federatedfilesharing](https://github.com/owncloud/core/tree/master/apps/federatedfilesharing) etc.)
 
+Trigger CI
+
 ## QA metrics on master branch:
 
 [![Build Status](https://travis-ci.org/owncloud/notifications.svg?branch=master)](https://travis-ci.org/owncloud/notifications)
