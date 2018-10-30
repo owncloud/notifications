@@ -91,6 +91,19 @@ class Handler {
 	}
 
 	/**
+	 * This method deletes the notifications of the user after the user is deleted
+	 * from the notifications table.
+	 *
+	 * @param string $uid uid of the user
+	 */
+	public function deleteUserNotifications($uid) {
+		$sql = $this->connection->getQueryBuilder();
+		$sql->delete('notifications')
+			->where($sql->expr()->eq('user', $sql->createNamedParameter($uid)));
+		$sql->execute();
+	}
+
+	/**
 	 * Delete the notification matching the given id
 	 *
 	 * @param int $id

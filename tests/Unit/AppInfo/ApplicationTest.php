@@ -22,8 +22,14 @@
 
 namespace OCA\Notifications\Tests\Unit\AppInfo;
 
+use OC\AppFramework\DependencyInjection\DIContainer;
 use OCA\Notifications\AppInfo\Application;
+use OCA\Notifications\Handler;
 use OCA\Notifications\Tests\Unit\TestCase;
+use OCP\IServerContainer;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\GenericEvent;
+use Test\Traits\UserTrait;
 
 /**
  * Class ApplicationTest
@@ -32,6 +38,7 @@ use OCA\Notifications\Tests\Unit\TestCase;
  * @package OCA\Notifications\Tests\AppInfo
  */
 class ApplicationTest extends TestCase {
+	use UserTrait;
 	/** @var \OCA\Notifications\AppInfo\Application */
 	protected $app;
 
@@ -41,6 +48,7 @@ class ApplicationTest extends TestCase {
 	protected function setUp() {
 		parent::setUp();
 		$this->app = new Application();
+		$this->app->setupSymfonyEventListeners();
 		$this->container = $this->app->getContainer();
 	}
 
@@ -63,5 +71,125 @@ class ApplicationTest extends TestCase {
 	 */
 	public function testContainerQuery($service, $expected) {
 		$this->assertTrue($this->container->query($service) instanceof $expected);
+	}
+
+	/**
+	 * @param array $values
+	 * @return \OCP\Notification\INotification|\PHPUnit_Framework_MockObject_MockObject
+	 */
+	protected function getNotification(array $values = []) {
+		$notification = $this->getMockBuilder('OCP\Notification\INotification')
+			->disableOriginalConstructor()
+			->getMock();
+
+		foreach ($values as $method => $returnValue) {
+			if ($method === 'getActions') {
+				$actions = [];
+				foreach ($returnValue as $actionData) {
+					$action = $this->getMockBuilder('OCP\Notification\IAction')
+						->disableOriginalConstructor()
+						->getMock();
+					foreach ($actionData as $actionMethod => $actionValue) {
+						$action->expects($this->any())
+							->method($actionMethod)
+							->willReturn($actionValue);
+					}
+					$actions[] = $action;
+				}
+				$notification->expects($this->any())
+					->method($method)
+					->willReturn($actions);
+			} else {
+				$notification->expects($this->any())
+					->method($method)
+					->willReturn($returnValue);
+			}
+		}
+
+		$defaultDateTime = new \DateTime();
+		$defaultDateTime->setTimestamp(0);
+		$defaultValues = [
+			'getApp' => '',
+			'getUser' => '',
+			'getDateTime' => $defaultDateTime,
+			'getObjectType' => '',
+			'getObjectId' => '',
+			'getSubject' => '',
+			'getSubjectParameters' => [],
+			'getMessage' => '',
+			'getMessageParameters' => [],
+			'getLink' => '',
+			'getActions' => [],
+		];
+		foreach ($defaultValues as $method => $returnValue) {
+			if (isset($values[$method])) {
+				continue;
+			}
+
+			$notification->expects($this->any())
+				->method($method)
+				->willReturn($returnValue);
+		}
+
+		$defaultValues = [
+			'setApp',
+			'setUser',
+			'setDateTime',
+			'setObject',
+			'setSubject',
+			'setMessage',
+			'setLink',
+			'addAction',
+		];
+		foreach ($defaultValues as $method) {
+			$notification->expects($this->any())
+				->method($method)
+				->willReturnSelf();
+		}
+
+		return $notification;
+	}
+
+	public function testSetupSymfonyEventListeners() {
+		$user1 = $this->createUser('user1');
+
+		$notification1 = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => $user1->getUID(),
+			'getDateTime' => new \DateTime(),
+			'getObjectType' => 'notification',
+			'getObjectId' => '1337',
+			'getSubject' => 'subject',
+			'getSubjectParameters' => [],
+			'getMessage' => 'message',
+			'getMessageParameters' => [],
+			'getLink' => 'link',
+			'getActions' => [
+				[
+					'getLabel' => 'action_label',
+					'getLink' => 'action_link',
+					'getRequestType' => 'GET',
+					'isPrimary' => true,
+				]
+			],
+		]);
+
+		$limitedNotification1 = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => $user1->getUID(),
+		]);
+
+		$handler = $this->container->query(Handler::class);
+		$handler->add($notification1);
+
+		//Now delete user1 to so that symofny event for user.afterdelete could be listened and
+		//the data from the notifications can be deleted.
+		$useriUID = $user1->getUID();
+		$this->assertTrue($user1->delete());
+
+		$notifications1 = $handler->get($limitedNotification1);
+		$notificationId1 = key($notifications1);
+
+		$this->assertNull($handler->getById($notificationId1, $useriUID));
 	}
 }
