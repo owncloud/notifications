@@ -92,17 +92,7 @@ pipeline:
       - PHP_VERSION=${PHP_VERSION}
     commands:
       - cd /var/www/owncloud
-      - phpdbg -d memory_limit=4096M -rr ./lib/composer/bin/phpunit --configuration apps/notifications/tests/Unit/phpunit.xml
-    when:
-      matrix:
-        TEST_SUITE: phpunit
-
-  scrutinizer:
-    image: owncloudci/php:${PHP_VERSION}
-    pull: true
-    commands:
-      - wget -q https://scrutinizer-ci.com/ocular.phar
-      - php ocular.phar code-coverage:upload --format=php-clover tests/Unit/clover.xml
+      - phpdbg -d memory_limit=4096M -rr ./lib/composer/bin/phpunit --configuration apps/notifications/phpunit.xml
     when:
       matrix:
         TEST_SUITE: phpunit
@@ -114,7 +104,7 @@ pipeline:
     flags:
       - ${TEST_SUITE}
     files:
-      - tests/Unit/clover.xml
+      - tests/output/clover.xml
     when:
       event: [push, pull_request]
       matrix:
