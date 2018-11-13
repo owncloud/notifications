@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+- Set max version to platform version 10 for future 10.x releases - [#251](https://github.com/owncloud/notifications/issues/251)
+
 ## [0.3.5]
 
 - Added translations - [#233](https://github.com/owncloud/notifications/issues/233)
@@ -41,7 +44,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Move OCS calls to app framework - consumes less resources - [#98](https://github.com/owncloud/notifications/pull/98)
 - Don't use escaped message for browser notification - [#100](https://github.com/owncloud/notifications/pull/100)
 
-[0.3.5]: https://github.com/owncloud/notifications/compare/v10.0.9...stable10
+[Unreleased]: https://github.com/owncloud/notifications/compare/v10.0.10...stable10
+[0.3.5]: https://github.com/owncloud/notifications/compare/v10.0.9...v10.0.10
 [0.3.4]: https://github.com/owncloud/notifications/compare/v10.0.8...v10.0.9
 [0.3.3]: https://github.com/owncloud/notifications/compare/v10.0.4...v10.0.8
 [0.3.2]: https://github.com/owncloud/notifications/compare/v10.0.3...v10.0.4
