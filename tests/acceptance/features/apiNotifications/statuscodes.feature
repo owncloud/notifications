@@ -2,7 +2,7 @@
 Feature: statuscodes
 
   Background:
-    Given user "test1" has been created
+    Given user "test1" has been created with default attributes
     And as user "test1"
     And using OCS API version "2"
 

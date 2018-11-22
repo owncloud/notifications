@@ -2,7 +2,7 @@
 Feature: notifications-content
 
   Background:
-    Given user "test1" has been created
+    Given user "test1" has been created with default attributes
     And using OCS API version "2"
 
   Scenario: Create notification
