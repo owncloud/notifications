@@ -62,6 +62,18 @@ class NotificationsContext implements Context {
 	}
 
 	/**
+	 * @When /^the administrator is sent (?:a|another) notification$/
+	 * @Given /^the administrator has been sent (?:a|another) notification$/
+	 *
+	 * @return void
+	 */
+	public function theAdminHasBeenSentANotification() {
+		$this->hasBeenSentANotification(
+			$this->featureContext->getAdminUsername()
+		);
+	}
+
+	/**
 	 * @When /^user "([^"]*)" is sent (?:a|another) notification with$/
 	 * @Given /^user "([^"]*)" has been sent (?:a|another) notification with$/
 	 *
@@ -88,6 +100,21 @@ class NotificationsContext implements Context {
 		PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
 		PHPUnit_Framework_Assert::assertEquals(
 			200, (int) $this->featureContext->getOCSResponseStatusCode($response)
+		);
+	}
+
+	/**
+	 * @When /^the administrator is sent (?:a|another) notification with$/
+	 * @Given /^the administrator has been sent (?:a|another) notification with$/
+	 *
+	 * @param \Behat\Gherkin\Node\TableNode|null $formData
+	 *
+	 * @return void
+	 */
+	public function theAdminHasBeenSentANotificationWith(TableNode $formData) {
+		$this->hasBeenSentANotificationWith(
+			$this->featureContext->getAdminUsername(),
+			$formData
 		);
 	}
 
@@ -180,6 +207,21 @@ class NotificationsContext implements Context {
 	}
 
 	/**
+	 * @When the administrator sets the email notification option to :setting using the API
+	 *
+	 * @param string $setting
+	 *
+	 * @throws Exception
+	 * @return void
+	 */
+	public function theAdminSetsEmailNotificationOption($setting) {
+		$this->setEmailNotificationOption(
+			$this->featureContext->getAdminUsername(),
+			$setting
+		);
+	}
+
+	/**
 	 * @When /^user "([^"]*)" deletes the (first|last) notification$/
 	 *
 	 * @param string $user
@@ -205,6 +247,20 @@ class NotificationsContext implements Context {
 			'DELETE',
 			'/apps/notifications/api/v1/notifications/'
 			. $this->notificationsCoreContext->getDeletedNotification()
+		);
+	}
+
+	/**
+	 * @When /^the administrator deletes the (first|last) notification$/
+	 *
+	 * @param string $firstOrLast
+	 *
+	 * @return void
+	 */
+	public function theAdminDeletesNotification($firstOrLast) {
+		$this->deleteNotification(
+			$this->featureContext->getAdminUsername(),
+			$firstOrLast
 		);
 	}
 
