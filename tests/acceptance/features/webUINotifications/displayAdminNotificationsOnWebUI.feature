@@ -42,3 +42,1007 @@ Feature: display notifications on the webUI
       | object_id   | 9483                                   |
     And the user follows the link of the first notification on the webUI
     Then the user should be redirected to a webUI page with the title "Settings - ownCloud"
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: follow notifications link
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting         |
+      | timestamp   | 144958517                              |
+      | subject     | Acceptance Testing                     |
+      | link        | %base_url%/index.php/settings/personal |
+      | message     | Settings of ownCloud                   |
+      | object_type | blog                                   |
+      | object_id   | 9483                                   |
+    And the user follows the link of the first notification on the webUI
+    Then the user should be redirected to a webUI page with the title "Settings - ownCloud"
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
+
+  Scenario: Create 3 notifications
+    When the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | Acceptance Testing             |
+      | link        | https://owncloud.org/blog      |
+      | message     | Notifications in ownCloud      |
+      | object_type | blog                           |
+      | object_id   | 9483                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | second notification            |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    And the administrator is sent a notification with
+      | app         | notificationsacceptancetesting |
+      | timestamp   | 144958517                      |
+      | subject     | UI tests                       |
+      | link        | http://owncloud.org/           |
+      | message     | notification 3                 |
+      | object_type | blog                           |
+      | object_id   | 9484                           |
+    Then the user should see 3 notifications on the webUI with these details
+      | title              | link                      | message                   |
+      | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud |
+      | UI tests           | http://owncloud.org/      | second notification       |
+      | UI tests           | http://owncloud.org/      | notification 3            |
