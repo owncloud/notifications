@@ -203,7 +203,7 @@ class NotificationsContext implements Context {
 	}
 
 	/**
-	 * @When the user :user sets the email notification option to :setting using the API
+	 * @When user :user sets the email notification option to :setting using the API
 	 *
 	 * @param string $user
 	 * @param string $setting
@@ -211,7 +211,7 @@ class NotificationsContext implements Context {
 	 * @throws Exception
 	 * @return void
 	 */
-	public function setEmailNotificationOption($user, $setting) {
+	public function userSetsEmailNotificationOption($user, $setting) {
 		$oldCSRFSetting = $this->disableCSRF();
 
 		$fullUrl = $this->featureContext->getBaseUrl() .
@@ -259,7 +259,7 @@ class NotificationsContext implements Context {
 	 * @return void
 	 */
 	public function theAdminSetsEmailNotificationOption($setting) {
-		$this->setEmailNotificationOption(
+		$this->userSetsEmailNotificationOption(
 			$this->featureContext->getAdminUsername(),
 			$setting
 		);
