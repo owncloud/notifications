@@ -45,17 +45,27 @@ class NotificationsContext implements Context {
 
 	/**
 	 * @When /^user "([^"]*)" is sent (?:a|another) notification$/
+	 *
+	 * @param string $user
+	 *
+	 * @return void
+	 */
+	public function userIsSentANotification($user) {
+		$this->featureContext->userSendsToOcsApiEndpoint(
+			$user,
+			'POST', '/apps/testing/api/v1/notifications'
+		);
+	}
+
+	/**
 	 * @Given /^user "([^"]*)" has been sent (?:a|another) notification$/
 	 *
 	 * @param string $user
 	 *
 	 * @return void
 	 */
-	public function hasBeenSentANotification($user) {
-		$this->featureContext->userSendsToOcsApiEndpoint(
-			$user,
-			'POST', '/apps/testing/api/v1/notifications'
-		);
+	public function userHasBeenSentANotification($user) {
+		$this->userIsSentANotification($user);
 		$response = $this->featureContext->getResponse();
 		PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
 		PHPUnit_Framework_Assert::assertEquals(
@@ -64,15 +74,36 @@ class NotificationsContext implements Context {
 	}
 
 	/**
+	 * @When /^the administrator is sent (?:a|another) notification$/
+	 *
+	 * @return void
+	 */
+	public function theAdminIsSentANotification() {
+		$this->userIsSentANotification(
+			$this->featureContext->getAdminUsername()
+		);
+	}
+
+	/**
+	 * @Given /^the administrator has been sent (?:a|another) notification$/
+	 *
+	 * @return void
+	 */
+	public function theAdminHasBeenSentANotification() {
+		$this->userHasBeenSentANotification(
+			$this->featureContext->getAdminUsername()
+		);
+	}
+
+	/**
 	 * @When /^user "([^"]*)" is sent (?:a|another) notification with$/
-	 * @Given /^user "([^"]*)" has been sent (?:a|another) notification with$/
 	 *
 	 * @param string $user
 	 * @param \Behat\Gherkin\Node\TableNode|null $formData
 	 *
 	 * @return void
 	 */
-	public function hasBeenSentANotificationWith($user, TableNode $formData) {
+	public function userIsSentANotificationWith($user, TableNode $formData) {
 		//add username to the TableNode,
 		//so it does not need to be mentioned in the table
 		$rows = $formData->getRows();
@@ -88,10 +119,50 @@ class NotificationsContext implements Context {
 			$this->featureContext->getAdminUsername(),
 			'POST', '/apps/testing/api/v1/notifications', $formData
 		);
+	}
+
+	/**
+	 * @Given /^user "([^"]*)" has been sent (?:a|another) notification with$/
+	 *
+	 * @param string $user
+	 * @param \Behat\Gherkin\Node\TableNode|null $formData
+	 *
+	 * @return void
+	 */
+	public function userHasBeenSentANotificationWith($user, TableNode $formData) {
+		$this->userIsSentANotificationWith($user, $formData);
 		$response = $this->featureContext->getResponse();
 		PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
 		PHPUnit_Framework_Assert::assertEquals(
 			200, (int) $this->featureContext->getOCSResponseStatusCode($response)
+		);
+	}
+
+	/**
+	 * @When /^the administrator is sent (?:a|another) notification with$/
+	 *
+	 * @param \Behat\Gherkin\Node\TableNode|null $formData
+	 *
+	 * @return void
+	 */
+	public function theAdminIsSentANotificationWith(TableNode $formData) {
+		$this->userIsSentANotificationWith(
+			$this->featureContext->getAdminUsername(),
+			$formData
+		);
+	}
+
+	/**
+	 * @Given /^the administrator has been sent (?:a|another) notification with$/
+	 *
+	 * @param \Behat\Gherkin\Node\TableNode|null $formData
+	 *
+	 * @return void
+	 */
+	public function theAdminHasBeenSentANotificationWith(TableNode $formData) {
+		$this->userHasBeenSentANotificationWith(
+			$this->featureContext->getAdminUsername(),
+			$formData
 		);
 	}
 
@@ -136,7 +207,7 @@ class NotificationsContext implements Context {
 	}
 
 	/**
-	 * @When the user :user sets the email notification option to :setting using the API
+	 * @When user :user sets the email notification option to :setting using the API
 	 *
 	 * @param string $user
 	 * @param string $setting
@@ -144,7 +215,7 @@ class NotificationsContext implements Context {
 	 * @throws Exception
 	 * @return void
 	 */
-	public function setEmailNotificationOption($user, $setting) {
+	public function userSetsEmailNotificationOption($user, $setting) {
 		$oldCSRFSetting = $this->disableCSRF();
 
 		$fullUrl = $this->featureContext->getBaseUrl() .
@@ -184,6 +255,21 @@ class NotificationsContext implements Context {
 	}
 
 	/**
+	 * @When the administrator sets the email notification option to :setting using the API
+	 *
+	 * @param string $setting
+	 *
+	 * @throws Exception
+	 * @return void
+	 */
+	public function theAdminSetsEmailNotificationOption($setting) {
+		$this->userSetsEmailNotificationOption(
+			$this->featureContext->getAdminUsername(),
+			$setting
+		);
+	}
+
+	/**
 	 * @When /^user "([^"]*)" deletes the (first|last) notification$/
 	 *
 	 * @param string $user
@@ -211,6 +297,20 @@ class NotificationsContext implements Context {
 			'DELETE',
 			'/apps/notifications/api/v1/notifications/'
 			. $this->notificationsCoreContext->getDeletedNotification()
+		);
+	}
+
+	/**
+	 * @When /^the administrator deletes the (first|last) notification$/
+	 *
+	 * @param string $firstOrLast
+	 *
+	 * @return void
+	 */
+	public function theAdminDeletesNotification($firstOrLast) {
+		$this->deleteNotification(
+			$this->featureContext->getAdminUsername(),
+			$firstOrLast
 		);
 	}
 

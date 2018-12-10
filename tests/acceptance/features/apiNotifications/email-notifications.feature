@@ -8,7 +8,7 @@ Feature: notifications-content
     And using OCS API version "2"
 
   Scenario: Create notification
-    When the user "user1" sets the email notification option to "always" using the API
+    When user "user1" sets the email notification option to "always" using the API
     And user "user1" is sent a notification with
       | app         | notificationsacceptancetesting                                            |
       | timestamp   | 144958517                                                                 |
