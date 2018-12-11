@@ -83,11 +83,11 @@ class NotificationMailerTest extends \Test\TestCase {
 		$pattern = '/^[a-zA-Z0-9][a-zA-Z0-9]*@test\.com$/';
 
 		$this->mailer->method('validateMailAddress')
-			->will($this->returnCallback(function($email) use ($pattern){
-				return preg_match($pattern, $email) === 1;
-		}));
+			->will($this->returnCallback(function ($email) use ($pattern) {
+				return \preg_match($pattern, $email) === 1;
+			}));
 
-		$this->assertEquals(preg_match($pattern, $email) === 1, $this->notificationMailer->validateEmail($email));
+		$this->assertEquals(\preg_match($pattern, $email) === 1, $this->notificationMailer->validateEmail($email));
 	}
 
 	public function testSendNotification() {
@@ -104,8 +104,8 @@ class NotificationMailerTest extends \Test\TestCase {
 		$mockedL10N = $this->getMockBuilder(IL10N::class)->disableOriginalConstructor()->getMock();
 		$mockedL10N->method('t')
 			->will($this->returnCallback(function ($text, $params) {
-				return vsprintf($text, $params);
-		}));
+				return \vsprintf($text, $params);
+			}));
 
 		$this->l10nFactory->method('get')->willReturn($mockedL10N);
 		$this->mailer->expects($this->once())->method('send');
@@ -141,8 +141,8 @@ class NotificationMailerTest extends \Test\TestCase {
 		$mockedL10N = $this->getMockBuilder(IL10N::class)->disableOriginalConstructor()->getMock();
 		$mockedL10N->method('t')
 			->will($this->returnCallback(function ($text, $params) {
-				return vsprintf($text, $params);
-		}));
+				return \vsprintf($text, $params);
+			}));
 
 		$this->l10nFactory->method('get')->willReturn($mockedL10N);
 		$this->mailer->expects($this->once())

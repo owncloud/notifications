@@ -18,5 +18,5 @@ class Version20180119080933 implements ISchemaMigration {
 		$column->setNotnull(false);
 		$column = $table->getColumn('link');
 		$column->setNotnull(false);
-    }
+	}
 }

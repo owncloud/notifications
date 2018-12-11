@@ -55,7 +55,6 @@ abstract class TestCase extends \Test\TestCase {
 				return $oldService;
 			});
 
-
 			unset($this->services[$name]);
 			return true;
 		}

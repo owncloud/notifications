@@ -159,7 +159,7 @@ class EndpointController extends OCSController {
 	 * @return string
 	 */
 	protected function generateEtag(array $notifications) {
-		return md5(json_encode($notifications));
+		return \md5(\json_encode($notifications));
 	}
 
 	/**
@@ -180,7 +180,7 @@ class EndpointController extends OCSController {
 			'link' => $notification->getLink(),
 			'actions' => [],
 		];
-		if (method_exists($notification, 'getIcon')) {
+		if (\method_exists($notification, 'getIcon')) {
 			$data['icon'] = $notification->getIcon();
 		}
 

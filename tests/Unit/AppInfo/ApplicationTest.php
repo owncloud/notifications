@@ -58,10 +58,10 @@ class ApplicationTest extends TestCase {
 	}
 
 	public function dataContainerQuery() {
-		return array(
-			array('EndpointController', 'OCA\Notifications\Controller\EndpointController'),
-			array('Capabilities', 'OCA\Notifications\Capabilities'),
-		);
+		return [
+			['EndpointController', 'OCA\Notifications\Controller\EndpointController'],
+			['Capabilities', 'OCA\Notifications\Capabilities'],
+		];
 	}
 
 	/**
@@ -188,7 +188,7 @@ class ApplicationTest extends TestCase {
 		$this->assertTrue($user1->delete());
 
 		$notifications1 = $handler->get($limitedNotification1);
-		$notificationId1 = key($notifications1);
+		$notificationId1 = \key($notifications1);
 
 		$this->assertNull($handler->getById($notificationId1, $useriUID));
 	}

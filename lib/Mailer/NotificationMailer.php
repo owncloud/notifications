@@ -92,7 +92,7 @@ class NotificationMailer {
 		$failedRecipents = $this->mailer->send($emailMessage);
 		if (!empty($failedRecipents)) {
 			// throw a plain exception to converge the mailer->send behaviour
-			throw new \Exception('Failed to send mail to ' . implode(', ', $failedRecipents));
+			throw new \Exception('Failed to send mail to ' . \implode(', ', $failedRecipents));
 		}
 
 		return $emailMessage;

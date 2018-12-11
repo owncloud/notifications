@@ -28,9 +28,9 @@ $application->setupSymfonyEventListeners();
 // Only display the app on index.php except for public shares
 $request = \OC::$server->getRequest();
 if (\OC::$server->getUserSession() !== null && \OC::$server->getUserSession()->getUser() !== null
-	&& substr($request->getScriptName(), 0 - strlen('/index.php')) === '/index.php'
-	&& substr($request->getPathInfo(), 0, strlen('/s/')) !== '/s/'
-	&& substr($request->getPathInfo(), 0, strlen('/login')) !== '/login') {
+	&& \substr($request->getScriptName(), 0 - \strlen('/index.php')) === '/index.php'
+	&& \substr($request->getPathInfo(), 0, \strlen('/s/')) !== '/s/'
+	&& \substr($request->getPathInfo(), 0, \strlen('/login')) !== '/login') {
 	Util::addScript('notifications', 'app');
 	Util::addScript('notifications', 'notification');
 	Util::addStyle('notifications', 'styles');
