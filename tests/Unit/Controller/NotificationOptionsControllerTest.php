@@ -57,9 +57,9 @@ class NotificationOptionsControllerTest extends \Test\TestCase {
 			->getMock();
 
 		$this->l10n->method('t')
-			->will($this->returnCallback(function($text, $params = []){
-				return vsprintf($text, $params);
-		}));
+			->will($this->returnCallback(function ($text, $params = []) {
+				return \vsprintf($text, $params);
+			}));
 
 		$this->optionsStorage->method('getValidOptionValuesInfo')
 			->willReturn([
@@ -80,7 +80,7 @@ class NotificationOptionsControllerTest extends \Test\TestCase {
 	}
 
 	private function getSuccessResponse($options) {
-		return json_encode([
+		return \json_encode([
 			'data' => [
 				'options' => $options,
 				'message' => 'Saved'
@@ -96,7 +96,7 @@ class NotificationOptionsControllerTest extends \Test\TestCase {
 				'rejects' => $rejects,
 			]
 		];
-		return json_encode($data);
+		return \json_encode($data);
 	}
 
 	public function emailNotificationOptionsProvider() {
@@ -128,37 +128,37 @@ class NotificationOptionsControllerTest extends \Test\TestCase {
 		$valuesSet = [];
 
 		$this->optionsStorage->method('isOptionValid')
-			->will($this->returnCallback(function($key, $value) use ($validKeys) {
-				return in_array($value, $validKeys, true);
-		}));
+			->will($this->returnCallback(function ($key, $value) use ($validKeys) {
+				return \in_array($value, $validKeys, true);
+			}));
 
 		$this->optionsStorage->method('setOption')
-			->will($this->returnCallback(function($user, $key, $value) use (&$valuesSet) {
+			->will($this->returnCallback(function ($user, $key, $value) use (&$valuesSet) {
 				$valuesSet = [
 					'user' => $user,
 					'key' => $key,
 					'value' => $value,
 				];
 				return null;
-		}));
+			}));
 
 		$this->optionsStorage->method('getOptions')
-			->will($this->returnCallback(function($userid) use (&$valuesSet) {
+			->will($this->returnCallback(function ($userid) use (&$valuesSet) {
 				if ($userid === $valuesSet['user']) {
 					return [$valuesSet['key'] => $valuesSet['value']];
 				} else {
 					return [];
 				}
-		}));
+			}));
 
-		if (!in_array($value, $validKeys, true)) {
+		if (!\in_array($value, $validKeys, true)) {
 			$this->optionsStorage->expects($this->never())
 				->method('setOption');
 		}
 
 		$result = $this->controller->setNotificationOptionsPartial();
 
-		if (in_array($value, $validKeys, true)) {
+		if (\in_array($value, $validKeys, true)) {
 			$this->assertEquals('testUser', $valuesSet['user']);
 			$this->assertEquals('email_sending_option', $valuesSet['key']);
 			$this->assertEquals($value, $valuesSet['value']);
@@ -188,29 +188,29 @@ class NotificationOptionsControllerTest extends \Test\TestCase {
 
 		$valuesSet = [];
 		$this->optionsStorage->method('setOption')
-			->will($this->returnCallback(function($user, $key, $value) use (&$valuesSet) {
+			->will($this->returnCallback(function ($user, $key, $value) use (&$valuesSet) {
 				if (!isset($valuesSet[$user])) {
 					$valuesSet[$user] = [];
 				}
 				$valuesSet[$user][$key] = $value;
 				return null;
-		}));
+			}));
 		$defaultOptions = $this->buildDefaultOptions('testUser');
 		unset($defaultOptions['id']);
 
 		$this->optionsStorage->method('isOptionValid')
-			->will($this->returnCallback(function($key, $value) use ($defaultOptions) {
-				return in_array($key, array_keys($defaultOptions), true);  // don't check specific values here
-		}));
+			->will($this->returnCallback(function ($key, $value) use ($defaultOptions) {
+				return \in_array($key, \array_keys($defaultOptions), true);  // don't check specific values here
+			}));
 
 		$this->optionsStorage->method('getOptions')
-			->will($this->returnCallback(function($user) use (&$valuesSet, $defaultOptions) {
+			->will($this->returnCallback(function ($user) use (&$valuesSet, $defaultOptions) {
 				if (!isset($valuesSet[$user])) {
 					return $defaultOptions;
 				} else {
 					return $valuesSet[$user];
 				}
-		}));
+			}));
 
 		$result = $this->controller->setNotificationOptions();
 
@@ -262,14 +262,14 @@ class NotificationOptionsControllerTest extends \Test\TestCase {
 
 		$defaultOptions = $this->buildDefaultOptions('testUser');
 		$this->optionsStorage->method('getOptions')
-			->will($this->returnCallback(function($user) use ($defaultOptions) {
+			->will($this->returnCallback(function ($user) use ($defaultOptions) {
 				unset($defaultOptions['id']);
 				return $defaultOptions;
-		}));
+			}));
 
 		$result = $this->controller->getNotificationOptions();
 		$expectedValue = ['data' => ['options' => $defaultOptions]];
-		$this->assertJsonStringEqualsJsonString(json_encode($expectedValue), $result->render());
+		$this->assertJsonStringEqualsJsonString(\json_encode($expectedValue), $result->render());
 	}
 
 	public function testGetNotificationOptionsUnknownUser() {

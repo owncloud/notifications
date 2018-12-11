@@ -7,7 +7,6 @@ use Doctrine\DBAL\Types\Type;
 use OCP\Migration\ISchemaMigration;
 
 class Version20170801085340 implements ISchemaMigration {
-
 	public function changeSchema(Schema $schema, array $options) {
 		$prefix = $options['tablePrefix'];
 		if ($schema->hasTable("{$prefix}notifications")) {

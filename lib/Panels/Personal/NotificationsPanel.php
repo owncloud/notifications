@@ -61,7 +61,7 @@ class NotificationsPanel implements ISettings {
 			];
 
 			if (!isset($possibleOptions[$emailSendingOption])) {
-				$possibleOptions = array_merge([
+				$possibleOptions = \array_merge([
 					$emailSendingOption => [
 						'visibleText' => (string)$this->l10n->t('Choose an option'),
 						'selected' => true,

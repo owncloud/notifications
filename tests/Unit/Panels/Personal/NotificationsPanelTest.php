@@ -50,9 +50,9 @@ class NotificationsPanelTest extends \Test\TestCase {
 			->getMock();
 
 		$this->l10n->method('t')
-			->will($this->returnCallback(function($text, $params = []){
-				return vsprintf($text, $params);
-		}));
+			->will($this->returnCallback(function ($text, $params = []) {
+				return \vsprintf($text, $params);
+			}));
 
 		$this->notificationsPanel = new NotificationsPanel($this->optionsStorage, $this->userSession, $this->l10n);
 	}
@@ -89,7 +89,7 @@ class NotificationsPanelTest extends \Test\TestCase {
 
 		$page = $this->notificationsPanel->getPanel()->fetchPage();
 		$this->assertContains('<h2 class="app-name">Mail Notifications</h2>', $page);
-		if (in_array($selectedValue, ['never', 'action', 'always'], true)) {
+		if (\in_array($selectedValue, ['never', 'action', 'always'], true)) {
 			$this->assertContains("<option value=\"$selectedValue\" selected=\"selected\">", $page);
 		} else {
 			$this->assertContains("<option value=\"$selectedValue\" selected=\"selected\">Choose an option</option>", $page);

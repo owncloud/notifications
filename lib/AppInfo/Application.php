@@ -35,11 +35,11 @@ use OCP\Notification\Events\RegisterNotifierEvent;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
 class Application extends App {
-	public function __construct (array $urlParams = array()) {
+	public function __construct(array $urlParams = []) {
 		parent::__construct('notifications', $urlParams);
 		$container = $this->getContainer();
 
-		$container->registerService('EndpointController', function(IContainer $c) {
+		$container->registerService('EndpointController', function (IContainer $c) {
 			/** @var \OC\Server $server */
 			$server = $c->query('ServerContainer');
 
@@ -56,7 +56,7 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService('Capabilities', function(IContainer $c) {
+		$container->registerService('Capabilities', function (IContainer $c) {
 			return new Capabilities();
 		});
 		$container->registerCapability('Capabilities');
@@ -67,11 +67,11 @@ class Application extends App {
 
 		$dispatcher = $container->getServer()->getEventDispatcher();
 
-		$dispatcher->addListener(RegisterConsumerEvent::NAME, function(RegisterConsumerEvent $event) use ($container) {
+		$dispatcher->addListener(RegisterConsumerEvent::NAME, function (RegisterConsumerEvent $event) use ($container) {
 			$event->registerNotificationConsumer($container->query(NotificationApp::class));
 		});
 
-		$dispatcher->addListener(RegisterNotifierEvent::NAME, function(RegisterNotifierEvent $event) use ($container) {
+		$dispatcher->addListener(RegisterNotifierEvent::NAME, function (RegisterNotifierEvent $event) use ($container) {
 			$l10n = $container->getServer()->getL10N('notifications');
 			$event->registerNotifier($container->query(Notifier::class), 'notifications', $l10n->t('Admin notifications'));
 		});
