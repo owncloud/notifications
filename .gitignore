@@ -58,13 +58,8 @@ vendor-bin/**/vendor
 vendor-bin/**/composer.lock
 
 # Tests - auto-generated files
-/tests/Unit/coverage*
-/tests/Unit/clover.xml
 /tests/Unit/js/node_modules
 /tests/output
-
-/tests/acceptance/composer.lock
 /tests/acceptance/output
-/tests/acceptance/vendor
 
 build
