@@ -92,7 +92,7 @@ class OptionsStorage {
 			return false;
 		}
 
-		if (in_array($value, $this->validOptionValues[$key]['values'], true)) {
+		if (\in_array($value, $this->validOptionValues[$key]['values'], true)) {
 			return true;
 		}
 		// we don't have any additional case for now, so return false. More cases could be added later

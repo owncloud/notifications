@@ -119,7 +119,7 @@ class EndpointControllerTest extends TestCase {
 	public function dataListNotifications() {
 		return [
 			[
-				[], md5(json_encode([])), [],
+				[], \md5(\json_encode([])), [],
 			],
 			[
 				[
@@ -130,7 +130,7 @@ class EndpointControllerTest extends TestCase {
 						->disableOriginalConstructor()
 						->getMock(),
 				],
-				md5(json_encode([1, 3])),
+				\md5(\json_encode([1, 3])),
 				['$notification', '$notification'],
 			],
 			[
@@ -139,7 +139,7 @@ class EndpointControllerTest extends TestCase {
 						->disableOriginalConstructor()
 						->getMock(),
 				],
-				md5(json_encode([42])),
+				\md5(\json_encode([42])),
 				['$notification'],
 			],
 		];
@@ -155,7 +155,7 @@ class EndpointControllerTest extends TestCase {
 		$controller = $this->getController([
 			'notificationToArray',
 		]);
-		$controller->expects($this->exactly(sizeof($notifications)))
+		$controller->expects($this->exactly(\sizeof($notifications)))
 			->method('notificationToArray')
 			->willReturn('$notification');
 
@@ -172,7 +172,7 @@ class EndpointControllerTest extends TestCase {
 		$this->manager->expects($this->once())
 			->method('createNotification')
 			->willReturn($filter);
-		$this->manager->expects($this->exactly(sizeof($notifications)))
+		$this->manager->expects($this->exactly(\sizeof($notifications)))
 			->method('prepare')
 			->willReturnArgument(0);
 
@@ -201,7 +201,7 @@ class EndpointControllerTest extends TestCase {
 						->disableOriginalConstructor()
 						->getMock(),
 				],
-				md5(json_encode([3])),
+				\md5(\json_encode([3])),
 				['$notification'],
 			],
 		];
@@ -291,7 +291,7 @@ class EndpointControllerTest extends TestCase {
 		$this->manager->expects($this->once())
 			->method('hasNotifiers')
 			->willReturn(true);
-		$this->manager->expects($this->once() )
+		$this->manager->expects($this->once())
 			->method('prepare')
 			->with($notification)
 			->willReturn($notification);
@@ -417,7 +417,7 @@ class EndpointControllerTest extends TestCase {
 		$controller = $this->getController([
 			'actionToArray'
 		]);
-		$controller->expects($this->exactly(sizeof($actions)))
+		$controller->expects($this->exactly(\sizeof($actions)))
 			->method('actionToArray')
 			->willReturn('action');
 
@@ -425,7 +425,7 @@ class EndpointControllerTest extends TestCase {
 				'notification_id' => $id,
 				'app' => $app,
 				'user' => $user,
-				'datetime' => date('c', $timestamp),
+				'datetime' => \date('c', $timestamp),
 				'object_type' => $objectType,
 				'object_id' => $objectId,
 				'subject' => $subject,

@@ -21,7 +21,6 @@
 
 namespace OCA\Notifications;
 
-
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\Notification\IAction;
@@ -246,18 +245,18 @@ class Handler {
 			->setParameter('subject', $notification->getSubject());
 
 		$sql->setValue('subject_parameters', $sql->createParameter('subject_parameters'))
-			->setParameter('subject_parameters', json_encode($notification->getSubjectParameters()));
+			->setParameter('subject_parameters', \json_encode($notification->getSubjectParameters()));
 
 		$sql->setValue('message', $sql->createParameter('message'))
 			->setParameter('message', $notification->getMessage());
 
 		$sql->setValue('message_parameters', $sql->createParameter('message_parameters'))
-			->setParameter('message_parameters', json_encode($notification->getMessageParameters()));
+			->setParameter('message_parameters', \json_encode($notification->getMessageParameters()));
 
 		$sql->setValue('link', $sql->createParameter('link'))
 			->setParameter('link', $notification->getLink());
 
-		if (method_exists($notification, 'getIcon')) {
+		if (\method_exists($notification, 'getIcon')) {
 			$sql->setValue('icon', $sql->createNamedParameter($notification->getIcon()));
 		}
 
@@ -272,7 +271,7 @@ class Handler {
 			];
 		}
 		$sql->setValue('actions', $sql->createParameter('actions'))
-			->setParameter('actions', json_encode($actions));
+			->setParameter('actions', \json_encode($actions));
 	}
 
 	/**
@@ -290,19 +289,19 @@ class Handler {
 			->setUser($row['user'])
 			->setDateTime($dateTime)
 			->setObject($row['object_type'], $row['object_id'])
-			->setSubject($row['subject'], (array) json_decode($row['subject_parameters'], true));
+			->setSubject($row['subject'], (array) \json_decode($row['subject_parameters'], true));
 
 		if ($row['message'] !== '' && $row['message'] !== null) {
-			$notification->setMessage($row['message'], (array) json_decode($row['message_parameters'], true));
+			$notification->setMessage($row['message'], (array) \json_decode($row['message_parameters'], true));
 		}
 		if ($row['link'] !== '' && $row['link'] !== null) {
 			$notification->setLink($row['link']);
 		}
-		if (method_exists($notification, 'setIcon') && isset($row['icon']) && $row['icon'] !== '' && $row['icon'] !== null) {
+		if (\method_exists($notification, 'setIcon') && isset($row['icon']) && $row['icon'] !== '' && $row['icon'] !== null) {
 			$notification->setIcon($row['icon']);
 		}
 
-		$actions = (array) json_decode($row['actions'], true);
+		$actions = (array) \json_decode($row['actions'], true);
 		foreach ($actions as $actionData) {
 			$action = $notification->createAction();
 			$action->setLabel($actionData['label'])

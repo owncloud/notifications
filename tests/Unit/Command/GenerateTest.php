@@ -86,6 +86,4 @@ class GenerateTest extends TestCase {
 		$response = $this->tester->execute($input);
 		$this->assertEquals(0, $response);
 	}
-
-
 }

@@ -21,7 +21,6 @@
 
 namespace OCA\Notifications;
 
-
 use OCP\Notification\IApp;
 use OCP\Notification\INotification;
 use OCA\Notifications\Mailer\NotificationMailerAdapter;

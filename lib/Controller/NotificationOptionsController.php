@@ -88,7 +88,7 @@ class NotificationOptionsController extends Controller {
 			$this->optionsStorage->setOption($userid, $key, $value);
 		}
 
-		$data = array_merge(['id' => $userid], $this->optionsStorage->getOptions($userid));
+		$data = \array_merge(['id' => $userid], $this->optionsStorage->getOptions($userid));
 
 		return new JSONResponse([
 			'data' => [
@@ -143,7 +143,7 @@ class NotificationOptionsController extends Controller {
 		}
 
 		$userid = $userObject->getUID();
-		$data = array_merge(['id' => $userid], $this->optionsStorage->getOptions($userid));
+		$data = \array_merge(['id' => $userid], $this->optionsStorage->getOptions($userid));
 
 		return new JSONResponse([
 			'data' => [
@@ -154,7 +154,7 @@ class NotificationOptionsController extends Controller {
 
 	private function fetchParamsFromRequest() {
 		$options = $this->request->getParams();
-		foreach (array_keys($options) as $key) {
+		foreach (\array_keys($options) as $key) {
 			if (@$key[0] === '_') {
 				// the condition will be evaluated to false if $key is an empty string or a number
 				// just supress the warning.
