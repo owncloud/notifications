@@ -122,11 +122,11 @@ pipeline:
   notify:
     image: plugins/slack:1
     pull: true
-    secrets: [ slack_webhook ]
+    secrets: [slack_webhook]
     channel: builds
     when:
-      status: [ failure, changed ]
-      event: [ push, tag ]
+      status: [failure, changed]
+      event: [push, tag]
 
 services:
   mysql:
