@@ -309,6 +309,39 @@ class NotificationsContext implements Context {
 	}
 
 	/**
+	 * @When the administrator sends following notifications using the occ command
+	 *
+	 * @param TableNode $notificationContent table with heading subject, message, user, group , link
+	 *
+	 * @return void
+	 */
+	public function theAdministratorSendsFollowingNotificationsUsingTheOccCommand(
+		TableNode $notificationContent
+		) {
+		foreach ($notificationContent as $content) {
+			$cmd = "notifications:generate";
+			if (\array_key_exists("subject", $content)) {
+				$cmd = $cmd . " '{$content['subject']}'";
+			}
+			if (\array_key_exists("message", $content)) {
+				$cmd = $cmd . " '{$content['message']}'";
+			}
+			if (\array_key_exists("user", $content)) {
+				$cmd = $cmd . " -u {$content['user']}";
+			}
+			if (\array_key_exists("group", $content)) {
+				$cmd = $cmd . " -g {$content['group']}";
+			}
+			if (\array_key_exists("link", $content)) {
+				$cmd = $cmd . " -l {$content['link']}";
+			}
+			$this->featureContext->runOcc(
+				[$cmd]
+			);
+		}
+	}
+
+	/**
 	 * @BeforeScenario
 	 *
 	 * @param BeforeScenarioScope $scope
