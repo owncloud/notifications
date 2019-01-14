@@ -28,6 +28,15 @@ default:
         - WebUIGeneralContext:
         - WebUILoginContext:
 
+    cliNotifications:
+      paths:
+        - %paths.base%/../features/cliNotifications
+      contexts:
+        - NotificationsContext:
+        - NotificationsCoreContext:
+        - FeatureContext: *common_feature_context_params
+        - OccContext:
+
   extensions:
       jarnaiz\JUnitFormatter\JUnitFormatterExtension:
           filename: report.xml
