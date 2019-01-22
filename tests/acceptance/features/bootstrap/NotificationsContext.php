@@ -323,7 +323,7 @@ class NotificationsContext implements Context {
 	 */
 	public function theAdministratorSendsFollowingNotificationsUsingTheOccCommand(
 		TableNode $notificationContent
-		) {
+	) {
 		foreach ($notificationContent as $content) {
 			$cmd = "notifications:generate";
 			if (\array_key_exists("subject", $content)) {
