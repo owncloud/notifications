@@ -11,6 +11,8 @@
     "Notify only when an action is required" : "Powiadamiaj mnie tylko, gdy jest wymagana akcja",
     "Notify about all events" : "Powiadamiaj o wszystkich aktywnościach",
     "Choose an option" : "Wybierz opcję",
+    "See <a href=\"%s\">%s</a> on %s for more information" : "Zajrzyj do <a href=\"%s\">%s</a> na %s aby uzyskać więcej informacji",
+    "See %s on %s for more information" : "Zajrzyj do %s na %s aby uzyskać więcej informacji",
     "Mail Notifications" : "Powiadomienia emailowe",
     "You can choose to be notified about events via mail. Some events are informative, others require an action (like accept/decline). Select your preference below:" : "Możesz być powiadamiany o wszystkich wydarzeniach przez email. Niektóre powiadomienia są informacyjne, inne wymagają akcji (np. akceptacja/odrzucenie). Ustaw swoje preferencje poniżej:",
     "It was not possible to get your session. Please, try reloading the page or logout and login again" : "Pobranie Twojej sesji nie było możliwe. Proszę spróbuj przeładować stronę i zalogować się ponownie.",
