@@ -54,6 +54,7 @@ clean: clean-deps
 
 .PHONY: clean-deps
 clean-deps:
+	rm -Rf vendor
 	rm -Rf vendor-bin/**/vendor vendor-bin/**/composer.lock
 
 # Builds the source and appstore package
