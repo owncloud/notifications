@@ -32,7 +32,7 @@ use SensioLabs\Behat\PageObjectExtension\PageObject\Exception\ElementNotFoundExc
 class Notification extends OwncloudPage {
 	
 	/**
-	 * 
+	 *
 	 * @var NodeElement
 	 */
 	private $notificationElement;
@@ -55,12 +55,12 @@ class Notification extends OwncloudPage {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param Session $session
 	 * @param int $timeout_msec
-	 * 
+	 *
 	 * @throws ElementNotFoundException
-	 * 
+	 *
 	 * @return void
 	 */
 	public function followLink(
@@ -77,32 +77,32 @@ class Notification extends OwncloudPage {
 		}
 		$destination = $link->getAttribute('href');
 		$link->click();
-		$currentTime = microtime(true);
+		$currentTime = \microtime(true);
 		$end = $currentTime + ($timeout_msec / 1000);
 		while ($currentTime <= $end) {
 			if ($destination === $session->getCurrentUrl()) {
 				break;
 			}
-			$currentTime = microtime(true);
+			$currentTime = \microtime(true);
 		}
 	}
 
 	/**
-	 * 
+	 *
 	 * @param string $reaction
 	 * @param Session $session
-	 * 
+	 *
 	 * @return void
 	 */
 	public function react($reaction, Session $session) {
-		$buttonXpath = sprintf($this->buttonByTextXpath, $reaction);
+		$buttonXpath = \sprintf($this->buttonByTextXpath, $reaction);
 		$button = $this->notificationElement->find(
 			"xpath", $buttonXpath
 		);
-		if (is_null($button)) {
+		if ($button === null) {
 			throw new ElementNotFoundException(
 				__METHOD__ .
-				" xpath " . $buttonXpath . 
+				" xpath " . $buttonXpath .
 				" could not find button with the given text"
 			);
 		}
