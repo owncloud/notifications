@@ -50,13 +50,16 @@ nbproject
 .well-known
 /.buildpath
 
-# Tests - auto-generated files
-/tests/Unit/coverage*
-/tests/Unit/clover.xml
-/tests/Unit/js/node_modules
+.php_cs.cache
 
-/tests/acceptance/composer.lock
+# Composer
+vendor/
+vendor-bin/**/vendor
+vendor-bin/**/composer.lock
+
+# Tests - auto-generated files
+/tests/Unit/js/node_modules
+/tests/output
 /tests/acceptance/output
-/tests/acceptance/vendor
 
 build

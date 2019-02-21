@@ -5,7 +5,7 @@ workspace:
 branches: [master, stable10, release*, release/*]
 
 pipeline:
-  install-server:
+  install-core:
     image: owncloudci/core
     version: ${OC_VERSION}
     pull: true
@@ -15,6 +15,9 @@ pipeline:
     db_username: autotest
     db_password: owncloud
     exclude: apps/notifications
+    when:
+      matrix:
+        NEED_CORE: true
 
   install-app:
     image: owncloudci/php:${PHP_VERSION}
@@ -26,6 +29,9 @@ pipeline:
       - php occ a:l
       - php occ config:system:set trusted_domains 1 --value=owncloud
       - php occ log:manage --level 0
+    when:
+      matrix:
+        NEED_INSTALL_APP: true
 
   owncloud-log:
     image: owncloud/ubuntu:16.04
@@ -33,21 +39,29 @@ pipeline:
     pull: true
     commands:
       - tail -f /var/www/owncloud/data/owncloud.log
+    when:
+      matrix:
+        NEED_SERVER: true
 
-  code-compliance-check:
+  owncloud-coding-standard:
     image: owncloudci/php:${PHP_VERSION}
     pull: true
     commands:
-      - cd /var/www/owncloud/apps/notifications
-      - make test-php-codecheck
-      - make test-php-lint
+      - make test-php-style
+    when:
+      matrix:
+        TEST_SUITE: owncloud-coding-standard
 
   fix-permissions:
     image: owncloudci/php:${PHP_VERSION}
     pull: true
     commands:
-      - cd /var/www/owncloud/
-      - chown www-data * -R
+      - chown www-data /var/www/owncloud -R
+      - chmod 777 /var/www/owncloud/tests/acceptance/filesForUpload -R
+      - chmod +x /var/www/owncloud/tests/acceptance/run.sh
+    when:
+      matrix:
+        NEED_SERVER: true
 
   webui-acceptance-tests:
     image: owncloudci/php:${PHP_VERSION}
@@ -61,10 +75,7 @@ pipeline:
       - BEHAT_SUITE=${BEHAT_SUITE}
       - APPS_TO_ENABLE=notifications
     commands:
-      - cd /var/www/owncloud/tests/acceptance
-      - chmod 777 /var/www/owncloud/tests/acceptance/filesForUpload -R
-      - chmod +x run.sh
-      - ./run.sh --remote --config /var/www/owncloud/apps/notifications/tests/acceptance/config/behat.yml
+      - make test-acceptance-webui
     when:
       matrix:
         TEST_SUITE: web-acceptance
@@ -78,31 +89,33 @@ pipeline:
       - BEHAT_SUITE=${BEHAT_SUITE}
       - APPS_TO_ENABLE=notifications
     commands:
-      - cd /var/www/owncloud/tests/acceptance
-      - chmod +x run.sh
-      - ./run.sh --config /var/www/owncloud/apps/notifications/tests/acceptance/config/behat.yml
+      - make test-acceptance-api
     when:
       matrix:
         TEST_SUITE: api-acceptance
+
+  cli-acceptance-tests:
+    image: owncloudci/php:${PHP_VERSION}
+    pull: true
+    environment:
+      - TEST_SERVER_URL=http://owncloud
+      - PLATFORM=Linux
+      - BEHAT_SUITE=${BEHAT_SUITE}
+      - APPS_TO_ENABLE=notifications
+    commands:
+      - make test-acceptance-cli
+    when:
+      matrix:
+        TEST_SUITE: cli-acceptance
 
   phpunit-tests:
     image: owncloudci/php:${PHP_VERSION}
     pull: true
     environment:
-      - PHP_VERSION=${PHP_VERSION}
+      - COVERAGE=${COVERAGE}
     commands:
-      - cd /var/www/owncloud
-      - phpdbg -d memory_limit=4096M -rr ./lib/composer/bin/phpunit --configuration apps/notifications/tests/Unit/phpunit.xml
-    when:
-      matrix:
-        TEST_SUITE: phpunit
-
-  scrutinizer:
-    image: owncloudci/php:${PHP_VERSION}
-    pull: true
-    commands:
-      - wget -q https://scrutinizer-ci.com/ocular.phar
-      - php ocular.phar code-coverage:upload --format=php-clover tests/Unit/clover.xml
+      - if [ -z "${COVERAGE}" ]; then make test-php-unit; fi
+      - if [ "${COVERAGE}" = "true" ]; then make test-php-unit-dbg; fi
     when:
       matrix:
         TEST_SUITE: phpunit
@@ -114,22 +127,20 @@ pipeline:
     flags:
       - ${TEST_SUITE}
     files:
-      - tests/Unit/clover.xml
+      - tests/output/clover.xml
     when:
       event: [push, pull_request]
       matrix:
-        TEST_SUITE: phpunit
-        PHP_VERSION: 7.1
-        DB_TYPE: mysql
+        COVERAGE: true
 
   notify:
     image: plugins/slack:1
     pull: true
-    secrets: [ slack_webhook ]
+    secrets: [slack_webhook]
     channel: builds
     when:
-      status: [ failure, changed ]
-      event: [ push, tag ]
+      status: [failure, changed]
+      event: [push, tag]
 
 services:
   mysql:
@@ -171,7 +182,7 @@ services:
     command: [ "/usr/local/bin/apachectl", "-e", "debug", "-D", "FOREGROUND" ]
     when:
       matrix:
-        USE_SERVER: true
+        NEED_SERVER: true
 
   selenium:
     image: selenium/standalone-chrome-debug:latest
@@ -189,66 +200,95 @@ services:
 
 matrix:
   include:
+      # owncloud-coding-standard
+    - PHP_VERSION: 7.2
+      TEST_SUITE: owncloud-coding-standard
+
+    - PHP_VERSION: 5.6
+      TEST_SUITE: owncloud-coding-standard
+
     # Unit Tests
     - PHP_VERSION: 7.1
       OC_VERSION: daily-master-qa
       TEST_SUITE: phpunit
       DB_TYPE: mysql
       DB_NAME: owncloud
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
+      COVERAGE: true
 
     - PHP_VERSION: 7.1
       OC_VERSION: daily-master-qa
       TEST_SUITE: phpunit
       DB_TYPE: pgsql
       DB_NAME: owncloud
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
 
     - PHP_VERSION: 7.1
       OC_VERSION: daily-master-qa
       TEST_SUITE: phpunit
       DB_TYPE: oci
       DB_NAME: XE
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
 
     - PHP_VERSION: 7.2
       OC_VERSION: daily-master-qa
       TEST_SUITE: phpunit
       DB_TYPE: mysql
       DB_NAME: owncloud
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
 
     - PHP_VERSION: 5.6
       OC_VERSION: daily-stable10-qa
       TEST_SUITE: phpunit
       DB_TYPE: mysql
       DB_NAME: owncloud
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
 
     - PHP_VERSION: 7.0
       OC_VERSION: daily-stable10-qa
       TEST_SUITE: phpunit
       DB_TYPE: mysql
       DB_NAME: owncloud
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
 
     - PHP_VERSION: 7.0
       OC_VERSION: daily-stable10-qa
       TEST_SUITE: phpunit
       DB_TYPE: pgsql
       DB_NAME: owncloud
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
 
     - PHP_VERSION: 7.0
       OC_VERSION: daily-stable10-qa
       TEST_SUITE: phpunit
       DB_TYPE: oci
       DB_NAME: XE
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
 
     - PHP_VERSION: 7.1
       OC_VERSION: daily-stable10-qa
       TEST_SUITE: phpunit
       DB_TYPE: mysql
       DB_NAME: owncloud
-      
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
+
     - PHP_VERSION: 7.2
       OC_VERSION: daily-stable10-qa
       TEST_SUITE: phpunit
       DB_TYPE: mysql
       DB_NAME: owncloud
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
+      COVERAGE: true
 
     # Acceptance Tests
 
@@ -258,7 +298,9 @@ matrix:
       BEHAT_SUITE: webUINotifications
       DB_TYPE: mysql
       DB_NAME: owncloud
-      USE_SERVER: true
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
+      NEED_SERVER: true
 
     - PHP_VERSION: 7.1
       OC_VERSION: daily-master-qa
@@ -266,7 +308,9 @@ matrix:
       BEHAT_SUITE: webUINotifications
       DB_TYPE: pgsql
       DB_NAME: owncloud
-      USE_SERVER: true
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
+      NEED_SERVER: true
 
     - PHP_VERSION: 7.1
       OC_VERSION: daily-master-qa
@@ -274,7 +318,9 @@ matrix:
       BEHAT_SUITE: webUINotifications
       DB_TYPE: oci
       DB_NAME: XE
-      USE_SERVER: true
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
+      NEED_SERVER: true
 
     - PHP_VERSION: 7.1
       OC_VERSION: daily-master-qa
@@ -282,7 +328,9 @@ matrix:
       BEHAT_SUITE: apiNotifications
       DB_TYPE: mysql
       DB_NAME: owncloud
-      USE_SERVER: true
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
+      NEED_SERVER: true
 
     - PHP_VERSION: 7.1
       OC_VERSION: daily-master-qa
@@ -290,7 +338,9 @@ matrix:
       BEHAT_SUITE: apiNotifications
       DB_TYPE: pgsql
       DB_NAME: owncloud
-      USE_SERVER: true
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
+      NEED_SERVER: true
 
     - PHP_VERSION: 7.1
       OC_VERSION: daily-master-qa
@@ -298,7 +348,39 @@ matrix:
       BEHAT_SUITE: apiNotifications
       DB_TYPE: oci
       DB_NAME: XE
-      USE_SERVER: true
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
+      NEED_SERVER: true
+
+    - PHP_VERSION: 7.1
+      OC_VERSION: daily-master-qa
+      TEST_SUITE: cli-acceptance
+      BEHAT_SUITE: cliNotifications
+      DB_TYPE: mysql
+      DB_NAME: owncloud
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
+      NEED_SERVER: true
+
+    - PHP_VERSION: 7.1
+      OC_VERSION: daily-master-qa
+      TEST_SUITE: cli-acceptance
+      BEHAT_SUITE: cliNotifications
+      DB_TYPE: pgsql
+      DB_NAME: owncloud
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
+      NEED_SERVER: true
+
+    - PHP_VERSION: 7.1
+      OC_VERSION: daily-master-qa
+      TEST_SUITE: cli-acceptance
+      BEHAT_SUITE: cliNotifications
+      DB_TYPE: oci
+      DB_NAME: XE
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
+      NEED_SERVER: true
 
     - PHP_VERSION: 5.6
       OC_VERSION: daily-stable10-qa
@@ -306,7 +388,9 @@ matrix:
       BEHAT_SUITE: webUINotifications
       DB_TYPE: mysql
       DB_NAME: owncloud
-      USE_SERVER: true
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
+      NEED_SERVER: true
 
     - PHP_VERSION: 5.6
       OC_VERSION: daily-stable10-qa
@@ -314,7 +398,9 @@ matrix:
       BEHAT_SUITE: webUINotifications
       DB_TYPE: pgsql
       DB_NAME: owncloud
-      USE_SERVER: true
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
+      NEED_SERVER: true
 
     - PHP_VERSION: 5.6
       OC_VERSION: daily-stable10-qa
@@ -322,7 +408,9 @@ matrix:
       BEHAT_SUITE: webUINotifications
       DB_TYPE: oci
       DB_NAME: XE
-      USE_SERVER: true
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
+      NEED_SERVER: true
 
     - PHP_VERSION: 5.6
       OC_VERSION: daily-stable10-qa
@@ -330,7 +418,9 @@ matrix:
       BEHAT_SUITE: apiNotifications
       DB_TYPE: mysql
       DB_NAME: owncloud
-      USE_SERVER: true
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
+      NEED_SERVER: true
 
     - PHP_VERSION: 5.6
       OC_VERSION: daily-stable10-qa
@@ -338,7 +428,9 @@ matrix:
       BEHAT_SUITE: apiNotifications
       DB_TYPE: pgsql
       DB_NAME: owncloud
-      USE_SERVER: true
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
+      NEED_SERVER: true
 
     - PHP_VERSION: 5.6
       OC_VERSION: daily-stable10-qa
@@ -346,4 +438,36 @@ matrix:
       BEHAT_SUITE: apiNotifications
       DB_TYPE: oci
       DB_NAME: XE
-      USE_SERVER: true
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
+      NEED_SERVER: true
+
+    - PHP_VERSION: 5.6
+      OC_VERSION: daily-stable10-qa
+      TEST_SUITE: cli-acceptance
+      BEHAT_SUITE: cliNotifications
+      DB_TYPE: mysql
+      DB_NAME: owncloud
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
+      NEED_SERVER: true
+
+    - PHP_VERSION: 5.6
+      OC_VERSION: daily-stable10-qa
+      TEST_SUITE: cli-acceptance
+      BEHAT_SUITE: cliNotifications
+      DB_TYPE: pgsql
+      DB_NAME: owncloud
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
+      NEED_SERVER: true
+
+    - PHP_VERSION: 5.6
+      OC_VERSION: daily-stable10-qa
+      TEST_SUITE: cli-acceptance
+      BEHAT_SUITE: cliNotifications
+      DB_TYPE: oci
+      DB_NAME: XE
+      NEED_CORE: true
+      NEED_INSTALL_APP: true
+      NEED_SERVER: true

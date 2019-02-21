@@ -1,11 +1,11 @@
 default:
   autoload:
-     '': %paths.base%/../features/bootstrap
+     '': '%paths.base%/../features/bootstrap'
 
   suites:
     apiNotifications:
       paths:
-        - %paths.base%/../features/apiNotifications
+        - '%paths.base%/../features/apiNotifications'
       contexts:
         - NotificationsContext:
         - NotificationsCoreContext:
@@ -19,7 +19,7 @@ default:
 
     webUINotifications:
       paths:
-        - %paths.base%/../features/webUINotifications
+        - '%paths.base%/../features/webUINotifications'
       contexts:
         - NotificationsContext:
         - NotificationsCoreContext:
@@ -28,7 +28,16 @@ default:
         - WebUIGeneralContext:
         - WebUILoginContext:
 
+    cliNotifications:
+      paths:
+        - '%paths.base%/../features/cliNotifications'
+      contexts:
+        - NotificationsContext:
+        - NotificationsCoreContext:
+        - FeatureContext: *common_feature_context_params
+        - OccContext:
+
   extensions:
       jarnaiz\JUnitFormatter\JUnitFormatterExtension:
           filename: report.xml
-          outputDir: %paths.base%/../output/
+          outputDir: '%paths.base%/../output/'

@@ -1,20 +1,16 @@
 @webUI @insulated @disablePreviews
 Feature: display notifications on the webUI
 
-  As a user
+  As an administrator
   I want to see my notifications on the webUI
-  So that I can stay informed
+  So that I can know about reported system issues
 
   Background:
-    Given these users have been created:
-      | username |
-      | user1    |
-    And the user has browsed to the login page
-    And the user has logged in with username "user1" and password "1234" using the webUI
+    Given the administrator has logged in using the webUI
     And using OCS API version "2"
 
   Scenario: Create notifications
-    When user "user1" is sent a notification with
+    When the administrator is sent a notification with
       | app         | notificationsacceptancetesting |
       | timestamp   | 144958517                      |
       | subject     | Acceptance Testing             |
@@ -22,7 +18,7 @@ Feature: display notifications on the webUI
       | message     | Notifications in ownCloud      |
       | object_type | blog                           |
       | object_id   | 9483                           |
-    And user "user1" is sent a notification with
+    And the administrator is sent a notification with
       | app         | notificationsacceptancetesting |
       | timestamp   | 144958517                      |
       | subject     | UI tests                       |
@@ -36,7 +32,7 @@ Feature: display notifications on the webUI
       | UI tests           | http://owncloud.org/      | second notification       |
 
   Scenario: follow notifications link
-    When user "user1" is sent a notification with
+    When the administrator is sent a notification with
       | app         | notificationsacceptancetesting         |
       | timestamp   | 144958517                              |
       | subject     | Acceptance Testing                     |
