@@ -47,6 +47,8 @@ class NotificationsContext implements Context {
 	 * @When /^user "([^"]*)" is sent (?:a|another) notification$/
 	 *
 	 * @param string $user
+	 *
+	 * @return void
 	 */
 	public function userIsSentANotification($user) {
 		$this->featureContext->userSendsToOcsApiEndpoint(
@@ -98,6 +100,8 @@ class NotificationsContext implements Context {
 	 *
 	 * @param string $user
 	 * @param \Behat\Gherkin\Node\TableNode|null $formData
+	 *
+	 * @return void
 	 */
 	public function userIsSentANotificationWith($user, TableNode $formData) {
 		//add username to the TableNode,
@@ -270,6 +274,8 @@ class NotificationsContext implements Context {
 	 *
 	 * @param string $user
 	 * @param string $firstOrLast
+	 *
+	 * @return void
 	 */
 	public function deleteNotification($user, $firstOrLast) {
 		PHPUnit_Framework_Assert::assertNotEmpty(
