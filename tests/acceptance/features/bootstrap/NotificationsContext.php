@@ -44,6 +44,12 @@ class NotificationsContext implements Context {
 	private $notificationsCoreContext;
 
 	/**
+	 *
+	 * @var OCSContext
+	 */
+	private $ocsContext;
+
+	/**
 	 * @When /^user "([^"]*)" is sent (?:a|another) notification$/
 	 *
 	 * @param string $user
@@ -51,7 +57,7 @@ class NotificationsContext implements Context {
 	 * @return void
 	 */
 	public function userIsSentANotification($user) {
-		$this->featureContext->userSendsToOcsApiEndpoint(
+		$this->ocsContext->userSendsToOcsApiEndpoint(
 			$user,
 			'POST', '/apps/testing/api/v1/notifications'
 		);
@@ -69,7 +75,7 @@ class NotificationsContext implements Context {
 		$response = $this->featureContext->getResponse();
 		PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
 		PHPUnit_Framework_Assert::assertEquals(
-			200, (int) $this->featureContext->getOCSResponseStatusCode($response)
+			200, (int) $this->ocsContext->getOCSResponseStatusCode($response)
 		);
 	}
 
@@ -115,7 +121,7 @@ class NotificationsContext implements Context {
 		}
 		$formData = new TableNode($rows);
 		
-		$this->featureContext->userSendsHTTPMethodToOcsApiEndpointWithBody(
+		$this->ocsContext->userSendsHTTPMethodToOcsApiEndpointWithBody(
 			$this->featureContext->getAdminUsername(),
 			'POST', '/apps/testing/api/v1/notifications', $formData
 		);
@@ -134,7 +140,7 @@ class NotificationsContext implements Context {
 		$response = $this->featureContext->getResponse();
 		PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
 		PHPUnit_Framework_Assert::assertEquals(
-			200, (int) $this->featureContext->getOCSResponseStatusCode($response)
+			200, (int) $this->ocsContext->getOCSResponseStatusCode($response)
 		);
 	}
 
@@ -292,7 +298,7 @@ class NotificationsContext implements Context {
 				\reset($lastNotificationIds)
 			);
 		}
-		$this->featureContext->userSendsToOcsApiEndpoint(
+		$this->ocsContext->userSendsToOcsApiEndpoint(
 			$user,
 			'DELETE',
 			'/apps/notifications/api/v1/notifications/'
@@ -359,9 +365,13 @@ class NotificationsContext implements Context {
 		$environment = $scope->getEnvironment();
 		// Get all the contexts you need in this context
 		$this->featureContext = $environment->getContext('FeatureContext');
+		//make sure the before scenario of featureContext runs, because it
+		//registers OCSContext to all suites
+		$this->featureContext->before($scope);
 		$this->notificationsCoreContext = $environment->getContext(
 			'NotificationsCoreContext'
 		);
+		$this->ocsContext = $environment->getContext('OCSContext');
 		SetupHelper::init(
 			$this->featureContext->getAdminUsername(),
 			$this->featureContext->getAdminPassword(),
