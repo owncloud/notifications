@@ -30,7 +30,7 @@
 	</settings>
 
 	<dependencies>
-		<owncloud min-version="10.0.9" max-version="10" />
+		<owncloud min-version="10.2" max-version="10" />
 	</dependencies>
 	<use-migrations>true</use-migrations>
 </info>
