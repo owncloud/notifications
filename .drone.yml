@@ -204,7 +204,7 @@ matrix:
     - PHP_VERSION: 7.2
       TEST_SUITE: owncloud-coding-standard
 
-    - PHP_VERSION: 5.6
+    - PHP_VERSION: 7.0
       TEST_SUITE: owncloud-coding-standard
 
     # Unit Tests
@@ -235,14 +235,6 @@ matrix:
 
     - PHP_VERSION: 7.2
       OC_VERSION: daily-master-qa
-      TEST_SUITE: phpunit
-      DB_TYPE: mysql
-      DB_NAME: owncloud
-      NEED_CORE: true
-      NEED_INSTALL_APP: true
-
-    - PHP_VERSION: 5.6
-      OC_VERSION: daily-stable10-qa
       TEST_SUITE: phpunit
       DB_TYPE: mysql
       DB_NAME: owncloud
@@ -382,7 +374,7 @@ matrix:
       NEED_INSTALL_APP: true
       NEED_SERVER: true
 
-    - PHP_VERSION: 5.6
+    - PHP_VERSION: 7.0
       OC_VERSION: daily-stable10-qa
       TEST_SUITE: web-acceptance
       BEHAT_SUITE: webUINotifications
@@ -392,7 +384,7 @@ matrix:
       NEED_INSTALL_APP: true
       NEED_SERVER: true
 
-    - PHP_VERSION: 5.6
+    - PHP_VERSION: 7.0
       OC_VERSION: daily-stable10-qa
       TEST_SUITE: web-acceptance
       BEHAT_SUITE: webUINotifications
@@ -402,7 +394,7 @@ matrix:
       NEED_INSTALL_APP: true
       NEED_SERVER: true
 
-    - PHP_VERSION: 5.6
+    - PHP_VERSION: 7.0
       OC_VERSION: daily-stable10-qa
       TEST_SUITE: web-acceptance
       BEHAT_SUITE: webUINotifications
@@ -412,7 +404,7 @@ matrix:
       NEED_INSTALL_APP: true
       NEED_SERVER: true
 
-    - PHP_VERSION: 5.6
+    - PHP_VERSION: 7.0
       OC_VERSION: daily-stable10-qa
       TEST_SUITE: api-acceptance
       BEHAT_SUITE: apiNotifications
@@ -422,7 +414,7 @@ matrix:
       NEED_INSTALL_APP: true
       NEED_SERVER: true
 
-    - PHP_VERSION: 5.6
+    - PHP_VERSION: 7.0
       OC_VERSION: daily-stable10-qa
       TEST_SUITE: api-acceptance
       BEHAT_SUITE: apiNotifications
@@ -432,7 +424,7 @@ matrix:
       NEED_INSTALL_APP: true
       NEED_SERVER: true
 
-    - PHP_VERSION: 5.6
+    - PHP_VERSION: 7.0
       OC_VERSION: daily-stable10-qa
       TEST_SUITE: api-acceptance
       BEHAT_SUITE: apiNotifications
@@ -442,7 +434,7 @@ matrix:
       NEED_INSTALL_APP: true
       NEED_SERVER: true
 
-    - PHP_VERSION: 5.6
+    - PHP_VERSION: 7.0
       OC_VERSION: daily-stable10-qa
       TEST_SUITE: cli-acceptance
       BEHAT_SUITE: cliNotifications
@@ -452,7 +444,7 @@ matrix:
       NEED_INSTALL_APP: true
       NEED_SERVER: true
 
-    - PHP_VERSION: 5.6
+    - PHP_VERSION: 7.0
       OC_VERSION: daily-stable10-qa
       TEST_SUITE: cli-acceptance
       BEHAT_SUITE: cliNotifications
@@ -462,7 +454,7 @@ matrix:
       NEED_INSTALL_APP: true
       NEED_SERVER: true
 
-    - PHP_VERSION: 5.6
+    - PHP_VERSION: 7.0
       OC_VERSION: daily-stable10-qa
       TEST_SUITE: cli-acceptance
       BEHAT_SUITE: cliNotifications
