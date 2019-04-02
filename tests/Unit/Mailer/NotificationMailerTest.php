@@ -21,7 +21,6 @@
 
 namespace OCA\Notifications\Tests\Unit\Mailer;
 
-use OC\Mail\Message;
 use OC\Mail\Mailer;
 use OCP\Notification\IManager;
 use OCP\Notification\INotification;
