@@ -33,15 +33,15 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class GenerateTest extends TestCase {
 
-	/** @var IURLGenerator | \PHPUnit_Framework_MockObject_MockObject */
+	/** @var IURLGenerator | \PHPUnit\Framework\MockObject\MockObject */
 	protected $urlGenerator;
-	/** @var IManager | \PHPUnit_Framework_MockObject_MockObject */
+	/** @var IManager | \PHPUnit\Framework\MockObject\MockObject */
 	protected $manager;
 	/** @var Generate */
 	protected $command;
 	/** @var CommandTester */
 	protected $tester;
-	/** @var IGroupManager | \PHPUnit_Framework_MockObject_MockObject */
+	/** @var IGroupManager | \PHPUnit\Framework\MockObject\MockObject */
 	protected $groupManager;
 
 	protected function setUp() {
