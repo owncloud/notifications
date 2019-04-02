@@ -22,6 +22,7 @@
 
 namespace OCA\Notifications\Tests\Unit\AppInfo;
 
+use OC\AppFramework\DependencyInjection\DIContainer;
 use OCA\Notifications\AppInfo\Application;
 use OCA\Notifications\Handler;
 use OCA\Notifications\Tests\Unit\TestCase;

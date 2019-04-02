@@ -25,6 +25,7 @@ use OCP\Notification\INotification;
 use OCP\IUserManager;
 use OCP\ILogger;
 use OCP\IURLGenerator;
+use OCA\Notifications\Mailer\NotificationMailer;
 
 /**
  * Send notifications via mail. This class acts as an adapter of the NotificationMailer and the

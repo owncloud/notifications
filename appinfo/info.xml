@@ -9,7 +9,7 @@
 	<screenshot>https://raw.githubusercontent.com/owncloud/promo/e1dd604d66b4c5f765579b4c160de3268169ea3c/ownCloud%20logo%20square.png</screenshot>
 
 	<licence>AGPL</licence>
-	<author>Joas Schilling, Thomas Müller</author>
+	<author>Joas Schilling, Thomas Müller, Juan Pablo Villafañez</author>
 	<version>0.4.1</version>
 
 	<types>
@@ -30,7 +30,7 @@
 	</settings>
 
 	<dependencies>
-		<owncloud min-version="10.2" max-version="11" />
+		<owncloud min-version="10.2" max-version="10" />
 	</dependencies>
 	<use-migrations>true</use-migrations>
 </info>
