@@ -28,13 +28,13 @@ use OCA\Notifications\Handler;
 use OCA\Notifications\Mailer\NotificationMailerAdapter;
 
 class AppTest extends TestCase {
-	/** @var \OCA\Notifications\Handler|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var \OCA\Notifications\Handler|\PHPUnit\Framework\MockObject\MockObject */
 	protected $handler;
 
-	/** @var \OCP\Notification\INotification|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var \OCP\Notification\INotification|\PHPUnit\Framework\MockObject\MockObject */
 	protected $notification;
 
-	/** @var NotificationMailerAdapter|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var NotificationMailerAdapter|\PHPUnit\Framework\MockObject\MockObject */
 	protected $mailerAdapter;
 
 	/** @var \OCA\Notifications\App */
