@@ -28,56 +28,56 @@ use OCA\Notifications\Tests\Unit\TestCase;
 use OCP\AppFramework\Http;
 
 class EndpointControllerTest extends TestCase {
-	/** @var \OCP\IRequest|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var \OCP\IRequest|\PHPUnit\Framework\MockObject\MockObject */
 	protected $request;
 
-	/** @var \OCA\Notifications\Handler|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var \OCA\Notifications\Handler|\PHPUnit\Framework\MockObject\MockObject */
 	protected $handler;
 
-	/** @var \OCP\Notification\IManager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var \OCP\Notification\IManager|\PHPUnit\Framework\MockObject\MockObject */
 	protected $manager;
 
-	/** @var \OCP\IConfig|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var \OCP\IConfig|\PHPUnit\Framework\MockObject\MockObject */
 	protected $config;
 
-	/** @var \OCP\IUserSession|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var \OCP\IUserSession|\PHPUnit\Framework\MockObject\MockObject */
 	protected $session;
 
 	/** @var EndpointController */
 	protected $controller;
 
-	/** @var \OCP\IUser|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var \OCP\IUser|\PHPUnit\Framework\MockObject\MockObject */
 	protected $user;
 
 	protected function setUp() {
 		parent::setUp();
 
-		/** @var \OCP\IRequest|\PHPUnit_Framework_MockObject_MockObject */
+		/** @var \OCP\IRequest|\PHPUnit\Framework\MockObject\MockObject */
 		$this->request = $this->getMockBuilder('OCP\IRequest')
 			->disableOriginalConstructor()
 			->getMock();
 
-		/** @var \OCA\Notifications\Handler|\PHPUnit_Framework_MockObject_MockObject */
+		/** @var \OCA\Notifications\Handler|\PHPUnit\Framework\MockObject\MockObject */
 		$this->handler = $this->getMockBuilder('OCA\Notifications\Handler')
 			->disableOriginalConstructor()
 			->getMock();
 
-		/** @var \OCP\Notification\IManager|\PHPUnit_Framework_MockObject_MockObject */
+		/** @var \OCP\Notification\IManager|\PHPUnit\Framework\MockObject\MockObject */
 		$this->manager = $this->getMockBuilder('OCP\Notification\IManager')
 			->disableOriginalConstructor()
 			->getMock();
 
-		/** @var \OCP\IConfig|\PHPUnit_Framework_MockObject_MockObject */
+		/** @var \OCP\IConfig|\PHPUnit\Framework\MockObject\MockObject */
 		$this->config = $this->getMockBuilder('OCP\IConfig')
 			->disableOriginalConstructor()
 			->getMock();
 
-		/** @var \OCP\IUserSession|\PHPUnit_Framework_MockObject_MockObject */
+		/** @var \OCP\IUserSession|\PHPUnit\Framework\MockObject\MockObject */
 		$this->session = $this->getMockBuilder('OCP\IUserSession')
 			->disableOriginalConstructor()
 			->getMock();
 
-		/** @var \OCP\IUser|\PHPUnit_Framework_MockObject_MockObject */
+		/** @var \OCP\IUser|\PHPUnit\Framework\MockObject\MockObject */
 		$this->user = $this->getMockBuilder('OCP\IUser')
 			->disableOriginalConstructor()
 			->getMock();

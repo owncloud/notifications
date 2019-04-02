@@ -24,9 +24,6 @@ namespace OCA\Notifications\Mailer;
 use OCP\Notification\IManager;
 use OCP\Notification\INotification;
 use OCP\Mail\IMailer;
-use OCP\IConfig;
-use OCP\L10N\IFactory;
-use OCP\Util;
 use OCP\Template;
 use OCA\Notifications\Configuration\OptionsStorage;
 

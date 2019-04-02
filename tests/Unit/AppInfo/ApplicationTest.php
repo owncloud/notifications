@@ -22,13 +22,9 @@
 
 namespace OCA\Notifications\Tests\Unit\AppInfo;
 
-use OC\AppFramework\DependencyInjection\DIContainer;
 use OCA\Notifications\AppInfo\Application;
 use OCA\Notifications\Handler;
 use OCA\Notifications\Tests\Unit\TestCase;
-use OCP\IServerContainer;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\GenericEvent;
 use Test\Traits\UserTrait;
 
 /**
@@ -75,7 +71,7 @@ class ApplicationTest extends TestCase {
 
 	/**
 	 * @param array $values
-	 * @return \OCP\Notification\INotification|\PHPUnit_Framework_MockObject_MockObject
+	 * @return \OCP\Notification\INotification|\PHPUnit\Framework\MockObject\MockObject
 	 */
 	protected function getNotification(array $values = []) {
 		$notification = $this->getMockBuilder('OCP\Notification\INotification')
