@@ -297,7 +297,7 @@ class Handler {
 		if ($row['link'] !== '' && $row['link'] !== null) {
 			$notification->setLink($row['link']);
 		}
-		if (\method_exists($notification, 'setIcon') && $row['icon'] !== '' && $row['icon'] !== null) {
+		if (\method_exists($notification, 'setIcon') && isset($row['icon']) && $row['icon'] !== '' && $row['icon'] !== null) {
 			$notification->setIcon($row['icon']);
 		}
 
