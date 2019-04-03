@@ -32,11 +32,11 @@ use OCP\IUser;
  * @package OCA\Notifications\Tests\AppInfo
  */
 class AppTest extends TestCase {
-	/** @var \OCP\Notification\IManager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var \OCP\Notification\IManager|\PHPUnit\Framework\MockObject\MockObject */
 	protected $manager;
-	/** @var \OCP\IRequest|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var \OCP\IRequest|\PHPUnit\Framework\MockObject\MockObject */
 	protected $request;
-	/** @var \OCP\IUserSession|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var \OCP\IUserSession|\PHPUnit\Framework\MockObject\MockObject */
 	protected $session;
 
 	protected function setUp() {

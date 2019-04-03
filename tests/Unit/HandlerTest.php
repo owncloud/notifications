@@ -236,7 +236,7 @@ class HandlerTest extends TestCase {
 
 	/**
 	 * @param array $values
-	 * @return \OCP\Notification\INotification|\PHPUnit_Framework_MockObject_MockObject
+	 * @return \OCP\Notification\INotification|\PHPUnit\Framework\MockObject\MockObject
 	 */
 	protected function getNotification(array $values = []) {
 		$notification = $this->getMockBuilder('OCP\Notification\INotification')

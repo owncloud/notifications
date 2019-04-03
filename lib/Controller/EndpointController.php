@@ -24,7 +24,6 @@ namespace OCA\Notifications\Controller;
 use OC\OCS\Result;
 use OCA\Notifications\Handler;
 use OCP\AppFramework\Http;
-use OCP\AppFramework\Controller;
 use OCP\AppFramework\OCSController;
 use OCP\IConfig;
 use OCP\IRequest;

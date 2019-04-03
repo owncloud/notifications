@@ -28,8 +28,6 @@ use OCA\Notifications\App as NotificationApp;
 use OCA\Notifications\Notifier;
 use OCP\AppFramework\App;
 use OCP\IContainer;
-use OCP\IUser;
-use OCP\IUserSession;
 use OCP\Notification\Events\RegisterConsumerEvent;
 use OCP\Notification\Events\RegisterNotifierEvent;
 use Symfony\Component\EventDispatcher\GenericEvent;

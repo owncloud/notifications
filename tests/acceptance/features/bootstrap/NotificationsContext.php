@@ -24,6 +24,7 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use GuzzleHttp\Client;
+use PHPUnit\Framework\Assert;
 use TestHelpers\SetupHelper;
 
 require_once 'bootstrap.php';
@@ -73,8 +74,8 @@ class NotificationsContext implements Context {
 	public function userHasBeenSentANotification($user) {
 		$this->userIsSentANotification($user);
 		$response = $this->featureContext->getResponse();
-		PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
-		PHPUnit_Framework_Assert::assertEquals(
+		Assert::assertEquals(200, $response->getStatusCode());
+		Assert::assertEquals(
 			200, (int) $this->ocsContext->getOCSResponseStatusCode($response)
 		);
 	}
@@ -138,8 +139,8 @@ class NotificationsContext implements Context {
 	public function userHasBeenSentANotificationWith($user, TableNode $formData) {
 		$this->userIsSentANotificationWith($user, $formData);
 		$response = $this->featureContext->getResponse();
-		PHPUnit_Framework_Assert::assertEquals(200, $response->getStatusCode());
-		PHPUnit_Framework_Assert::assertEquals(
+		Assert::assertEquals(200, $response->getStatusCode());
+		Assert::assertEquals(
 			200, (int) $this->ocsContext->getOCSResponseStatusCode($response)
 		);
 	}
@@ -239,19 +240,19 @@ class NotificationsContext implements Context {
 
 		$this->setCSRFDotDisabled($oldCSRFSetting);
 
-		PHPUnit_Framework_Assert::assertEquals(
+		Assert::assertEquals(
 			200, $response->getStatusCode(),
 			"could not set notification option " . $response->getReasonPhrase()
 		);
 		$responseDecoded = \json_decode($response->getBody());
-		PHPUnit_Framework_Assert::assertEquals(
+		Assert::assertEquals(
 			$responseDecoded->data->options->id, $user,
 			"Could not set notification option! " .
 			"'user' in the response is:'" .
 			$responseDecoded->data->options->id . "' " .
 			"but should be: '$user'"
 		);
-		PHPUnit_Framework_Assert::assertEquals(
+		Assert::assertEquals(
 			$responseDecoded->data->options->email_sending_option, $setting,
 			"Could not set notification option! " .
 			"'email_sending_option' in the response is:'" .
@@ -284,7 +285,7 @@ class NotificationsContext implements Context {
 	 * @return void
 	 */
 	public function deleteNotification($user, $firstOrLast) {
-		PHPUnit_Framework_Assert::assertNotEmpty(
+		Assert::assertNotEmpty(
 			$this->notificationsCoreContext->getNotificationIds()
 		);
 		$lastNotificationIds
