@@ -68,13 +68,14 @@ dist: ## Builds the source and appstore package
 source: ## Builds the source package
 	rm -rf $(source_build_directory)
 	mkdir -p $(source_build_directory)
-	tar cvzf $(source_package_name).tar.gz ../$(app_name) \
+	tar --format=gnu --owner=nobody --group=nogroup -cvzf $(source_package_name).tar.gz \
 	--exclude-vcs \
 	--exclude="../$(app_name)/build" \
 	--exclude="../$(app_name)/js/node_modules" \
 	--exclude="../$(app_name)/node_modules" \
 	--exclude="../$(app_name)/*.log" \
 	--exclude="../$(app_name)/js/*.log" \
+	../$(app_name)
 
 # Builds the source package for the app store, ignores php and js tests
 .PHONY: appstore
@@ -86,16 +87,18 @@ appstore: ## Builds the source package for the app store
 	css \
 	img \
 	js \
+	l10n \
 	lib \
 	templates \
 	$(appstore_package_name)
+	rm -R $(appstore_package_name)/l10n/.tx
 
 ifdef CAN_SIGN
 	$(sign) --path="$(appstore_package_name)"
 else
 	@echo $(sign_skip_msg)
 endif
-	tar -czf $(appstore_package_name).tar.gz -C $(appstore_package_name)/../ $(app_name)
+	tar --format=gnu --owner=nobody --group=nogroup -czf $(appstore_package_name).tar.gz -C $(appstore_package_name)/../ $(app_name)
 
 ##------------
 ## Tests
