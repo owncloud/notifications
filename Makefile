@@ -90,6 +90,9 @@ appstore: ## Builds the source package for the app store
 	l10n \
 	lib \
 	templates \
+	README.md \
+	CHANGELOG.md \
+	COPYING \
 	$(appstore_package_name)
 	rm -R $(appstore_package_name)/l10n/.tx
 
