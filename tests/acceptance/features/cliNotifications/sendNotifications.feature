@@ -39,7 +39,7 @@ Feature: send notifications using the occ command
       | subject | Quota updated |
 
   Scenario: administrator should be able to send a notification with subject and message to a group
-    Given these users have been created:
+    Given these users have been created with skeleton files:
       | username |
       | user0    |
       | user1    |
