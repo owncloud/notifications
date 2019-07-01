@@ -58,9 +58,12 @@ class NotificationsContext implements Context {
 	 * @return void
 	 */
 	public function userIsSentANotification($user) {
-		$this->ocsContext->userSendsToOcsApiEndpoint(
+		$bodyTable = new TableNode([['user', $user]]);
+		$this->ocsContext->userSendsHTTPMethodToOcsApiEndpointWithBody(
 			$user,
-			'POST', '/apps/testing/api/v1/notifications'
+			'POST', '/apps/testing/api/v1/notifications',
+			$bodyTable,
+			null
 		);
 	}
 
