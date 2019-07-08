@@ -487,7 +487,7 @@ matrix:
 
     # Tests against latest stable release of core
     - PHP_VERSION: 7.1
-      OC_VERSION: 10.2.0
+      OC_VERSION: 10.2.1
       TEST_SUITE: cli-acceptance
       BEHAT_SUITE: cliNotifications
       DB_TYPE: mysql
@@ -498,7 +498,7 @@ matrix:
       USE_RELEASE_TARBALL: true
 
     - PHP_VERSION: 7.1
-      OC_VERSION: 10.2.0
+      OC_VERSION: 10.2.1
       TEST_SUITE: web-acceptance
       BEHAT_SUITE: webUINotifications
       DB_TYPE: mysql
@@ -509,7 +509,7 @@ matrix:
       USE_RELEASE_TARBALL: true
 
     - PHP_VERSION: 7.1
-      OC_VERSION: 10.2.0
+      OC_VERSION: 10.2.1
       TEST_SUITE: api-acceptance
       BEHAT_SUITE: apiNotifications
       DB_TYPE: mysql
