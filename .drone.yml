@@ -22,7 +22,7 @@ pipeline:
     image: owncloudci/php:${PHP_VERSION}
     pull: true
     commands:
-      - git clone -b stable10 --depth=1 https://github.com/owncloud/core.git /var/www/owncloud/testrunner
+      - git clone -b master --depth=1 https://github.com/owncloud/core.git /var/www/owncloud/testrunner
       - cp -r /var/www/owncloud/apps/notifications /var/www/owncloud/testrunner/apps/
       - cd /var/www/owncloud/testrunner
       - make install-composer-deps
@@ -263,45 +263,12 @@ matrix:
       NEED_INSTALL_APP: true
 
     - PHP_VERSION: 7.0
-      OC_VERSION: daily-stable10-qa
+      OC_VERSION: daily-master-qa
       TEST_SUITE: phpunit
       DB_TYPE: mysql
       DB_NAME: owncloud
       NEED_CORE: true
       NEED_INSTALL_APP: true
-
-    - PHP_VERSION: 7.0
-      OC_VERSION: daily-stable10-qa
-      TEST_SUITE: phpunit
-      DB_TYPE: pgsql
-      DB_NAME: owncloud
-      NEED_CORE: true
-      NEED_INSTALL_APP: true
-
-    - PHP_VERSION: 7.0
-      OC_VERSION: daily-stable10-qa
-      TEST_SUITE: phpunit
-      DB_TYPE: oci
-      DB_NAME: XE
-      NEED_CORE: true
-      NEED_INSTALL_APP: true
-
-    - PHP_VERSION: 7.1
-      OC_VERSION: daily-stable10-qa
-      TEST_SUITE: phpunit
-      DB_TYPE: mysql
-      DB_NAME: owncloud
-      NEED_CORE: true
-      NEED_INSTALL_APP: true
-
-    - PHP_VERSION: 7.2
-      OC_VERSION: daily-stable10-qa
-      TEST_SUITE: phpunit
-      DB_TYPE: mysql
-      DB_NAME: owncloud
-      NEED_CORE: true
-      NEED_INSTALL_APP: true
-      COVERAGE: true
 
     # Acceptance Tests
 
@@ -396,7 +363,7 @@ matrix:
       NEED_SERVER: true
 
     - PHP_VERSION: 7.0
-      OC_VERSION: daily-stable10-qa
+      OC_VERSION: daily-master-qa
       TEST_SUITE: web-acceptance
       BEHAT_SUITE: webUINotifications
       DB_TYPE: mysql
@@ -406,27 +373,7 @@ matrix:
       NEED_SERVER: true
 
     - PHP_VERSION: 7.0
-      OC_VERSION: daily-stable10-qa
-      TEST_SUITE: web-acceptance
-      BEHAT_SUITE: webUINotifications
-      DB_TYPE: pgsql
-      DB_NAME: owncloud
-      NEED_CORE: true
-      NEED_INSTALL_APP: true
-      NEED_SERVER: true
-
-    - PHP_VERSION: 7.0
-      OC_VERSION: daily-stable10-qa
-      TEST_SUITE: web-acceptance
-      BEHAT_SUITE: webUINotifications
-      DB_TYPE: oci
-      DB_NAME: XE
-      NEED_CORE: true
-      NEED_INSTALL_APP: true
-      NEED_SERVER: true
-
-    - PHP_VERSION: 7.0
-      OC_VERSION: daily-stable10-qa
+      OC_VERSION: daily-master-qa
       TEST_SUITE: api-acceptance
       BEHAT_SUITE: apiNotifications
       DB_TYPE: mysql
@@ -436,51 +383,11 @@ matrix:
       NEED_SERVER: true
 
     - PHP_VERSION: 7.0
-      OC_VERSION: daily-stable10-qa
-      TEST_SUITE: api-acceptance
-      BEHAT_SUITE: apiNotifications
-      DB_TYPE: pgsql
-      DB_NAME: owncloud
-      NEED_CORE: true
-      NEED_INSTALL_APP: true
-      NEED_SERVER: true
-
-    - PHP_VERSION: 7.0
-      OC_VERSION: daily-stable10-qa
-      TEST_SUITE: api-acceptance
-      BEHAT_SUITE: apiNotifications
-      DB_TYPE: oci
-      DB_NAME: XE
-      NEED_CORE: true
-      NEED_INSTALL_APP: true
-      NEED_SERVER: true
-
-    - PHP_VERSION: 7.0
-      OC_VERSION: daily-stable10-qa
+      OC_VERSION: daily-master-qa
       TEST_SUITE: cli-acceptance
       BEHAT_SUITE: cliNotifications
       DB_TYPE: mysql
       DB_NAME: owncloud
-      NEED_CORE: true
-      NEED_INSTALL_APP: true
-      NEED_SERVER: true
-
-    - PHP_VERSION: 7.0
-      OC_VERSION: daily-stable10-qa
-      TEST_SUITE: cli-acceptance
-      BEHAT_SUITE: cliNotifications
-      DB_TYPE: pgsql
-      DB_NAME: owncloud
-      NEED_CORE: true
-      NEED_INSTALL_APP: true
-      NEED_SERVER: true
-
-    - PHP_VERSION: 7.0
-      OC_VERSION: daily-stable10-qa
-      TEST_SUITE: cli-acceptance
-      BEHAT_SUITE: cliNotifications
-      DB_TYPE: oci
-      DB_NAME: XE
       NEED_CORE: true
       NEED_INSTALL_APP: true
       NEED_SERVER: true
