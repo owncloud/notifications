@@ -227,11 +227,371 @@ class HandlerTest extends TestCase {
 
 		// Get with correct user
 		$getNotification = $this->handler->getById($notificationId, 'test_user1');
-		$this->assertInstanceOf('OCP\Notification\INotification', $getNotification);
+		$this->assertInstanceOf(INotification::class, $getNotification);
 
 		// Delete and count
 		$this->handler->deleteById($notificationId, 'test_user1');
 		$this->assertSame(0, $this->handler->count($limitedNotification), 'Wrong notification count for user1 after deleting');
+	}
+
+	public function testFetchDescendentList() {
+		$notification1 = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+			'getDateTime' => new \DateTime(),
+			'getObjectType' => 'notification',
+			'getObjectId' => '1337',
+			'getSubject' => 'subject',
+			'getSubjectParameters' => [],
+			'getMessage' => 'message',
+			'getMessageParameters' => [],
+			'getLink' => 'link',
+			'getActions' => [
+				[
+					'getLabel' => 'action_label',
+					'getLink' => 'action_link',
+					'getRequestType' => 'GET',
+					'isPrimary' => true,
+				]
+			],
+		]);
+		$notification2 = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user2',
+			'getDateTime' => new \DateTime(),
+			'getObjectType' => 'notifi-cat-ion',
+			'getObjectId' => '1338',
+			'getSubject' => 'subject',
+			'getSubjectParameters' => [],
+			'getMessage' => 'message',
+			'getMessageParameters' => [],
+			'getLink' => 'link',
+			'getActions' => [
+				[
+					'getLabel' => 'action_label',
+					'getLink' => 'action_link',
+					'getRequestType' => 'GET',
+					'isPrimary' => true,
+				]
+			],
+		]);
+		$notification3 = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+			'getDateTime' => new \DateTime(),
+			'getObjectType' => 'blondification',
+			'getObjectId' => '1339',
+			'getSubject' => 'subject',
+			'getSubjectParameters' => [],
+			'getMessage' => 'message',
+			'getMessageParameters' => [],
+			'getLink' => 'link',
+			'getActions' => [
+				[
+					'getLabel' => 'action_label',
+					'getLink' => 'action_link',
+					'getRequestType' => 'GET',
+					'isPrimary' => true,
+				]
+			],
+		]);
+		$notification4 = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+			'getDateTime' => new \DateTime(),
+			'getObjectType' => 'nonefination',
+			'getObjectId' => '1340',
+			'getSubject' => 'subject',
+			'getSubjectParameters' => [],
+			'getMessage' => 'message',
+			'getMessageParameters' => [],
+			'getLink' => 'link',
+			'getActions' => [
+				[
+					'getLabel' => 'action_label',
+					'getLink' => 'action_link',
+					'getRequestType' => 'GET',
+					'isPrimary' => true,
+				]
+			],
+		]);
+		$this->handler->add($notification1);
+		$this->handler->add($notification2);
+		$this->handler->add($notification3);
+		$this->handler->add($notification4);
+
+		// fetch all the notifications (up to 20)
+		$list = $this->handler->fetchDescendentList('test_user1');
+		$listKeys = array_keys($list);
+		$this->assertEquals(3, count($list));
+		$this->assertEquals('nonefination', $list[$listKeys[0]]->getObjectType());
+		$this->assertEquals('blondification', $list[$listKeys[1]]->getObjectType());
+		$this->assertEquals('notification', $list[$listKeys[2]]->getObjectType());
+		$this->assertTrue($listKeys[0] > $listKeys[1]);
+		$this->assertTrue($listKeys[1] > $listKeys[2]);
+
+		$list2 = $this->handler->fetchDescendentList('test_user1', $listKeys[1]);
+		$listKeys2 = array_keys($list2);
+		$this->assertEquals(1, count($list2));  // only 1 since the id specified won't be included
+		$this->assertEquals('notification', $list[$listKeys2[0]]->getObjectType());
+		$this->assertEquals($listKeys[2], $listKeys2[0]);  // check the id of the notification
+
+		$list3 = $this->handler->fetchDescendentList('test_user1', null, 1);
+		$listKeys3 = array_keys($list3);
+		$this->assertEquals(1, count($list3));  // only 1 since the id specified won't be included
+		$this->assertEquals('nonefination', $list[$listKeys3[0]]->getObjectType());
+		$this->assertEquals($listKeys[0], $listKeys3[0]);  // check the id of the notification
+
+		$list4 = $this->handler->fetchDescendentList('test_user1', $listKeys[0], 1);
+		$listKeys4 = array_keys($list4);
+		$this->assertEquals(1, count($list4));  // only 1 since the id specified won't be included
+		$this->assertEquals('blondification', $list[$listKeys4[0]]->getObjectType());
+		$this->assertEquals($listKeys[1], $listKeys4[0]);  // check the id of the notification
+
+		$callableFunc = function(INotification $notification) {
+			if (strpos($notification->getObjectType(), 'no') === 0) {
+				return $notification;
+			} else {
+				return null;
+			}
+		};
+
+		$list5 = $this->handler->fetchDescendentList('test_user1', null, 20, $callableFunc);
+		$listKeys5 = array_keys($list5);
+		$this->assertEquals(2, count($list5));  // only 1 since the id specified won't be included
+		$this->assertEquals('nonefination', $list[$listKeys5[0]]->getObjectType());
+		$this->assertEquals('notification', $list[$listKeys5[1]]->getObjectType());
+		$this->assertTrue($listKeys5[0] > $listKeys5[1]);
+		$this->assertEquals($listKeys[0], $listKeys5[0]);  // check the id of the notification
+		$this->assertEquals($listKeys[2], $listKeys5[1]);
+
+		$this->handler->delete($notification1);
+		$this->handler->delete($notification2);
+		$this->handler->delete($notification3);
+		$this->handler->delete($notification4);
+	}
+
+	public function testFetchAscendentList() {
+		$notification1 = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+			'getDateTime' => new \DateTime(),
+			'getObjectType' => 'notification',
+			'getObjectId' => '1337',
+			'getSubject' => 'subject',
+			'getSubjectParameters' => [],
+			'getMessage' => 'message',
+			'getMessageParameters' => [],
+			'getLink' => 'link',
+			'getActions' => [
+				[
+					'getLabel' => 'action_label',
+					'getLink' => 'action_link',
+					'getRequestType' => 'GET',
+					'isPrimary' => true,
+				]
+			],
+		]);
+		$notification2 = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user2',
+			'getDateTime' => new \DateTime(),
+			'getObjectType' => 'notifi-cat-ion',
+			'getObjectId' => '1338',
+			'getSubject' => 'subject',
+			'getSubjectParameters' => [],
+			'getMessage' => 'message',
+			'getMessageParameters' => [],
+			'getLink' => 'link',
+			'getActions' => [
+				[
+					'getLabel' => 'action_label',
+					'getLink' => 'action_link',
+					'getRequestType' => 'GET',
+					'isPrimary' => true,
+				]
+			],
+		]);
+		$notification3 = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+			'getDateTime' => new \DateTime(),
+			'getObjectType' => 'blondification',
+			'getObjectId' => '1339',
+			'getSubject' => 'subject',
+			'getSubjectParameters' => [],
+			'getMessage' => 'message',
+			'getMessageParameters' => [],
+			'getLink' => 'link',
+			'getActions' => [
+				[
+					'getLabel' => 'action_label',
+					'getLink' => 'action_link',
+					'getRequestType' => 'GET',
+					'isPrimary' => true,
+				]
+			],
+		]);
+		$notification4 = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+			'getDateTime' => new \DateTime(),
+			'getObjectType' => 'nonefination',
+			'getObjectId' => '1340',
+			'getSubject' => 'subject',
+			'getSubjectParameters' => [],
+			'getMessage' => 'message',
+			'getMessageParameters' => [],
+			'getLink' => 'link',
+			'getActions' => [
+				[
+					'getLabel' => 'action_label',
+					'getLink' => 'action_link',
+					'getRequestType' => 'GET',
+					'isPrimary' => true,
+				]
+			],
+		]);
+		$this->handler->add($notification1);
+		$this->handler->add($notification2);
+		$this->handler->add($notification3);
+		$this->handler->add($notification4);
+
+		// fetch all the notifications (up to 20)
+		$list = $this->handler->fetchAscendentList('test_user1');
+		$listKeys = array_keys($list);
+		$this->assertEquals(3, count($list));
+		$this->assertEquals('notification', $list[$listKeys[0]]->getObjectType());
+		$this->assertEquals('blondification', $list[$listKeys[1]]->getObjectType());
+		$this->assertEquals('nonefination', $list[$listKeys[2]]->getObjectType());
+		$this->assertTrue($listKeys[0] < $listKeys[1]);
+		$this->assertTrue($listKeys[1] < $listKeys[2]);
+
+		$list2 = $this->handler->fetchAscendentList('test_user1', $listKeys[1]);
+		$listKeys2 = array_keys($list2);
+		$this->assertEquals(1, count($list2));  // only 1 since the id specified won't be included
+		$this->assertEquals('nonefination', $list[$listKeys2[0]]->getObjectType());
+		$this->assertEquals($listKeys[2], $listKeys2[0]);  // check the id of the notification
+
+		$list3 = $this->handler->fetchAscendentList('test_user1', null, 1);
+		$listKeys3 = array_keys($list3);
+		$this->assertEquals(1, count($list3));  // only 1 since the id specified won't be included
+		$this->assertEquals('notification', $list[$listKeys3[0]]->getObjectType());
+		$this->assertEquals($listKeys[0], $listKeys3[0]);  // check the id of the notification
+
+		$list4 = $this->handler->fetchAscendentList('test_user1', $listKeys[0], 1);
+		$listKeys4 = array_keys($list4);
+		$this->assertEquals(1, count($list4));  // only 1 since the id specified won't be included
+		$this->assertEquals('blondification', $list[$listKeys4[0]]->getObjectType());
+		$this->assertEquals($listKeys[1], $listKeys4[0]);  // check the id of the notification
+
+		$callableFunc = function(INotification $notification) {
+			if (strpos($notification->getObjectType(), 'no') === 0) {
+				return $notification;
+			} else {
+				return null;
+			}
+		};
+
+		$list5 = $this->handler->fetchAscendentList('test_user1', null, 20, $callableFunc);
+		$listKeys5 = array_keys($list5);
+		$this->assertEquals(2, count($list5));  // only 1 since the id specified won't be included
+		$this->assertEquals('notification', $list[$listKeys5[0]]->getObjectType());
+		$this->assertEquals('nonefination', $list[$listKeys5[1]]->getObjectType());
+		$this->assertTrue($listKeys5[0] < $listKeys5[1]);
+		$this->assertEquals($listKeys[0], $listKeys5[0]);  // check the id of the notification
+		$this->assertEquals($listKeys[2], $listKeys5[1]);
+
+		$this->handler->delete($notification1);
+		$this->handler->delete($notification2);
+		$this->handler->delete($notification3);
+		$this->handler->delete($notification4);
+	}
+
+	public function testGetMaxNotificationIdNoNotifications() {
+		$user = uniqid('test_user_');  // any non-existing user is good
+		$this->assertNull($this->handler->getMaxNotificationId($user));
+	}
+
+	public function testGetMaxNotificationId() {
+		$notification1 = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+			'getDateTime' => new \DateTime(),
+			'getObjectType' => 'notification',
+			'getObjectId' => '1337',
+			'getSubject' => 'subject',
+			'getSubjectParameters' => [],
+			'getMessage' => 'message',
+			'getMessageParameters' => [],
+			'getLink' => 'link',
+			'getActions' => [
+				[
+					'getLabel' => 'action_label',
+					'getLink' => 'action_link',
+					'getRequestType' => 'GET',
+					'isPrimary' => true,
+				]
+			],
+		]);
+		$notification3 = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+			'getDateTime' => new \DateTime(),
+			'getObjectType' => 'blondification',
+			'getObjectId' => '1339',
+			'getSubject' => 'subject',
+			'getSubjectParameters' => [],
+			'getMessage' => 'message',
+			'getMessageParameters' => [],
+			'getLink' => 'link',
+			'getActions' => [
+				[
+					'getLabel' => 'action_label',
+					'getLink' => 'action_link',
+					'getRequestType' => 'GET',
+					'isPrimary' => true,
+				]
+			],
+		]);
+		$notification4 = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+			'getDateTime' => new \DateTime(),
+			'getObjectType' => 'nonefination',
+			'getObjectId' => '1340',
+			'getSubject' => 'subject',
+			'getSubjectParameters' => [],
+			'getMessage' => 'message',
+			'getMessageParameters' => [],
+			'getLink' => 'link',
+			'getActions' => [
+				[
+					'getLabel' => 'action_label',
+					'getLink' => 'action_link',
+					'getRequestType' => 'GET',
+					'isPrimary' => true,
+				]
+			],
+		]);
+		$this->handler->add($notification1);
+		$this->handler->add($notification3);
+		$this->handler->add($notification4);
+
+		$maxId = $this->handler->getMaxNotificationId('test_user1');
+
+		$limitedNotification = $this->getNotification([
+			'getApp' => 'testing_notifications',
+			'getUser' => 'test_user1',
+		]);
+		$notificationList = $this->handler->get($limitedNotification);
+		$expectedMaxId = -1;
+		foreach ($notificationList as $key => $value) {
+			if ($key > $expectedMaxId) {
+				$expectedMaxId = $key;
+			}
+		}
+		$this->assertEquals($expectedMaxId, $maxId);
 	}
 
 	/**
@@ -239,7 +599,7 @@ class HandlerTest extends TestCase {
 	 * @return \OCP\Notification\INotification|\PHPUnit\Framework\MockObject\MockObject
 	 */
 	protected function getNotification(array $values = []) {
-		$notification = $this->getMockBuilder('OCP\Notification\INotification')
+		$notification = $this->getMockBuilder(INotification::class)
 			->disableOriginalConstructor()
 			->getMock();
 

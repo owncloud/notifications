@@ -32,11 +32,13 @@
 
 		interval: null,
 
+		lastKnownId: null,
+
 		initialise: function() {
 			// Go!
 
 			// Setup elements
-			this.$notifications = $('<div class="notifications hidden"></div>');
+			this.$notifications = $('<div class="notifications"></div>');
 			this.$button = $('<div class="notifications-button menutoggle"><img class="svg" alt="' + t('notifications', 'Notifications') + '" src="' + OC.imagePath('notifications', 'notifications') + '"></div>');
 			this.$container = $('<div class="notification-container"></div>');
 			var $wrapper = $('<div class="notification-wrapper"></div>');
@@ -56,7 +58,15 @@
 			$('form.searchbox').before(this.$notifications);
 
 			// Initial call to the notification endpoint
-			this.initialFetch();
+			var self = this;
+			this.fetchDescendentV2(
+				OC.generateUrl('apps/notifications/api/v2/notifications?limit=3&format=json'),
+				function(result, textStatus, jqxhr) {
+					self.updateLastKnowId(jqxhr.getResponseHeader('OC-Last-Notification'));
+					if (result.ocs.data.notifications.length > 0) {
+						self.updateLastShownId(result.ocs.data.notifications[0].notification_id);
+					}
+			});
 
 			// Bind the button click event
 			OC.registerMenu(this.$button, this.$container);
@@ -66,7 +76,11 @@
 			this.$container.on('click', '.notification-delete', _.bind(this._onClickDismissNotification, this));
 
 			// Setup the background checker
-			this.interval = setInterval(_.bind(this.backgroundFetch, this), this.pollInterval);
+			this.restartPolling();
+
+			if ('Notification' in window && Notification.permission === 'default') {
+				Notification.requestPermission();
+			}
 		},
 
 		_onClickDismissNotification: function(event) {
@@ -79,7 +93,7 @@
 			$notification.fadeOut(OC.menuSpeed);
 
 			$.ajax({
-				url: OC.linkToOCS('apps/notifications/api/v1', 2) + 'notifications/' + id + '?format=json',
+				url: OC.generateUrl('apps/notifications/api/v2/notifications/' + id),
 				type: 'DELETE',
 				success: function(data) {
 					self._removeNotification(id);
@@ -127,7 +141,8 @@
 			delete OCA.Notifications.notifications[id];
 
 			$notification.remove();
-			if (_.keys(OCA.Notifications.notifications).length === 0) {
+			if (_.keys(OCA.Notifications.notifications).length === 0 &&
+					this.$container.find('div.notification-controls').length === 0) {
 				this._onHaveNoNotifications();
 			}
 		},
@@ -140,65 +155,163 @@
 			OC.showMenu(null, OCA.Notifications.$container);
 		},
 
-		initialFetch: function() {
-			var self = this;
+		/**
+		 * Restart the polling. Use "clearInterval(this.interval)" to stop the polling
+		 */
+		restartPolling: function() {
+			this.interval = setInterval(_.bind(this.pollingV2, this), this.pollInterval);
+		},
 
-			this.fetch(
-				function(data) {
+		/**
+		 * Make a GET request to the target url. Consider the result of the request as a list of
+		 * notifications sorted from newer to older and draw those notifications accordingly in the UI.
+		 * @param {string} url the url of the request, it should be apps/notifications/api/v2/notifications?fetch=desc
+		 * with additional parameters in the url
+		 * @param {function} successCallback the callback that will be executed if the call is
+		 * successful after the notification rendering is done.
+		 * @param {function} errorCallback the callback that will be executed if the call fails
+		 */
+		fetchDescendentV2: function(url, successCallback, errorCallback) {
+			var self = this;
+			var request = $.ajax({
+				url: url,
+				type: 'GET'
+			}).done(function(result, textStatus, jqxhr) {
 					// Fill Array
-					$.each(data, function(index) {
-						var n = new self.Notif(data[index]);
+					$.each(result.ocs.data.notifications, function(index) {
+						var n = new self.Notif(result.ocs.data.notifications[index]);
 						self.notifications[n.getId()] = n;
-						self.addToUI(n);
+						self.appendToUI(n);
 					});
+					if (typeof result.ocs.data.next !== 'undefined') {
+						self.addShowMoreNotificationsButton(result.ocs.data.next);
+					}
 					// Check if we have any, and notify the UI
 					if (self.numNotifications() !== 0) {
 						self._onHaveNotifications();
 					} else {
 						self._onHaveNoNotifications();
 					}
-				},
+			}).fail(function() {
 				_.bind(self._onFetchError, self)
-			);
+			});
+
+			if (successCallback) {
+				request.done(successCallback);
+			}
+
+			if (errorCallback) {
+				request.fail(errorCallback);
+			}
 		},
 
 		/**
-		 * Background fetch handler
+		 * Make a GET request to the target url. Consider the result of the request as a list of
+		 * notifications sorted from newer to older and draw those notifications accordingly in the UI.
+		 * @param {string} url the url of the request, it should be apps/notifications/api/v2/notifications?fetch=asc
+		 * with additional parameters in the url
+		 * @param {function} successCallback the callback that will be executed if the call is
+		 * successful after the notification rendering is done.
+		 * @param {function} errorCallback the callback that will be executed if the call fails
 		 */
-		backgroundFetch: function() {
+		fetchAscendentV2: function(url, successCallback, errorCallback) {
 			var self = this;
-
-			this.fetch(
-				function(data) {
-					var inJson = [];
-					var oldNum = self.numNotifications();
-					$.each(data, function(index) {
-						var n = new self.Notif(data[index]);
-						inJson.push(n.getId());
-						if (!self.getNotification(n.getId())){
-							// New notification!
-							self._onNewNotification(n);
-						}
+			var request = $.ajax({
+				url: url,
+				type: 'GET'
+			}).done(function(result, textStatus, jqxhr){
+					// Fill Array
+					$.each(result.ocs.data.notifications, function(index) {
+						var n = new self.Notif(result.ocs.data.notifications[index]);
+						self.notifications[n.getId()] = n;
+						self.addToUI(n);
 					});
-
-					for (var n in self.getNotifications()) {
-						if (inJson.indexOf(self.getNotifications()[n].getId()) === -1) {
-							// Not in JSON, remove from UI
-							self._onRemoveNotification(self.getNotifications()[n]);
-						}
+					if (typeof result.ocs.data.next !== 'undefined') {
+						self.addShowNewerNotificationsButton(result.ocs.data.next);
 					}
-
-					// Now check if we suddenly have notifs, or now none
-					if (oldNum == 0 && self.numNotifications() !== 0) {
-						// We now have some!
+					// Check if we have any, and notify the UI
+					if (self.numNotifications() !== 0) {
 						self._onHaveNotifications();
-					} else if (oldNum != 0 && self.numNotifications() === 0) {
-						// Now we have none
+					} else {
 						self._onHaveNoNotifications();
 					}
-				},
+			}).fail(function() {
 				_.bind(self._onFetchError, self)
-			);
+			});
+
+			if (successCallback) {
+				request.done(successCallback);
+			}
+
+			if (errorCallback) {
+				request.fail(errorCallback);
+			}
+		},
+
+		/**
+		 * Make a request to the polling endpoint and update the last notification id. If it's properly
+		 * updated the polling will stop
+		 */
+		pollingV2: function() {
+			var self = this;
+			var request = $.ajax({
+				url: OC.generateUrl('apps/notifications/api/v2/tracker/notifications/polling?format=json'),
+				type: 'GET'
+			}).done(function(result, textStatus, jqxhr){
+				var lastNotificationId = jqxhr.getResponseHeader('OC-Last-Notification');
+				if (self.updateLastKnowId(lastNotificationId)) {
+					clearInterval(self.interval);
+				}
+			});
+		},
+
+		/**
+		 * Update the last known notification id. If the new id is greater than the old one, make
+		 * the bell icon flicker and show a button to fetch the newer notifications. Also show a
+		 * browser notification if possible.
+		 * @return true if the value is updated, false otherwise
+		 */
+		updateLastKnowId: function(newId) {
+			var previousId = this.lastKnownId;
+			this.lastKnownId = newId;
+			if (previousId !== null && parseInt(previousId, 10) < parseInt(newId, 10)) {
+				this._onHaveNotifications();
+				this._onLastKnownIdChange();
+				this.popupWebBrowserNotification();
+				return true;
+			}
+			return false;
+		},
+
+		/**
+		 * Update the last shown notification id to keep track of what notifications we should request
+		 * later. Only update if the new id is greater than the old one.
+		 * @param {string} newId the newest id shown to the user.
+		 */
+		updateLastShownId: function(newId) {
+			var newIdInt = parseInt(newId, 10);
+			var lastShownId = this.$container.data('lastShownId');
+			if (lastShownId === undefined || newIdInt > lastShownId) {
+				this.$container.data('lastShownId', newIdInt);
+			}
+		},
+
+		/**
+		 * Get the last shown id value stored with the "updateLastShownId" method
+		 * @return {string|undefined} the stored value, or undefined if no value has been stored yet
+		 */
+		getLastShownId: function() {
+			return this.$container.data('lastShownId');
+		},
+
+		_onLastKnownIdChange: function() {
+			var lastShownId = this.$container.find('div.notification-wrapper .notification:first').data('id');
+			if (lastShownId === undefined) {
+				// if we don't know the id shown, rely on the stored one
+				lastShownId = this.getLastShownId();
+			}
+			var targetUrl = OC.generateUrl('apps/notifications/api/v2/notifications?id=' + lastShownId + '&fetch=asc&limit=3&format=json');
+			this.addShowNewerNotificationsButton(targetUrl);
 		},
 
 		/**
@@ -215,74 +328,115 @@
 		},
 
 		/**
-		 * Handles removing the Notification from the UI when no longer in JSON
-		 * @param {OCA.Notifications.Notification} notification
+		 * Show a browser notification to notify the user about new notifications
 		 */
-		_onRemoveNotification: function(notification) {
-			$('div.notification[data-id='+escapeHTML(notification.getId())+']').remove();
-			delete OCA.Notifications.notifications[notification.getId()];
-		},
-
-		/**
-		 * Handle new notification received
-		 * @param {OCA.Notifications.Notification} notification
-		 */
-		_onNewNotification: function(notification) {
-			// Add it to the array
-			OCA.Notifications.notifications[notification.getId()] = notification;
-			// Add to the UI
-			OCA.Notifications.addToUI(notification);
-
-			// Trigger browsers web notification
-			// https://github.com/owncloud/notifications/issues/1
-			if ("Notification" in window) {
-				if (Notification.permission === "granted") {
-					// If it's okay let's create a notification
-					OCA.Notifications.createWebNotification(notification);
-				}
-
-				// Otherwise, we need to ask the user for permission
-				else if (Notification.permission !== 'denied') {
-					Notification.requestPermission(function (permission) {
-						// If the user accepts, let's create a notification
-						if (permission === "granted") {
-							OCA.Notifications.createWebNotification(notification);
-						}
-					});
-				}
+		popupWebBrowserNotification: function() {
+			if ('Notification' in window && Notification.permission === 'granted') {
+				var self = this;
+				var title = t('notifications', 'Notifications available on {server}', {server: location.host});
+				var body = t('notifications', 'You have new notifications available. Go and check them!');
+				var notif = new Notification(title, {
+					body: body,
+					lang: OC.getLocale(),
+					requireInteraction: true
+				});
 			}
-		},
-
-		/**
-		 * Create a browser notification
-		 *
-		 * @see https://developer.mozilla.org/en/docs/Web/API/notification
-		 * @param {OCA.Notifications.Notification} notification
-		 */
-		createWebNotification: function (notification) {
-			var n = new Notification(notification.getSubject(), {
-				title: notification.getSubject(),
-				lang: OC.getLocale(),
-				body: notification.getRawMessage(),
-				icon: notification.getIcon(),
-				tag: notification.getId()
-			});
-			setTimeout(n.close.bind(n), 5000);
 		},
 
 		_shutDownNotifications: function() {
 			// The app was disabled or has no notifiers, so we can stop polling
 			// And hide the UI as well
 			window.clearInterval(this.interval);
-			this.$notifications.addClass('hidden');
 		},
 
 		/**
-		 * Adds the notification to the UI
+		 * Prepend the notification in the UI container
 		 * @param {OCA.Notifications.Notification} notification
 		 */
 		addToUI: function(notification) {
-			$('div.notification-wrapper').prepend(notification.renderElement());
+			this.$container.find('div.notification-wrapper').prepend(notification.renderElement());
+			this.updateLastShownId(notification.getId());
+		},
+
+		/**
+		 * Append the notification in the UI container
+		 * @param {OCA.Notifications.Notification} notification
+		 */
+		appendToUI: function(notification) {
+			this.$container.find('div.notification-wrapper').append(notification.renderElement());
+		},
+
+		/**
+		 * Add a button to the end of the notification list to fetch the next bunch of notifications.
+		 * @param {string} nextUrl the url that will be used for a "fetchDescendentV2" call, that
+		 * will be called when the button is clicked. The url should normally be the "next" url
+		 * from a result of a previous "fetchDescendentV2" call.
+		 */
+		addShowMoreNotificationsButton: function(nextUrl) {
+			var self = this;
+			var $notificationControlsDiv = $('<div>', {
+				'class' : 'notification-controls controls-below'
+			});
+
+			var $showMoreButton = $('<button>', {
+				'class' : 'notification-showmore',
+				'text' : t('notifications', 'Show More')
+			});
+
+			$showMoreButton.click(function() {
+				self.removeShowMoreNotificationsButton();
+				self.fetchDescendentV2(nextUrl);
+			});
+
+			$notificationControlsDiv.append($showMoreButton);
+
+			this.$container.find('div.notification-wrapper').append($notificationControlsDiv);
+		},
+
+		/**
+		 * Remove the button created with the "addShowMoreNotificationsButton"
+		 */
+		removeShowMoreNotificationsButton: function() {
+			this.$container.find('div.notification-controls.controls-below').remove();
+		},
+
+		/**
+		 * Add a button to the beginning of the notification list to fetch the newer bunch of
+		 * notifications. Once the user click in the button, polling will be restarted if the
+		 * "fetchAscendentV2" call doesn't return the link to the next call (there aren't any
+		 * additional notification available for now)
+		 * @param {string} nextUrl the url that will be used for a "fetchAscendentV2" call, that
+		 * will be called when the button is clicked. The url should normally be the "next" url
+		 * from a result of a previous "fetchAscendentV2" call.
+		 */
+		addShowNewerNotificationsButton: function(nextUrl) {
+			var self = this;
+			var $notificationControlsDiv = $('<div>', {
+				'class' : 'notification-controls controls-above'
+			});
+			var $showMoreButton = $('<button>', {
+				'class' : 'notification-shownewer',
+				'text' : t('notifications', 'Show Newer Notifications')
+			});
+			$showMoreButton.click(function() {
+				self.removeShowNewerNotificationButton();
+				self.fetchAscendentV2(nextUrl, function(result) {
+					if (typeof result.next === 'undefined') {
+						self.restartPolling();
+					}
+				});
+			});
+
+			$notificationControlsDiv.append($showMoreButton);
+
+			this.$container.find('div.notification-wrapper').prepend($notificationControlsDiv);
+		},
+
+		/**
+		 * Remove the button created by "addShowNewerNotificationsButton"
+		 */
+		removeShowNewerNotificationButton: function() {
+			this.$container.find('div.notification-controls.controls-above').remove();
 		},
 
 		/**
@@ -298,8 +452,6 @@
 				.animate({opacity: 1}, 600)
 				.animate({opacity: 0.7}, 600);
 			this.$container.find('.emptycontent').addClass('hidden');
-
-			this.$notifications.removeClass('hidden');
 		},
 
 		/**
@@ -310,32 +462,6 @@
 			$('div.notifications-button').removeClass('hasNotifications');
 			$('div.notifications .emptycontent').removeClass('hidden');
 			this.$button.find('img').attr('src', OC.imagePath('notifications', 'notifications'));
-
-			this.$notifications.addClass('hidden');
-		},
-
-		/**
-		 * Performs the AJAX request to retrieve the notifications
-		 * @param {Function} success
-		 * @param {Function} failure
-		 */
-		fetch: function(success, failure){
-			var self = this;
-			var request = $.ajax({
-				url: OC.linkToOCS('apps/notifications/api/v1', 2) + 'notifications?format=json',
-				type: 'GET'
-			});
-
-
-			request.done(function(data, statusText, xhr) {
-				if (xhr.status === 204 || data.ocs.meta.statuscode === 204) {
-					// 204 No Content - Intercept when no notifiers are there.
-					self._shutDownNotifications();
-				} else {
-					success(data.ocs.data, statusText, xhr);
-				}
-			});
-			request.fail(failure);
 		},
 
 		/**
@@ -355,14 +481,6 @@
 		 */
 		getNotifications: function() {
 			return this.notifications;
-		},
-
-		/**
-		 * Handles the returned data from the AJAX call
-		 * @param {object} responseData
-		 */
-		parseNotifications: function(responseData) {
-
 		},
 
 		/**
