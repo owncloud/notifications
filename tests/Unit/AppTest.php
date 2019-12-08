@@ -40,7 +40,7 @@ class AppTest extends TestCase {
 	/** @var \OCA\Notifications\App */
 	protected $app;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->handler = $this->getMockBuilder(Handler::class)

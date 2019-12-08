@@ -39,7 +39,7 @@ class AppTest extends TestCase {
 	/** @var \OCP\IUserSession|\PHPUnit\Framework\MockObject\MockObject */
 	protected $session;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->manager = $this->getMockBuilder('OCP\Notification\IManager')
@@ -59,7 +59,7 @@ class AppTest extends TestCase {
 		$this->overwriteService('UserSession', $this->session);
 	}
 
-	protected function tearDown() {
+	protected function tearDown(): void {
 		$this->restoreService('NotificationManager');
 		$this->restoreService('Request');
 		$this->restoreService('UserSession');

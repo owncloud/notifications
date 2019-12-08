@@ -49,7 +49,7 @@ class EndpointControllerTest extends TestCase {
 	/** @var \OCP\IUser|\PHPUnit\Framework\MockObject\MockObject */
 	protected $user;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		/** @var \OCP\IRequest|\PHPUnit\Framework\MockObject\MockObject */
