@@ -44,7 +44,7 @@ class GenerateTest extends TestCase {
 	/** @var IGroupManager | \PHPUnit\Framework\MockObject\MockObject */
 	protected $groupManager;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->manager = $this->createMock(IManager::class);

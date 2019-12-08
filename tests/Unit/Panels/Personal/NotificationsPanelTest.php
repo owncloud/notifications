@@ -37,7 +37,7 @@ class NotificationsPanelTest extends \Test\TestCase {
 	/** @var IL10N */
 	private $l10n;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 		$this->userSession = $this->getMockBuilder(IUserSession::class)
 			->disableOriginalConstructor()

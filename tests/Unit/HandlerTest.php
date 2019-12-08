@@ -35,7 +35,7 @@ class HandlerTest extends TestCase {
 	/** @var \OCA\Notifications\Handler */
 	protected $handler;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->handler = new Handler(
@@ -48,7 +48,7 @@ class HandlerTest extends TestCase {
 		]));
 	}
 
-	protected function tearDown() {
+	protected function tearDown(): void {
 		parent::tearDown();
 		$this->handler->delete($this->getNotification([
 			'getApp' => 'testing_notifications',

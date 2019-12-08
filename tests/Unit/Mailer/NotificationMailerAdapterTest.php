@@ -42,7 +42,7 @@ class NotificationMailerAdapterTest extends \Test\TestCase {
 	/** @var NotificationMailerAdapter */
 	private $adapter;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->notificationMailer = $this->getMockBuilder(NotificationMailer::class)
