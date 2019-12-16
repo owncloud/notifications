@@ -125,9 +125,10 @@ class NotificationMailerTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @expectedException \Exception
 	 */
 	public function testSendNotificationFailedRecipients() {
+		$this->expectException(\Exception::class);
+
 		$mockedNotification = $this->getMockBuilder(INotification::class)->disableOriginalConstructor()->getMock();
 		$mockedNotification->method('getUser')->willReturn('userTest1');
 		$mockedNotification->method('getObjectType')->willReturn('test_obj_type');
