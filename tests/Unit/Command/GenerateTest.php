@@ -55,9 +55,10 @@ class GenerateTest extends TestCase {
 	}
 
 	/**
-	 * @expectedException \Exception
 	 */
 	public function testNoGroupOrUserGiven() {
+		$this->expectException(\Exception::class);
+
 		$options = [];
 		$input = ['message' => 'test', 'subject' => 'test'];
 		$response = $this->tester->execute($input, $options);
