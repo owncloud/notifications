@@ -16,6 +16,7 @@ Feature: notifications-content
       | object_id   | 9483                                                                      |
     Then user "test1" should have 1 notification
     And the last notification of user "test1" should match
+      | key         | regex                                                                     |
       | app         | notificationsacceptancetesting                                            |
       | datetime    | 1974-08-05T18:15:17+00:00                                                 |
       | subject     | Acceptance Testing                                                        |
@@ -35,6 +36,7 @@ Feature: notifications-content
       | object_id   | notifications                                                                 |
     Then user "test1" should have 1 notification
     And the last notification of user "test1" should match
+      | key         | regex                                                                         |
       | app         | notificationsacceptancetesting                                                |
       | datetime    | 1974-08-05T18:15:15+00:00                                                     |
       | subject     | Testing Acceptance                                                            |
