@@ -11,6 +11,8 @@
     "Notify only when an action is required" : "只有需要采取行动时通知",
     "Notify about all events" : "通知关于所有事件",
     "Choose an option" : "选择个选项",
+    "See <a href=\"%s\">%s</a> on %s for more information" : "阅读%s上的<a href=\"%s\">%s</a>获得更过信息",
+    "See %s on %s for more information" : "阅读%s上的%s获得更多信息",
     "Mail Notifications" : "邮件通知",
     "You can choose to be notified about events via mail. Some events are informative, others require an action (like accept/decline). Select your preference below:" : "您可以选择通过邮件来通知您事件。 有些事件包含信息，有些则需要进行操作（如“接受”或“拒绝”）。 在下面选择您的偏好：",
     "It was not possible to get your session. Please, try reloading the page or logout and login again" : "无法获取您的会话。请尝试重新载入页面或注销后重新登录。",
