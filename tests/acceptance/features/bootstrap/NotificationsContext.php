@@ -25,6 +25,7 @@ use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\Assert;
+use TestHelpers\HttpRequestHelper;
 use TestHelpers\SetupHelper;
 
 require_once 'bootstrap.php';
@@ -124,7 +125,7 @@ class NotificationsContext implements Context {
 			);
 		}
 		$formData = new TableNode($rows);
-		
+
 		$this->ocsContext->userSendsHTTPMethodToOcsApiEndpointWithBody(
 			$this->featureContext->getAdminUsername(),
 			'POST', '/apps/testing/api/v1/notifications', $formData
@@ -231,16 +232,13 @@ class NotificationsContext implements Context {
 		$fullUrl = $this->featureContext->getBaseUrl() .
 				   "/index.php/apps/notifications/settings/personal/" .
 				   "notifications/options";
-		$client = new Client();
-		$options = [];
-		$options['auth'] = [$user, $this->featureContext->getUserPassword($user)];
-		$options['headers'] = ['Content-Type' => 'application/json'];
-		$options['body'] = '{"email_sending_option":"' . $setting . '"}';
 
-		$response = $client->send(
-			$client->createRequest("PATCH", $fullUrl, $options)
+		$response = HttpRequestHelper::sendRequest(
+			$fullUrl,
+			"PATCH", $user, $this->featureContext->getUserPassword($user),
+			['Content-Type' => 'application/json'],
+			'{"email_sending_option":"' . $setting . '"}'
 		);
-
 		$this->setCSRFDotDisabled($oldCSRFSetting);
 
 		Assert::assertEquals(
