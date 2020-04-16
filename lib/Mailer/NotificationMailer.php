@@ -110,7 +110,7 @@ class NotificationMailer {
 	 * The checks of this function shouldn't consider the notification as prepared in order to use
 	 * this function as soon as possible
 	 * @param INotification $notification the notification that will be checked
-	 * @return true if the notification will be sent by the sendNotification method, false otherwise
+	 * @return boolean true if the notification will be sent by the sendNotification method, false otherwise
 	 */
 	public function willSendNotification(INotification $notification) {
 		$options = $this->optionsStorage->getOptions($notification->getUser());

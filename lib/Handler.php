@@ -47,7 +47,6 @@ class Handler {
 	 * Add a new notification to the database
 	 *
 	 * @param INotification $notification
-	 * @return int
 	 */
 	public function add(INotification $notification) {
 		$sql = $this->connection->getQueryBuilder();
@@ -80,7 +79,6 @@ class Handler {
 	 * Delete the notifications matching the given Notification
 	 *
 	 * @param INotification $notification
-	 * @return null
 	 */
 	public function delete(INotification $notification) {
 		$sql = $this->connection->getQueryBuilder();
@@ -107,7 +105,6 @@ class Handler {
 	 *
 	 * @param int $id
 	 * @param string $user
-	 * @return null
 	 */
 	public function deleteById($id, $user) {
 		$sql = $this->connection->getQueryBuilder();

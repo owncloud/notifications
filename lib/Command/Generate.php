@@ -63,6 +63,10 @@ class Generate extends Command {
 		;
 	}
 
+	/**
+	 * @param InputInterface $input
+	 * @param OutputInterface $output
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$user = $input->getOption('user');
 		$group = $input->getOption('group');
@@ -102,7 +106,7 @@ class Generate extends Command {
 				$notification->setLink($link);
 			}
 
-			$notification->setObject('admin-notification', $time);
+			$notification->setObject('admin-notification', (string)$time);
 			if (\method_exists($notification, 'setIcon')) {
 				$notification->setIcon($this->urlGenerator->imagePath('notifications', 'icon.png'));
 			}
@@ -112,5 +116,6 @@ class Generate extends Command {
 			$progress->advance();
 		}
 		$progress->finish();
+		return;
 	}
 }
