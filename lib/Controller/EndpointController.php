@@ -110,7 +110,7 @@ class EndpointController extends OCSController {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 *
-	 * @param $id
+	 * @param int $id
 	 * @return Result
 	 */
 	public function getNotification($id) {
@@ -143,7 +143,7 @@ class EndpointController extends OCSController {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 *
-	 * @param $id
+	 * @param int $id
 	 * @return Result
 	 */
 	public function deleteNotification($id) {
