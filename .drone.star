@@ -48,16 +48,25 @@ config = {
 				'chrome',
 				'firefox'
 			],
+			'phpVersions': [
+				'7.4',
+			],
 		},
 		'api': {
 			'suites': [
 				'apiNotifications',
+			],
+			'phpVersions': [
+				'7.4',
 			],
 			'emailNeeded': True
 		},
 		'cli': {
 			'suites': [
 				'cliNotifications'
+			],
+			'phpVersions': [
+				'7.4',
 			],
 		},
 	},
@@ -1197,7 +1206,7 @@ def installCore(version, db, useBundledApp):
 		'image': 'owncloudci/core',
 		'pull': 'always',
 		'settings': {
-			'version': version,
+			'git_reference': 'php7.4-20200310',
 			'core_path': '/var/www/owncloud/server',
 			'db_type': dbType,
 			'db_name': database,
