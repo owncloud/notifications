@@ -23,7 +23,6 @@ namespace OCA\Notifications;
 
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
-use OCP\Notification\IAction;
 use OCP\Notification\IManager;
 use OCP\Notification\INotification;
 
@@ -259,7 +258,7 @@ class Handler {
 
 		$actions = [];
 		foreach ($notification->getActions() as $action) {
-			/** @var IAction $action */
+			/** @var \OCP\Notification\IAction $action */
 			$actions[] = [
 				'label' => $action->getLabel(),
 				'link' => $action->getLink(),
