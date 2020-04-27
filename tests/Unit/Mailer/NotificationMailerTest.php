@@ -120,8 +120,8 @@ class NotificationMailerTest extends \Test\TestCase {
 		$this->assertEquals('This is a parsed subject', $sentMessage->getSubject());
 
 		// notification's subject and message must be present in the email body, as well as the server url
-		$this->assertContains($mockedNotification->getParsedMessage(), $sentMessage->getPlainBody());
-		$this->assertContains('http://test.server/oc', $sentMessage->getPlainBody());
+		$this->assertStringContainsString($mockedNotification->getParsedMessage(), $sentMessage->getPlainBody());
+		$this->assertStringContainsString('http://test.server/oc', $sentMessage->getPlainBody());
 	}
 
 	/**
