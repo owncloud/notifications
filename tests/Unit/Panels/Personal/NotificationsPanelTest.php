@@ -88,11 +88,11 @@ class NotificationsPanelTest extends \Test\TestCase {
 		$this->optionsStorage->method('getOptions')->willReturn(['email_sending_option' => $selectedValue]);
 
 		$page = $this->notificationsPanel->getPanel()->fetchPage();
-		$this->assertContains('<h2 class="app-name">Mail Notifications</h2>', $page);
+		$this->assertStringContainsString('<h2 class="app-name">Mail Notifications</h2>', $page);
 		if (\in_array($selectedValue, ['never', 'action', 'always'], true)) {
-			$this->assertContains("<option value=\"$selectedValue\" selected=\"selected\">", $page);
+			$this->assertStringContainsString("<option value=\"$selectedValue\" selected=\"selected\">", $page);
 		} else {
-			$this->assertContains("<option value=\"$selectedValue\" selected=\"selected\">Choose an option</option>", $page);
+			$this->assertStringContainsString("<option value=\"$selectedValue\" selected=\"selected\">Choose an option</option>", $page);
 		}
 	}
 
@@ -102,7 +102,7 @@ class NotificationsPanelTest extends \Test\TestCase {
 		$this->optionsStorage->method('getOptions')->willReturn(['email_sending_option' => 'always']);
 
 		$page = $this->notificationsPanel->getPanel()->fetchPage();
-		$this->assertContains('not possible to get your session', $page);
-		$this->assertNotContains('<select id="email_sending_option">', $page);
+		$this->assertStringContainsString('not possible to get your session', $page);
+		$this->assertStringNotContainsString('<select id="email_sending_option">', $page);
 	}
 }

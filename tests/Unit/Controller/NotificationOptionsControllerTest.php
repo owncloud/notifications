@@ -249,7 +249,7 @@ class NotificationOptionsControllerTest extends \Test\TestCase {
 
 		$this->assertEquals(Http::STATUS_FORBIDDEN, $result->getStatus());
 		$rawData = $result->getData();
-		$this->assertContains('Unknown user session', $rawData['data']['message']);
+		$this->assertStringContainsString('Unknown user session', $rawData['data']['message']);
 	}
 
 	public function testGetNotificationOptions() {
@@ -283,6 +283,6 @@ class NotificationOptionsControllerTest extends \Test\TestCase {
 
 		$this->assertEquals(Http::STATUS_FORBIDDEN, $result->getStatus());
 		$rawData = $result->getData();
-		$this->assertContains('Unknown user session', $rawData['data']['message']);
+		$this->assertStringContainsString('Unknown user session', $rawData['data']['message']);
 	}
 }
