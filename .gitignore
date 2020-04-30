@@ -61,5 +61,6 @@ vendor-bin/**/composer.lock
 /tests/Unit/js/node_modules
 /tests/output
 /tests/acceptance/output
+.phpunit.result.cache
 
 build
