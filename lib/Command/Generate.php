@@ -116,6 +116,6 @@ class Generate extends Command {
 			$progress->advance();
 		}
 		$progress->finish();
-		return;
+		return 0;
 	}
 }
