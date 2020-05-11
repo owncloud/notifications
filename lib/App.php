@@ -39,12 +39,14 @@ class App implements IApp {
 
 	/**
 	 * @param INotification $notification
+	 * @return null
 	 * @throws \InvalidArgumentException When the notification is not valid
 	 * @since 8.2.0
 	 */
 	public function notify(INotification $notification) {
 		$this->handler->add($notification);
 		$this->mailerAdapter->sendMail($notification);
+		return null;
 	}
 
 	/**
@@ -58,9 +60,11 @@ class App implements IApp {
 
 	/**
 	 * @param INotification $notification
+	 * @return null
 	 * @since 8.2.0
 	 */
 	public function markProcessed(INotification $notification) {
 		$this->handler->delete($notification);
+		return null;
 	}
 }
