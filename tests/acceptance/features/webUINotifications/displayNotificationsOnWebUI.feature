@@ -8,13 +8,13 @@ Feature: display notifications on the webUI
   Background:
     Given these users have been created with skeleton files:
       | username |
-      | user1    |
+      | Alice    |
     And the user has browsed to the login page
-    And the user has logged in with username "user1" and password "1234" using the webUI
+    And user "Alice" has logged in using the webUI
     And using OCS API version "2"
 
   Scenario: Create notifications
-    When user "user1" is sent a notification with
+    When user "Alice" is sent a notification with
       | app         | notificationsacceptancetesting |
       | timestamp   | 144958517                      |
       | subject     | Acceptance Testing             |
@@ -22,7 +22,7 @@ Feature: display notifications on the webUI
       | message     | Notifications in ownCloud      |
       | object_type | blog                           |
       | object_id   | 9483                           |
-    And user "user1" is sent a notification with
+    And user "Alice" is sent a notification with
       | app         | notificationsacceptancetesting |
       | timestamp   | 144958517                      |
       | subject     | UI tests                       |
@@ -36,7 +36,7 @@ Feature: display notifications on the webUI
       | UI tests           | http://owncloud.org/      | second notification       |
 
   Scenario: follow notifications link
-    When user "user1" is sent a notification with
+    When user "Alice" is sent a notification with
       | app         | notificationsacceptancetesting         |
       | timestamp   | 144958517                              |
       | subject     | Acceptance Testing                     |
