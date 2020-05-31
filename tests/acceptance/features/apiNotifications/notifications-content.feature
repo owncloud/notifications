@@ -2,11 +2,11 @@
 Feature: notifications-content
 
   Background:
-    Given user "test1" has been created with default attributes and skeleton files
+    Given user "Alice" has been created with default attributes and skeleton files
     And using OCS API version "2"
 
   Scenario: Create notification
-    When user "test1" is sent a notification with
+    When user "Alice" is sent a notification with
       | app         | notificationsacceptancetesting                                            |
       | timestamp   | 144958517                                                                 |
       | subject     | Acceptance Testing                                                        |
@@ -14,8 +14,8 @@ Feature: notifications-content
       | message     | About Activities and Notifications in ownCloud                            |
       | object_type | blog                                                                      |
       | object_id   | 9483                                                                      |
-    Then user "test1" should have 1 notification
-    And the last notification of user "test1" should match
+    Then user "Alice" should have 1 notification
+    And the last notification of user "Alice" should match
       | key         | regex                                                                     |
       | app         | notificationsacceptancetesting                                            |
       | datetime    | 1974-08-05T18:15:17+00:00                                                 |
@@ -26,7 +26,7 @@ Feature: notifications-content
       | object_id   | 9483                                                                      |
 
   Scenario: Create different notification
-    When user "test1" is sent a notification with
+    When user "Alice" is sent a notification with
       | app         | notificationsacceptancetesting                                                |
       | timestamp   | 144958515                                                                     |
       | subject     | Testing Acceptance                                                            |
@@ -34,8 +34,8 @@ Feature: notifications-content
       | message     | Reading and deleting notifications as a Client                                |
       | object_type | repo                                                                          |
       | object_id   | notifications                                                                 |
-    Then user "test1" should have 1 notification
-    And the last notification of user "test1" should match
+    Then user "Alice" should have 1 notification
+    And the last notification of user "Alice" should match
       | key         | regex                                                                         |
       | app         | notificationsacceptancetesting                                                |
       | datetime    | 1974-08-05T18:15:15+00:00                                                     |
