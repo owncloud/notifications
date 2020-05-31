@@ -10,7 +10,7 @@ Feature: display notifications on the webUI
       | username |
       | Alice    |
     And the user has browsed to the login page
-    And the user has logged in with username "Alice" and password "1234" using the webUI
+    And user "Alice" has logged in using the webUI
     And using OCS API version "2"
 
   Scenario: Create notifications
