@@ -13,7 +13,7 @@ OC.L10N.register(
     "Notify only when an action is required" : "Nur informieren, wenn eine Aktion erforderlich ist",
     "Notify about all events" : "Über alle Ereignisse informieren",
     "Choose an option" : "Wähle eine Option",
-    "See <a href=\"%s\">%s</a> on %s for more information" : "Siehe<a href=\"%s\">%s</a>in %s für weitere Informationen",
+    "See <a href=\"%s\">%s</a> on %s for more information" : "Gehen Sie auf <a href=\"%s\">%s</a> in %s für weitere Informationen",
     "See %s on %s for more information" : "Bitte %s auf %s ansehen, für weitere Informationen",
     "Mail Notifications" : "E-Mail Benachrichtigungen",
     "You can choose to be notified about events via mail. Some events are informative, others require an action (like accept/decline). Select your preference below:" : "Sie können sich über Ereignisse per E-Mail benachrichtigen lassen. Manche Ereignisse sind rein informativ, andere hingegen erfordern ein manuelles Eingreifen (z.B. Annehmen/Ablehnen). Wählen Sie ihre gewünschte Einstellung:",
