@@ -1,4 +1,5 @@
-Hello,
+<?php p($l->t('Hello,')); ?>
+
 <?php if ($_['message'] !== ''): ?>
 <?php print_unescaped($_['message']); ?>
 

@@ -11,7 +11,8 @@
 <tr>
 <td width="20px">&nbsp;</td>
 <td style="font-weight:normal; font-size:0.8em; line-height:1.2em; font-family:verdana,'arial',sans;">
-Hello,<br>
+<?php p($l->t('Hello,')); ?>
+<br>
 <?php if ($_['message'] !== ''): ?>
 	<?php p($_['message']); ?>
 	<br><br>
