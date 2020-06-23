@@ -13,6 +13,7 @@ OC.L10N.register(
     "Notify only when an action is required" : "יש להודיע כאשר נדרשת פעולה",
     "Notify about all events" : "להודיע על כל האירועים",
     "Choose an option" : "בחר אפשרות",
+    "Hello," : "שלום,",
     "See <a href=\"%s\">%s</a> on %s for more information" : "מידע נוסף ב- <a href=\"%s\">%s</a> מ- %s ",
     "See %s on %s for more information" : "מידע נוסף ב- %s מ- %s ",
     "Mail Notifications" : "הודעות בדוא״ל",

@@ -13,6 +13,7 @@ OC.L10N.register(
     "Notify only when an action is required" : "Notificar só cando se require unha acción",
     "Notify about all events" : "Notificar sobre todos os eventos",
     "Choose an option" : "Escolla unha opción",
+    "Hello," : "Ola,",
     "See <a href=\"%s\">%s</a> on %s for more information" : "Vexa <a href=\"%s\">%s</a> en %s para obter máis información",
     "See %s on %s for more information" : "Vexa %s en %s para obter máis información ",
     "Mail Notifications" : "Notificacións por correo",
