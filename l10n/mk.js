@@ -13,6 +13,7 @@ OC.L10N.register(
     "Notify only when an action is required" : "Извести само кога е потребно акција",
     "Notify about all events" : "Извести за сите настани",
     "Choose an option" : "Избери...",
+    "Hello," : "Здраво,",
     "See <a href=\"%s\">%s</a> on %s for more information" : "Види <a href=\"%s\">%s</a> на %s за повеќе информации",
     "See %s on %s for more information" : "Види %s на %s за повеќе информации",
     "Mail Notifications" : "Email Известувања",

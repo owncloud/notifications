@@ -11,6 +11,7 @@
     "Notify only when an action is required" : "Aðeins láta vita þegar aðgerðar er krafist",
     "Notify about all events" : "Tilkynna um alla atburði",
     "Choose an option" : "Veldu einhvern valkost",
+    "Hello," : "Halló,",
     "See <a href=\"%s\">%s</a> on %s for more information" : "Skoðaðu <a href=\"%s\">%s</a> á %s til að fá frekari upplýsingar",
     "See %s on %s for more information" : "Skoðaðu %s á %s til að fá frekari upplýsingar",
     "Mail Notifications" : "Tilkynningar í tölvupósti",

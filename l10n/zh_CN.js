@@ -13,6 +13,7 @@ OC.L10N.register(
     "Notify only when an action is required" : "只有需要采取行动时通知",
     "Notify about all events" : "通知关于所有事件",
     "Choose an option" : "选择个选项",
+    "Hello," : "你好，",
     "See <a href=\"%s\">%s</a> on %s for more information" : "阅读%s上的<a href=\"%s\">%s</a>获得更过信息",
     "See %s on %s for more information" : "阅读%s上的%s获得更多信息",
     "Mail Notifications" : "邮件通知",

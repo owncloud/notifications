@@ -13,6 +13,7 @@ OC.L10N.register(
     "Notify only when an action is required" : "Ekintzaren bat behar denean jakinarazi bakarrik",
     "Notify about all events" : "Jakinarazi gertaera guztiak",
     "Choose an option" : "Hautatu aukera bat",
+    "Hello," : "Kaixo,",
     "See <a href=\"%s\">%s</a> on %s for more information" : "Ikusi <a href=\"%s\">%s</a>%s-en xehetasun gehiagorako",
     "See %s on %s for more information" : "Ikusi %s%s-en xehetasun gehiagorako",
     "Mail Notifications" : "Posta jakinarazpenak",

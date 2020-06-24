@@ -12,6 +12,7 @@ OC.L10N.register(
     "Notify only when an action is required" : "Informovat pouze v případě, že je akce požadována",
     "Notify about all events" : "Informovat o všech událostech",
     "Choose an option" : "Vyberte možnost",
+    "Hello," : "Ahoj,",
     "Mail Notifications" : "Emailové upozornění",
     "You can choose to be notified about events via mail. Some events are informative, others require an action (like accept/decline). Select your preference below:" : "Můžete si vybrat upozornění na události prostřednictvím pošty. Některé události jsou informativní, jiné vyžadují akci (například přijetí / odmítnutí). Zvolte své preference níže:",
     "It was not possible to get your session. Please, try reloading the page or logout and login again" : "Vaše přihlášená relace vypršela. Zkuste prosím znovu načíst stránku nebo se odhlásit a znovu přihlásit",

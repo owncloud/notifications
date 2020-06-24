@@ -13,6 +13,7 @@ OC.L10N.register(
     "Notify only when an action is required" : "アクションが必要な時にのみ通知する",
     "Notify about all events" : "すべてのイベントについて通知する",
     "Choose an option" : "オプションを選択してください",
+    "Hello," : "こんにちは、",
     "See <a href=\"%s\">%s</a> on %s for more information" : "詳細は <a href=\"%s\">%s</a> （ %s 内）を参照してください",
     "See %s on %s for more information" : "詳細は %s （%s 内）を参照してください",
     "Mail Notifications" : "メール通知",

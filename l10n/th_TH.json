@@ -11,6 +11,7 @@
     "Notify only when an action is required" : "แจ้งเตือนเมื่อจำเป็นต้องมีการดำเนินการเท่านั้น",
     "Notify about all events" : "แจ้งเตือนเกี่ยวกับเหตุการณ์ทั้งหมด",
     "Choose an option" : "เลือกตัวเลือก",
+    "Hello," : "สวัสดี,",
     "See <a href=\"%s\">%s</a> on %s for more information" : "ดูข้อมูลเพิ่มเติมเกี่ยวกับ <a href=\"%s\">%s</a> ได้ที่ %s ",
     "See %s on %s for more information" : "ดูข้อมูลเพิ่มเติมเกี่ยวกับ %s ได้ที่ %s",
     "Mail Notifications" : "การแจ้งเตือนทางอีเมล",

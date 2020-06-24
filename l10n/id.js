@@ -13,6 +13,7 @@ OC.L10N.register(
     "Notify only when an action is required" : "Beritahu hanya saat aksi diperlukan",
     "Notify about all events" : "Beritahu semua event",
     "Choose an option" : "Pilih opsi",
+    "Hello," : "Halo,",
     "See <a href=\"%s\">%s</a> on %s for more information" : "Lihat <a href=\"%s\">%s</a> di %s untuk informasi lebih lanjut",
     "See %s on %s for more information" : "Kugat %s di %s untuk informasi lebih lanjut",
     "Mail Notifications" : "Pemberitahuan Mail",

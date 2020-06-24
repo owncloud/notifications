@@ -11,6 +11,7 @@
     "Notify only when an action is required" : "Notifier seulement quand une action est obligatoire",
     "Notify about all events" : "Notifier à propos de tous les évènements",
     "Choose an option" : "Choisir une option",
+    "Hello," : "Bonjour,",
     "See <a href=\"%s\">%s</a> on %s for more information" : "Voir <a href=\"%s\">%s</a> sur %s pour plus d'informations",
     "See %s on %s for more information" : "Voir %s sur %s pour plus d'informations",
     "Mail Notifications" : "Notifications par courriel",

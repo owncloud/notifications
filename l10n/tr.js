@@ -13,6 +13,7 @@ OC.L10N.register(
     "Notify only when an action is required" : "Sadece bir işlem gerektiren durumlarda bildirim gönder",
     "Notify about all events" : "Tüm etkinlikler hakkında bildirim gönder",
     "Choose an option" : "Bir seçenek seçin",
+    "Hello," : "Merhaba,",
     "See <a href=\"%s\">%s</a> on %s for more information" : "Daha fazla bilgi için %s üzerinde <a href=\"%s\">%s</a> bakın",
     "See %s on %s for more information" : "Daha fazla bilgi için %s üzerinde %s bakın",
     "Mail Notifications" : "E-posta Bildirimleri",

@@ -13,6 +13,7 @@ OC.L10N.register(
     "Notify only when an action is required" : "نبهني فقط عندما تحتاج الي اجراء",
     "Notify about all events" : " اشعار حول / عن كافة الاحداث",
     "Choose an option" : "اختر احد الخيارات",
+    "Hello," : "مرحبًا،",
     "See <a href=\"%s\">%s</a> on %s for more information" : "اطلع علي <a href=\"%s\">%s</a> في %s للمزيد من المعلومات ",
     "See %s on %s for more information" : "اطلع علي %s في %s للمزيد من المعلومات",
     "Mail Notifications" : "اشعارات البريد",

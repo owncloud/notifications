@@ -13,6 +13,7 @@ OC.L10N.register(
     "Notify only when an action is required" : "Notify only when an action is required",
     "Notify about all events" : "Notify about all events",
     "Choose an option" : "Choose an option",
+    "Hello," : "Hello,",
     "See <a href=\"%s\">%s</a> on %s for more information" : "See <a href=\"%s\">%s</a> on %s for more information",
     "See %s on %s for more information" : "See %s on %s for more information",
     "Mail Notifications" : "Mail Notifications",

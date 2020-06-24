@@ -13,6 +13,7 @@ OC.L10N.register(
     "Notify only when an action is required" : "Varsle kun når en handling er nødvendig",
     "Notify about all events" : "Varsle om alle handlinger",
     "Choose an option" : "Velg et alternativ",
+    "Hello," : "Hallo,",
     "See %s on %s for more information" : "Se %s på %s for mer informasjon",
     "Mail Notifications" : "E-post Varsler",
     "You can choose to be notified about events via mail. Some events are informative, others require an action (like accept/decline). Select your preference below:" : "Du kan velge å bli varslet om hendelser via e-post. Noen hendelser er kun for informasjon, andre krever en handling (som godta / avvise). Velg din preferanse nedenfor:",

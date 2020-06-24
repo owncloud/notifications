@@ -13,6 +13,7 @@ OC.L10N.register(
     "Notify only when an action is required" : "Notificar apenas quando uma ação é necessária",
     "Notify about all events" : "Notificar sobre todas as alterações",
     "Choose an option" : "Escolha uma opção",
+    "Hello," : "Olá,",
     "See <a href=\"%s\">%s</a> on %s for more information" : "Veja <a href=\"%s\">%s </a>em %s para mais informações",
     "See %s on %s for more information" : "See %s on %sfor more information",
     "Mail Notifications" : "Notificações de corrreio",

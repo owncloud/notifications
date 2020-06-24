@@ -11,6 +11,7 @@
     "Notify only when an action is required" : "Уведомить только когда потребуется действие",
     "Notify about all events" : "Уведомлять обо всех событиях",
     "Choose an option" : "Выбирете опции",
+    "Hello," : "Здравствуйте,",
     "See <a href=\"%s\">%s</a> on %s for more information" : "Откройте <a href=\"%s\">%s</a> на %s для более подробной инфрмации",
     "See %s on %s for more information" : "Откройте %s на %s для более подробной информации",
     "Mail Notifications" : "Почтовые уведомления",

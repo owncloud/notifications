@@ -13,6 +13,7 @@ OC.L10N.register(
     "Notify only when an action is required" : "Ειδοποίηση μόνο όταν απαιτείται κάποια ενέργεια",
     "Notify about all events" : "Ειδοποίηση για όλα τα συμβάντα",
     "Choose an option" : "Διάλεξε μια επιλογή",
+    "Hello," : "Γεια σας,",
     "See <a href=\"%s\">%s</a> on %s for more information" : "Δείτε <a href=\"%s\">%s</a> στο %s για περισσότερες πληροφορίες",
     "See %s on %s for more information" : "Δείτε %s στο %s για περισσότερες πληροφορίες",
     "Mail Notifications" : "Ειδοποιήσεις αλληλογραφίας",

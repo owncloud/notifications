@@ -13,6 +13,7 @@ OC.L10N.register(
     "Notify only when an action is required" : "Njofto vetëm kur lypset një veprim",
     "Notify about all events" : "Njoftohuni mbi krejt veprimtaritë",
     "Choose an option" : "Zgjidhni një mundësi",
+    "Hello," : "Tungjatjeta,",
     "See <a href=\"%s\">%s</a> on %s for more information" : "Për më tepër të dhëna, shihni <a href=\"%s\">%s</a> te %s",
     "See %s on %s for more information" : "Për më tepër të dhëna, shihni %s te %s",
     "Mail Notifications" : "Njoftime Me Email",
