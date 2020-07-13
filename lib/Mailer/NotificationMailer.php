@@ -80,8 +80,8 @@ class NotificationMailer {
 
 		$emailMessage->setSubject($parsedSubject);
 
-		$htmlText = $this->getMailBody($parsedMessage, $notificationLink, 'mail/htmlmail');
-		$plainText = $this->getMailBody($parsedMessage, $notificationLink, 'mail/plaintextmail');
+		$htmlText = $this->getMailBody($parsedMessage, $notificationLink, 'mail/htmlmail', $language);
+		$plainText = $this->getMailBody($parsedMessage, $notificationLink, 'mail/plaintextmail', $language);
 
 		$emailMessage->setPlainBody($plainText);
 		$emailMessage->setHtmlBody($htmlText);
@@ -127,8 +127,8 @@ class NotificationMailer {
 		}
 	}
 
-	private function getMailBody($message, $serverUrl, $targetTemplate) {
-		$tmpl = new Template('notifications', $targetTemplate, '', false);
+	private function getMailBody($message, $serverUrl, $targetTemplate, $languageCode) {
+		$tmpl = new Template('notifications', $targetTemplate, '', false, $languageCode);
 		$tmpl->assign('message', $message);
 		$tmpl->assign('serverUrl', $serverUrl);
 		return $tmpl->fetchPage();
