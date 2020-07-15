@@ -4,7 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [0.5.1] - 2020-06-29
+
+### Added
+
+- Add `Hello` as translatable string to the mail templates - [#320](https://github.com/owncloud/notifications/issues/320)
+
+### Changed
+
+- Bump libraries
 
 ## [0.5.0] - 2019-04-25
 
@@ -35,7 +43,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Move OCS calls to app framework - consumes less resources - [#98](https://github.com/owncloud/notifications/pull/98)
 - Don't use escaped message for browser notification - [#100](https://github.com/owncloud/notifications/pull/100)
 
-[Unreleased]: https://github.com/owncloud/core/compare/v0.5.0...master
-[0.5.0]: https://github.com/owncloud/core/compare/v10.1.1...v0.5.0
-[0.4.1]: https://github.com/owncloud/core/compare/v10.0.2...v10.1.1
-
+[0.5.1]: https://github.com/owncloud/notifications/compare/v0.5.0...v0.5.1
+[0.5.0]: https://github.com/owncloud/notifications/compare/v0.4.1...v0.5.0
+[0.4.1]: https://github.com/owncloud/notifications/compare/v0.4.0...v0.4.1
