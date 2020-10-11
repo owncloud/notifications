@@ -14,6 +14,8 @@ OC.L10N.register(
     "Notify about all events" : "通知所有事件",
     "Choose an option" : "選擇一個選項",
     "Hello," : "嗨",
+    "See <a href=\"%s\">%s</a> on %s for more information" : "看<a href=\"%s\">%s</a>上%s了解更多信息",
+    "See %s on %s for more information" : "看%s上%s了解更多信息",
     "Mail Notifications" : "郵件通知",
     "You can choose to be notified about events via mail. Some events are informative, others require an action (like accept/decline). Select your preference below:" : "您可以選擇需要以郵件方式通知的事件類型。有些事件類型只提供資訊，有些則需要採取行動（如接受/拒絕）。在下面選擇您的偏好：",
     "It was not possible to get your session. Please, try reloading the page or logout and login again" : "無法進行連線，請嘗試重新整理頁面或重新登入。",
