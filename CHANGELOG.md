@@ -4,7 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
-## [0.5.1] - 2020-06-29
+## [Unreleased]
+
+## [0.5.2] - 2020-07-15
+
+### Fixed
+
+- Use language code to correctly translate mail body of notifications - [#322](https://github.com/owncloud/notifications/issues/322)
 
 ### Added
 
@@ -43,6 +49,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Move OCS calls to app framework - consumes less resources - [#98](https://github.com/owncloud/notifications/pull/98)
 - Don't use escaped message for browser notification - [#100](https://github.com/owncloud/notifications/pull/100)
 
-[0.5.1]: https://github.com/owncloud/notifications/compare/v0.5.0...v0.5.1
+[Unreleased]: https://github.com/owncloud/notifications/compare/v0.5.2...master
+[0.5.2]: https://github.com/owncloud/notifications/compare/v0.5.0...v0.5.2
 [0.5.0]: https://github.com/owncloud/notifications/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/owncloud/notifications/compare/v0.4.0...v0.4.1
