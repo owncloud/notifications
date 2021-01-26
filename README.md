@@ -6,8 +6,9 @@ Used for notifications of other apps ([announcementcenter](https://github.com/ow
 ## QA metrics on master branch:
 
 [![Build Status](https://drone.owncloud.com/api/badges/owncloud/notifications/status.svg?branch=master)](https://drone.owncloud.com/owncloud/notifications)
-[![codecov](https://codecov.io/gh/owncloud/notifications/branch/master/graph/badge.svg)](https://codecov.io/gh/owncloud/notifications)
-
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=owncloud_notifications&metric=alert_status)](https://sonarcloud.io/dashboard?id=owncloud_notifications)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=owncloud_notifications&metric=security_rating)](https://sonarcloud.io/dashboard?id=owncloud_notifications)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=owncloud_notifications&metric=coverage)](https://sonarcloud.io/dashboard?id=owncloud_notifications)
 
 ## Screenshots
 

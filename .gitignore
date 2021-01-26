@@ -67,3 +67,6 @@ build
 
 # SonarCloud scanner
 .scannerwork
+
+# Generated from .drone.star
+.drone.yml
