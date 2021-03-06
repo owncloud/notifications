@@ -6,7 +6,7 @@ Feature: send notifications using the occ command
   So that I can inform them about the necessary things
 
   Scenario: administrator should be able to send a notification with subject and message to a user
-    Given user "Alice" has been created with default attributes and skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files
     When the administrator sends following notifications using the occ command
       | subject       | message                                          | user  |
       | Quota updated | Congratulations your oC quota has been increased | Alice |
@@ -18,7 +18,7 @@ Feature: send notifications using the occ command
       | message | Congratulations your oC quota has been increased |
 
   Scenario: administrator should be able to send a notification with a link
-    Given user "Alice" has been created with default attributes and skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files
     When the administrator sends following notifications using the occ command
       | subject       | message                                          | user  | link                                                                      |
       | Quota updated | Congratulations your oC quota has been increased | Alice | https://owncloud.org/blog/about-activities-and-notifications-in-owncloud/ |
@@ -31,7 +31,7 @@ Feature: send notifications using the occ command
       | link    | https://owncloud.org/blog/about-activities-and-notifications-in-owncloud/ |
 
   Scenario: administrator should be able to send a notification with only the subject to a user
-    Given user "Alice" has been created with default attributes and skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files
     When the administrator sends following notifications using the occ command
       | subject       | user  |
       | Quota updated | Alice |
@@ -42,7 +42,7 @@ Feature: send notifications using the occ command
       | subject | Quota updated |
 
   Scenario: administrator should be able to send a notification with subject and message to a group
-    Given these users have been created with skeleton files:
+    Given these users have been created without skeleton files:
       | username |
       | Alice    |
       | Brian    |
@@ -59,7 +59,7 @@ Feature: send notifications using the occ command
     And user "Carol" should have 0 notification
 
   Scenario: administrator should be able to send a notification with subject and message to a group
-    Given user "Alice" has been created with default attributes and skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files
     And group "grp1" has been created
     And user "Alice" has been added to group "grp1"
     When the administrator sends following notifications using the occ command
@@ -73,7 +73,7 @@ Feature: send notifications using the occ command
       | message | Congratulations your oC quota has been increased |
 
   Scenario: administrator sends more than one notifications to a user
-    Given user "Alice" has been created with default attributes and skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files
     When the administrator sends following notifications using the occ command
       | subject           | message                                             | user  |
       | Quota updated     | Congratulations your oC quota has been increased    | Alice |
