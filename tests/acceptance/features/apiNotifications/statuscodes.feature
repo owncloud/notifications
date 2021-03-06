@@ -2,7 +2,7 @@
 Feature: statuscodes
 
   Background:
-    Given user "Alice" has been created with default attributes and skeleton files
+    Given user "Alice" has been created with default attributes and without skeleton files
     And as user "Alice"
     And using OCS API version "2"
 

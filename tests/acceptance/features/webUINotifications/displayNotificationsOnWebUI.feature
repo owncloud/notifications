@@ -6,7 +6,7 @@ Feature: display notifications on the webUI
   So that I can stay informed
 
   Background:
-    Given these users have been created with skeleton files:
+    Given these users have been created without skeleton files:
       | username |
       | Alice    |
     And the user has browsed to the login page
