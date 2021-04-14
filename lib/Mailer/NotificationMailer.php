@@ -26,6 +26,7 @@ use OCP\Notification\INotification;
 use OCP\Mail\IMailer;
 use OCP\Template;
 use OCA\Notifications\Configuration\OptionsStorage;
+use OCP\IURLGenerator;
 
 /**
  * The class will focus on sending notifications via email. In addition, some email-related
@@ -41,10 +42,14 @@ class NotificationMailer {
 	/** @var OptionsStorage */
 	private $optionsStorage;
 
-	public function __construct(IManager $manager, IMailer $mailer, OptionsStorage $optionsStorage) {
+	/** @var IURLGenerator */
+	private $urlGenerator;
+
+	public function __construct(IManager $manager, IMailer $mailer, OptionsStorage $optionsStorage, IURLGenerator $urlGenerator) {
 		$this->manager = $manager;
 		$this->mailer = $mailer;
 		$this->optionsStorage = $optionsStorage;
+		$this->urlGenerator = $urlGenerator;
 	}
 
 	/**
@@ -71,8 +76,13 @@ class NotificationMailer {
 		$emailMessage->setTo([$emailAddress]);
 
 		$notificationLink = $notification->getLink();
+		$components = \parse_url($notificationLink);
+		$linkIsAbsolute = \array_key_exists('host', $components);
+
 		if ($notificationLink === '') {
 			$notificationLink = $serverUrl;
+		} elseif ($linkIsAbsolute !== true) {
+			$notificationLink = $this->urlGenerator->getAbsoluteURL($components['path']);
 		}
 
 		$parsedSubject = $notification->getParsedSubject();
