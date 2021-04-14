@@ -33,7 +33,7 @@ class RepairNotifications extends Command {
 	/** @var IDBConnection */
 	protected $connection;
 
-	private static $availableSubjects = [
+	public static $availableSubjects = [
 		'relativeLinks'
 	];
 
@@ -75,7 +75,7 @@ class RepairNotifications extends Command {
 
 		if (!$result) {
 			$output->writeln('No notifications found to repair.');
-			return false;
+			return 0;
 		}
 
 		$output->writeln(\sprintf('%s notification(s) found to repair', \count($result)));
