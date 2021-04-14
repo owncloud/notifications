@@ -22,6 +22,7 @@
 namespace OCA\Notifications\Tests\Unit\Mailer;
 
 use OC\Mail\Mailer;
+use OCP\IURLGenerator;
 use OCP\Notification\IManager;
 use OCP\Notification\INotification;
 use OCP\L10N\IFactory;
@@ -36,10 +37,10 @@ class NotificationMailerTest extends \Test\TestCase {
 	private $mailer;
 	/** @var OptionsStorage */
 	private $optionsStorage;
-	/** @var IFactory */
-	private $l10nFactory;
 	/** @var NotificationMailer*/
 	private $notificationMailer;
+	/** @var IURLGenerator*/
+	private $urlGenerator;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -57,11 +58,11 @@ class NotificationMailerTest extends \Test\TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->l10nFactory = $this->getMockBuilder(IFactory::class)
+		$this->urlGenerator = $this->getMockBuilder(IURLGenerator::class)
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->notificationMailer = new NotificationMailer($this->manager, $this->mailer, $this->optionsStorage, $this->l10nFactory);
+		$this->notificationMailer = new NotificationMailer($this->manager, $this->mailer, $this->optionsStorage, $this->urlGenerator);
 	}
 
 	public function emailProvider() {
@@ -106,7 +107,6 @@ class NotificationMailerTest extends \Test\TestCase {
 				return \vsprintf($text, $params);
 			}));
 
-		$this->l10nFactory->method('get')->willReturn($mockedL10N);
 		$this->mailer->expects($this->once())->method('send');
 
 		$this->optionsStorage->method('getOptions')
@@ -144,7 +144,6 @@ class NotificationMailerTest extends \Test\TestCase {
 				return \vsprintf($text, $params);
 			}));
 
-		$this->l10nFactory->method('get')->willReturn($mockedL10N);
 		$this->mailer->expects($this->once())
 			->method('send')
 			->willReturn(['userTest1']);
