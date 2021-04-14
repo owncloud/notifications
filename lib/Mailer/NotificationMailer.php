@@ -82,7 +82,7 @@ class NotificationMailer {
 		if ($notificationLink === '') {
 			$notificationLink = $serverUrl;
 		} elseif ($linkIsAbsolute !== true) {
-			$notificationLink = $this->urlGenerator->getAbsoluteURL($components['path']);
+			$notificationLink = $this->urlGenerator->getAbsoluteURL($notificationLink);
 		}
 
 		$parsedSubject = $notification->getParsedSubject();

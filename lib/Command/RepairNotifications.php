@@ -1,6 +1,7 @@
 <?php
 /**
- * @author tbc
+ * @author Jannik Stehle <jstehle@owncloud.com>
+ * @author Jan Ackermann <jackermann@owncloud.com>
  *
  * @copyright Copyright (c) 2021, ownCloud GmbH
  * @license AGPL-3.0
