@@ -22,7 +22,7 @@
 
 namespace OCA\Notifications\Command;
 
-use OCP\IDBConnection;
+use OCA\Notifications\Handler;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,19 +30,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class RepairNotifications extends Command {
 
-	/** @var IDBConnection */
-	protected $connection;
+	/** @var Handler */
+	protected $handler;
 
 	public static $availableSubjects = [
 		'relativeLinks'
 	];
 
 	/**
-	 * @param IDBConnection $connection
+	 * @param Handler $handler
 	 */
-	public function __construct(IDBConnection $connection) {
+	public function __construct(Handler $handler) {
 		parent::__construct();
-		$this->connection = $connection;
+		$this->handler = $handler;
 	}
 
 	protected function configure() {
@@ -56,60 +56,19 @@ class RepairNotifications extends Command {
 	/**
 	 * @param InputInterface $input
 	 * @param OutputInterface $output
-	 * @return false|int
+	 * @return int
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$subject = $input->getArgument('subject');
 
 		if (!\in_array($subject, self::$availableSubjects)) {
-			throw new \LogicException('Invalid subject');
+			$output->writeln('Invalid subject');
+			return 1;
 		}
 
-		$sql = $this->connection->getQueryBuilder();
-		$sql->select(['notification_id', 'link', 'actions'])
-			->from('notifications')
-			->where($sql->expr()->like('link', $sql->createPositionalParameter('http%')))
-			->orWhere($sql->expr()->like('actions', $sql->createPositionalParameter('%"link":"http%')));
+		$updatedNotificationsCount = $this->handler->removeBaseUrlFromAbsoluteLinks();
 
-		$result = $sql->execute()->fetchAll();
-
-		if (!$result) {
-			$output->writeln('No notifications found to repair.');
-			return 0;
-		}
-
-		$output->writeln(\sprintf('%s notification(s) found to repair', \count($result)));
-
-		foreach ($result as $row) {
-			$output->writeln(\sprintf('Repairing notification with ID %s...', $row['notification_id']));
-
-			$sql = $this->connection->getQueryBuilder();
-			$sql->update('notifications')
-				->where($sql->expr()->eq('notification_id', $sql->createNamedParameter($row['notification_id'])));
-
-			$linkUrlComponents = \parse_url($row['link']);
-			if (\array_key_exists('scheme', $linkUrlComponents)) {
-				$newLink = \parse_url($row['link'], PHP_URL_PATH);
-				$sql->set('link', $sql->createNamedParameter($newLink));
-			}
-
-			if (\strpos($row['actions'], 'http') !== false) {
-				$actions = \json_decode($row['actions'], true);
-
-				foreach ($actions as &$action) {
-					$actionUrlComponents = \parse_url($action['link']);
-					if (\array_key_exists('scheme', $actionUrlComponents)) {
-						$action['link'] = \parse_url($action['link'], PHP_URL_PATH);
-					}
-				}
-
-				$sql->set('actions', $sql->createNamedParameter(\json_encode($actions)));
-			}
-
-			$sql->execute();
-		}
-
-		$output->writeln('Done');
+		$output->writeln("$updatedNotificationsCount notifications were updated");
 		return 0;
 	}
 }

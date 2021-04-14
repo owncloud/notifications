@@ -76,12 +76,11 @@ class NotificationMailer {
 		$emailMessage->setTo([$emailAddress]);
 
 		$notificationLink = $notification->getLink();
-		$components = \parse_url($notificationLink);
-		$linkIsAbsolute = \array_key_exists('host', $components);
+		$urlComponents = \parse_url($notificationLink);
 
 		if ($notificationLink === '') {
 			$notificationLink = $serverUrl;
-		} elseif ($linkIsAbsolute !== true) {
+		} elseif (!isset($urlComponents['host'])) {
 			$notificationLink = $this->urlGenerator->getAbsoluteURL($notificationLink);
 		}
 
