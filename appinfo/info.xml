@@ -24,6 +24,7 @@
 
 	<commands>
 		<command>OCA\Notifications\Command\Generate</command>
+		<command>OCA\Notifications\Command\RepairNotifications</command>
 	</commands>
 	<settings>
 		<personal>OCA\Notifications\Panels\Personal\NotificationsPanel</personal>

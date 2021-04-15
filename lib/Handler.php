@@ -310,4 +310,53 @@ class Handler {
 
 		return $notification;
 	}
+
+	/**
+	 * Remove the base url from absolute links in the database.
+	 * This affects the columns 'link' and 'action'.
+	 * e.g: http://owncloud.com/test -> /test
+	 *
+	 * @return int number of updated notifications
+	 */
+	public function removeBaseUrlFromAbsoluteLinks() {
+		$sql = $this->connection->getQueryBuilder();
+		$sql->select(['notification_id', 'link', 'actions'])
+			->from('notifications')
+			->where($sql->expr()->like('link', $sql->createPositionalParameter('http%')))
+			->orWhere($sql->expr()->like('actions', $sql->createPositionalParameter('%"link":"http%')));
+
+		$statement = $sql->execute();
+		$counter = 0;
+
+		while ($row = $statement->fetch()) {
+			$sql = $this->connection->getQueryBuilder();
+			$sql->update('notifications')
+				->where($sql->expr()->eq('notification_id', $sql->createNamedParameter($row['notification_id'])));
+
+			$linkUrlComponents = \parse_url($row['link']);
+			if (isset($linkUrlComponents['scheme'], $linkUrlComponents['path'])) {
+				$sql->set('link', $sql->createNamedParameter($linkUrlComponents['path']));
+			}
+
+			if (\strpos($row['actions'], 'http') !== false) {
+				$actions = \json_decode($row['actions'], true);
+
+				foreach ($actions as $index => $action) {
+					$actionUrlComponents = \parse_url($action['link']);
+					if (isset($actionUrlComponents['scheme'], $actionUrlComponents['path'])) {
+						$actions[$index]['link'] = $actionUrlComponents['path'];
+					}
+				}
+
+				$sql->set('actions', $sql->createNamedParameter(\json_encode($actions)));
+			}
+
+			$counter++;
+			$sql->execute();
+		}
+
+		$statement->closeCursor();
+
+		return $counter;
+	}
 }
