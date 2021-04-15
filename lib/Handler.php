@@ -334,7 +334,7 @@ class Handler {
 				->where($sql->expr()->eq('notification_id', $sql->createNamedParameter($row['notification_id'])));
 
 			$linkUrlComponents = \parse_url($row['link']);
-			if (isset($linkUrlComponents['scheme'])) {
+			if (isset($linkUrlComponents['scheme'], $linkUrlComponents['path'])) {
 				$sql->set('link', $sql->createNamedParameter($linkUrlComponents['path']));
 			}
 
@@ -343,7 +343,7 @@ class Handler {
 
 				foreach ($actions as $index => $action) {
 					$actionUrlComponents = \parse_url($action['link']);
-					if (isset($actionUrlComponents['scheme'])) {
+					if (isset($actionUrlComponents['scheme'], $actionUrlComponents['path'])) {
 						$actions[$index]['link'] = $actionUrlComponents['path'];
 					}
 				}
