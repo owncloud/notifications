@@ -335,8 +335,7 @@ class Handler {
 
 			$linkUrlComponents = \parse_url($row['link']);
 			if (isset($linkUrlComponents['scheme'])) {
-				$newLink = \parse_url($row['link'], PHP_URL_PATH);
-				$sql->set('link', $sql->createNamedParameter($newLink));
+				$sql->set('link', $sql->createNamedParameter($linkUrlComponents['path']));
 			}
 
 			if (\strpos($row['actions'], 'http') !== false) {
@@ -345,7 +344,7 @@ class Handler {
 				foreach ($actions as $index => $action) {
 					$actionUrlComponents = \parse_url($action['link']);
 					if (isset($actionUrlComponents['scheme'])) {
-						$actions[$index]['link'] = \parse_url($action['link'], PHP_URL_PATH);
+						$actions[$index]['link'] = $actionUrlComponents['path'];
 					}
 				}
 
