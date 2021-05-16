@@ -27,6 +27,8 @@ use OCP\Mail\IMailer;
 use OCP\Template;
 use OCA\Notifications\Configuration\OptionsStorage;
 use OCP\IURLGenerator;
+use OCP\Defaults;
+use OCP\Util;
 
 /**
  * The class will focus on sending notifications via email. In addition, some email-related
@@ -51,7 +53,22 @@ class NotificationMailer {
 		$this->optionsStorage = $optionsStorage;
 		$this->urlGenerator = $urlGenerator;
 	}
+	
+	protected function getSenderData($setting) {
+		if (empty($this->senderAddress)) {
+			$this->senderAddress = Util::getDefaultEmailAddress('no-reply');
+		}
+		if (empty($this->senderName)) {
+			$defaults = new Defaults();
+			$this->senderName = $defaults->getName();
+		}
 
+		if ($setting === 'email') {
+			return $this->senderAddress;
+		}
+		return $this->senderName;
+	}
+	
 	/**
 	 * Send a notification via email to the list of email addresses passed as parameter
 	 * @param INotification $notification the notification to be sent
@@ -74,6 +91,7 @@ class NotificationMailer {
 
 		$emailMessage = $this->mailer->createMessage();
 		$emailMessage->setTo([$emailAddress]);
+		$emailMessage->setFrom([$this->getSenderData('email') => $this->getSenderData('name')]);
 
 		$notificationLink = $notification->getLink();
 		$urlComponents = \parse_url($notificationLink);
