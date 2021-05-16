@@ -54,6 +54,11 @@ class NotificationMailer {
 		$this->urlGenerator = $urlGenerator;
 	}
 	
+	/**
+	 * Get the sender data
+	 * @param string $setting Either `email` or `name`
+	 * @return string
+	 */
 	protected function getSenderData($setting) {
 		if (empty($this->senderAddress)) {
 			$this->senderAddress = Util::getDefaultEmailAddress('no-reply');
