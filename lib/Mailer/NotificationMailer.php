@@ -46,6 +46,12 @@ class NotificationMailer {
 
 	/** @var IURLGenerator */
 	private $urlGenerator;
+	
+	/** @var string */
+	protected $senderAddress;
+
+	/** @var string */
+	protected $senderName;
 
 	public function __construct(IManager $manager, IMailer $mailer, OptionsStorage $optionsStorage, IURLGenerator $urlGenerator) {
 		$this->manager = $manager;
