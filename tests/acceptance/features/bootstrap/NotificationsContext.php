@@ -62,7 +62,8 @@ class NotificationsContext implements Context {
 		$bodyTable = new TableNode([['user', $user]]);
 		$this->ocsContext->userSendsHTTPMethodToOcsApiEndpointWithBody(
 			$user,
-			'POST', '/apps/testing/api/v1/notifications',
+			'POST',
+			'/apps/testing/api/v1/notifications',
 			$bodyTable,
 			null
 		);
@@ -80,7 +81,8 @@ class NotificationsContext implements Context {
 		$response = $this->featureContext->getResponse();
 		Assert::assertEquals(200, $response->getStatusCode());
 		Assert::assertEquals(
-			200, (int) $this->ocsContext->getOCSResponseStatusCode($response)
+			200,
+			(int) $this->ocsContext->getOCSResponseStatusCode($response)
 		);
 	}
 
@@ -128,7 +130,9 @@ class NotificationsContext implements Context {
 
 		$this->ocsContext->userSendsHTTPMethodToOcsApiEndpointWithBody(
 			$this->featureContext->getAdminUsername(),
-			'POST', '/apps/testing/api/v1/notifications', $formData
+			'POST',
+			'/apps/testing/api/v1/notifications',
+			$formData
 		);
 	}
 
@@ -145,7 +149,8 @@ class NotificationsContext implements Context {
 		$response = $this->featureContext->getResponse();
 		Assert::assertEquals(200, $response->getStatusCode());
 		Assert::assertEquals(
-			200, (int) $this->ocsContext->getOCSResponseStatusCode($response)
+			200,
+			(int) $this->ocsContext->getOCSResponseStatusCode($response)
 		);
 	}
 
@@ -235,26 +240,31 @@ class NotificationsContext implements Context {
 
 		$response = HttpRequestHelper::sendRequest(
 			$fullUrl,
-			"PATCH", $user, $this->featureContext->getUserPassword($user),
+			"PATCH",
+			$user,
+			$this->featureContext->getUserPassword($user),
 			['Content-Type' => 'application/json'],
 			'{"email_sending_option":"' . $setting . '"}'
 		);
 		$this->setCSRFDotDisabled($oldCSRFSetting);
 
 		Assert::assertEquals(
-			200, $response->getStatusCode(),
+			200,
+			$response->getStatusCode(),
 			"could not set notification option " . $response->getReasonPhrase()
 		);
 		$responseDecoded = \json_decode($response->getBody());
 		Assert::assertEquals(
-			$responseDecoded->data->options->id, $user,
+			$responseDecoded->data->options->id,
+			$user,
 			"Could not set notification option! " .
 			"'user' in the response is:'" .
 			$responseDecoded->data->options->id . "' " .
 			"but should be: '$user'"
 		);
 		Assert::assertEquals(
-			$responseDecoded->data->options->email_sending_option, $setting,
+			$responseDecoded->data->options->email_sending_option,
+			$setting,
 			"Could not set notification option! " .
 			"'email_sending_option' in the response is:'" .
 			$responseDecoded->data->options->email_sending_option . "' " .

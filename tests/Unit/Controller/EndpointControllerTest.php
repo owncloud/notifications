@@ -421,7 +421,8 @@ class EndpointControllerTest extends TestCase {
 			->method('actionToArray')
 			->willReturn('action');
 
-		$this->assertEquals([
+		$this->assertEquals(
+			[
 				'notification_id' => $id,
 				'app' => $app,
 				'user' => $user,
@@ -474,7 +475,8 @@ class EndpointControllerTest extends TestCase {
 			->method('isPrimary')
 			->willReturn($isPrimary);
 
-		$this->assertEquals([
+		$this->assertEquals(
+			[
 				'label' => $label,
 				'link' => $link,
 				'type' => $requestType,

@@ -62,23 +62,29 @@ class NotificationMailerAdapter {
 		$targetUser = $notification->getUser();
 
 		if (!$this->sender->willSendNotification($notification)) {
-			$this->logger->debug("notification $nObjectType#$nObjectId won't be sent to $targetUser via email: personal configuration for $targetUser prevents it",
-				['app' => $this->appName]);
+			$this->logger->debug(
+				"notification $nObjectType#$nObjectId won't be sent to $targetUser via email: personal configuration for $targetUser prevents it",
+				['app' => $this->appName]
+			);
 			return;
 		}
 
 		$userObject = $this->userManager->get($targetUser);
 
 		if ($userObject === null) {
-			$this->logger->warning("notification $nObjectType#$nObjectId can't be sent to $targetUser via email: the user is missing",
-				['app' => $this->appName]);
+			$this->logger->warning(
+				"notification $nObjectType#$nObjectId can't be sent to $targetUser via email: the user is missing",
+				['app' => $this->appName]
+			);
 			return;
 		}
 
 		$targetEmail = $userObject->getEMailAddress();
 		if ($targetEmail === null) {
-			$this->logger->warning("notification $nObjectType#$nObjectId can't be sent to $targetUser via email: email for the user isn't set",
-				['app' => $this->appName]);
+			$this->logger->warning(
+				"notification $nObjectType#$nObjectId can't be sent to $targetUser via email: email for the user isn't set",
+				['app' => $this->appName]
+			);
 			return;
 		}
 
