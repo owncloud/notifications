@@ -30,9 +30,9 @@ use OCP\IL10N;
 use OCA\Notifications\Configuration\OptionsStorage;
 
 class NotificationOptionsController extends Controller {
-	const ERROR_CODE_MISSING_USER_SESSION = 1;
-	const ERROR_CODE_OPTION_NOT_SUPPORTED = 2;
-	const ERROR_CODE_INCOMPLETE_DATA = 3;
+	public const ERROR_CODE_MISSING_USER_SESSION = 1;
+	public const ERROR_CODE_OPTION_NOT_SUPPORTED = 2;
+	public const ERROR_CODE_INCOMPLETE_DATA = 3;
 
 	/** @var IUserSession */
 	private $userSession;
