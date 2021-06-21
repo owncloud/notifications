@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Add command to repair notifications and properly handle mail sending … - [#333](https://github.com/owncloud/notifications/issues/333)
+- Add Mail sender name - [#338](https://github.com/owncloud/notifications/issues/338)
 
 ## [0.5.2] - 2020-07-15
 
