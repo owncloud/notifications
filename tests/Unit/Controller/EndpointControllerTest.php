@@ -23,6 +23,7 @@
 namespace OCA\Notifications\Tests\Unit\Controller;
 
 use OC\OCS\Result;
+use OC\URLGenerator;
 use OCA\Notifications\Controller\EndpointController;
 use OCA\Notifications\Tests\Unit\TestCase;
 use OCP\AppFramework\Http;
@@ -48,6 +49,9 @@ class EndpointControllerTest extends TestCase {
 
 	/** @var \OCP\IUser|\PHPUnit\Framework\MockObject\MockObject */
 	protected $user;
+
+	/** @var \OCP\IURLGenerator|\PHPUnit\Framework\MockObject\MockObject */
+	protected $urlGenerator;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -82,6 +86,11 @@ class EndpointControllerTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
+		/** @var \OCP\IURLGenerator|\PHPUnit\Framework\MockObject\MockObject */
+		$this->urlGenerator = $this->getMockBuilder('OCP\IURLGenerator')
+			->disableOriginalConstructor()
+			->getMock();
+
 		$this->session->expects($this->any())
 			->method('getUser')
 			->willReturn($this->user);
@@ -99,7 +108,8 @@ class EndpointControllerTest extends TestCase {
 				$this->handler,
 				$this->manager,
 				$this->config,
-				$this->session
+				$this->session,
+				$this->urlGenerator
 			);
 		} else {
 			return $this->getMockBuilder('OCA\Notifications\Controller\EndpointController')
@@ -109,7 +119,8 @@ class EndpointControllerTest extends TestCase {
 					$this->handler,
 					$this->manager,
 					$this->config,
-					$this->session
+					$this->session,
+					$this->urlGenerator
 				])
 				->setMethods($methods)
 				->getMock();
@@ -414,9 +425,14 @@ class EndpointControllerTest extends TestCase {
 			->method('getParsedActions')
 			->willReturn($actions);
 
+		$this->urlGenerator->expects($this->once())
+			->method('getAbsoluteUrl')
+			->willReturn($link);
+
 		$controller = $this->getController([
 			'actionToArray'
 		]);
+
 		$controller->expects($this->exactly(\sizeof($actions)))
 			->method('actionToArray')
 			->willReturn('action');
@@ -474,6 +490,10 @@ class EndpointControllerTest extends TestCase {
 		$action->expects($this->once())
 			->method('isPrimary')
 			->willReturn($isPrimary);
+
+		$this->urlGenerator->expects($this->once())
+			->method('getAbsoluteUrl')
+			->willReturn($link);
 
 		$this->assertEquals(
 			[

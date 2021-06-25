@@ -50,7 +50,8 @@ class Application extends App {
 				),
 				$server->getNotificationManager(),
 				$server->getConfig(),
-				$server->getUserSession()
+				$server->getUserSession(),
+				$server->getURLGenerator()
 			);
 		});
 
