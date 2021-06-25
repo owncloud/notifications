@@ -225,7 +225,7 @@ class EndpointController extends OCSController {
 	 * @param string $link
 	 * @return string
 	 */
-	public function getAbsoluteLink(string $link) {
+	protected function getAbsoluteLink(string $link) {
 		$urlComponents = \parse_url($link);
 
 		// Check if already absolute
