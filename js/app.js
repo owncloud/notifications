@@ -113,6 +113,9 @@
 						}
 					}));
 					self._removeNotification($notification.attr('data-id'));
+					if (data.ocs && data.ocs.data && data.ocs.data.redirectTo) {
+						window.location.href = data.ocs.data.redirectTo;
+					}
 				},
 				error: function() {
 					$notification.fadeIn(OC.menuSpeed);
