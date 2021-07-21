@@ -122,8 +122,8 @@ class NotificationsContext implements Context {
 		$rows = $formData->getRows();
 		$rows[] = ["user", $user];
 		for ($rowCount = 0; $rowCount < \count($rows); $rowCount ++) {
-			$rows[$rowCount] = $this->featureContext->substituteInLineCodes(
-				$rows[$rowCount]
+			$rows[$rowCount][1] = $this->featureContext->substituteInLineCodes(
+				$rows[$rowCount][1]
 			);
 		}
 		$formData = new TableNode($rows);
