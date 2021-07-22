@@ -202,11 +202,15 @@ class NotificationsContext implements Context {
 	 */
 	private function setCSRFDotDisabled($setting) {
 		$oldCSRFSetting = SetupHelper::runOcc(
-			['config:system:get', 'csrf.disabled']
+			['config:system:get', 'csrf.disabled'],
+			$this->featureContext->getStepLineRef()
 		)['stdOut'];
 
 		if ($setting === "") {
-			SetupHelper::runOcc(['config:system:delete', 'csrf.disabled']);
+			SetupHelper::runOcc(
+				['config:system:delete', 'csrf.disabled'],
+				$this->featureContext->getStepLineRef()
+			);
 		} elseif ($setting !== null) {
 			SetupHelper::runOcc(
 				[
@@ -216,7 +220,8 @@ class NotificationsContext implements Context {
 					'boolean',
 					'--value',
 					$setting
-				]
+				],
+				$this->featureContext->getStepLineRef()
 			);
 		}
 		return \trim($oldCSRFSetting);
@@ -240,6 +245,7 @@ class NotificationsContext implements Context {
 
 		$response = HttpRequestHelper::sendRequest(
 			$fullUrl,
+			$this->featureContext->getStepLineRef(),
 			"PATCH",
 			$user,
 			$this->featureContext->getUserPassword($user),
