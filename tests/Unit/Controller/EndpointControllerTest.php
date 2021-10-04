@@ -245,12 +245,13 @@ class EndpointControllerTest extends TestCase {
 		$this->manager->expects($this->once())
 			->method('createNotification')
 			->willReturn($filter);
-		$this->manager->expects($this->at(2))
+		$this->manager
+			->expects($this->any())
 			->method('prepare')
-			->willThrowException(new \InvalidArgumentException());
-		$this->manager->expects($this->at(3))
-			->method('prepare')
-			->willReturnArgument(0);
+			->willReturnOnConsecutiveCalls(
+				$this->throwException(new \InvalidArgumentException()),
+				$this->returnArgument(0),
+			);
 
 		$this->handler->expects($this->once())
 			->method('get')
