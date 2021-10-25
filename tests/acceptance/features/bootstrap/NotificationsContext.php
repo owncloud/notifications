@@ -23,7 +23,6 @@
 use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
-use GuzzleHttp\Client;
 use PHPUnit\Framework\Assert;
 use TestHelpers\HttpRequestHelper;
 use TestHelpers\SetupHelper;
@@ -58,7 +57,7 @@ class NotificationsContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function userIsSentANotification($user) {
+	public function userIsSentANotification(string $user):void {
 		$bodyTable = new TableNode([['user', $user]]);
 		$this->ocsContext->userSendsHTTPMethodToOcsApiEndpointWithBody(
 			$user,
@@ -76,7 +75,7 @@ class NotificationsContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function userHasBeenSentANotification($user) {
+	public function userHasBeenSentANotification(string $user):void {
 		$this->userIsSentANotification($user);
 		$response = $this->featureContext->getResponse();
 		Assert::assertEquals(200, $response->getStatusCode());
@@ -91,7 +90,7 @@ class NotificationsContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function theAdminIsSentANotification() {
+	public function theAdminIsSentANotification():void {
 		$this->userIsSentANotification(
 			$this->featureContext->getAdminUsername()
 		);
@@ -102,7 +101,7 @@ class NotificationsContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function theAdminHasBeenSentANotification() {
+	public function theAdminHasBeenSentANotification():void {
 		$this->userHasBeenSentANotification(
 			$this->featureContext->getAdminUsername()
 		);
@@ -116,7 +115,7 @@ class NotificationsContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function userIsSentANotificationWith($user, TableNode $formData) {
+	public function userIsSentANotificationWith(string $user, TableNode $formData):void {
 		//add username to the TableNode,
 		//so it does not need to be mentioned in the table
 		$rows = $formData->getRows();
@@ -144,7 +143,7 @@ class NotificationsContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function userHasBeenSentANotificationWith($user, TableNode $formData) {
+	public function userHasBeenSentANotificationWith(string $user, TableNode $formData):void {
 		$this->userIsSentANotificationWith($user, $formData);
 		$response = $this->featureContext->getResponse();
 		Assert::assertEquals(200, $response->getStatusCode());
@@ -161,7 +160,7 @@ class NotificationsContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function theAdminIsSentANotificationWith(TableNode $formData) {
+	public function theAdminIsSentANotificationWith(TableNode $formData):void {
 		$this->userIsSentANotificationWith(
 			$this->featureContext->getAdminUsername(),
 			$formData
@@ -175,7 +174,7 @@ class NotificationsContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function theAdminHasBeenSentANotificationWith(TableNode $formData) {
+	public function theAdminHasBeenSentANotificationWith(TableNode $formData):void {
 		$this->userHasBeenSentANotificationWith(
 			$this->featureContext->getAdminUsername(),
 			$formData
@@ -188,7 +187,7 @@ class NotificationsContext implements Context {
 	 * @throws Exception
 	 * @return string the previous setting of csrf.disabled
 	 */
-	private function disableCSRF() {
+	private function disableCSRF():string {
 		return $this->setCSRFDotDisabled('true');
 	}
 
@@ -200,7 +199,7 @@ class NotificationsContext implements Context {
 	 * @throws Exception
 	 * @return string the previous setting of csrf.disabled
 	 */
-	private function setCSRFDotDisabled($setting) {
+	private function setCSRFDotDisabled(string $setting):string {
 		$oldCSRFSetting = SetupHelper::runOcc(
 			['config:system:get', 'csrf.disabled'],
 			$this->featureContext->getStepLineRef()
@@ -236,7 +235,7 @@ class NotificationsContext implements Context {
 	 * @throws Exception
 	 * @return void
 	 */
-	public function userSetsEmailNotificationOption($user, $setting) {
+	public function userSetsEmailNotificationOption(string $user, string $setting):void {
 		$oldCSRFSetting = $this->disableCSRF();
 
 		$fullUrl = $this->featureContext->getBaseUrl() .
@@ -286,7 +285,7 @@ class NotificationsContext implements Context {
 	 * @throws Exception
 	 * @return void
 	 */
-	public function theAdminSetsEmailNotificationOption($setting) {
+	public function theAdminSetsEmailNotificationOption(string $setting):void {
 		$this->userSetsEmailNotificationOption(
 			$this->featureContext->getAdminUsername(),
 			$setting
@@ -301,7 +300,7 @@ class NotificationsContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function deleteNotification($user, $firstOrLast) {
+	public function deleteNotification(string $user, string $firstOrLast):void {
 		Assert::assertNotEmpty(
 			$this->notificationsCoreContext->getNotificationIds()
 		);
@@ -331,7 +330,7 @@ class NotificationsContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function theAdminDeletesNotification($firstOrLast) {
+	public function theAdminDeletesNotification(string $firstOrLast):void {
 		$this->deleteNotification(
 			$this->featureContext->getAdminUsername(),
 			$firstOrLast
@@ -347,7 +346,7 @@ class NotificationsContext implements Context {
 	 */
 	public function theAdministratorSendsFollowingNotificationsUsingTheOccCommand(
 		TableNode $notificationContent
-	) {
+	):void {
 		foreach ($notificationContent as $content) {
 			$cmd = "notifications:generate";
 			if (\array_key_exists("subject", $content)) {
@@ -378,7 +377,7 @@ class NotificationsContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function setUpScenario(BeforeScenarioScope $scope) {
+	public function setUpScenario(BeforeScenarioScope $scope):void {
 		// Get the environment
 		$environment = $scope->getEnvironment();
 		// Get all the contexts you need in this context
