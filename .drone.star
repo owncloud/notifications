@@ -60,7 +60,6 @@ config = {
             "databases": [
                 "mysql:8.0",
                 "postgres:9.4",
-                "oracle",
             ],
             # Note: this is required because tests/acceptance/run.sh disables notifications by default
             "extraEnvironment": {
