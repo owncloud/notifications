@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author Joas Schilling <nickvergessen@owncloud.com>
  * @author Thomas Müller <thomas.mueller@tmit.eu>
@@ -258,7 +258,7 @@ class NotificationsContext implements Context {
 			$response->getStatusCode(),
 			"could not set notification option " . $response->getReasonPhrase()
 		);
-		$responseDecoded = \json_decode($response->getBody());
+		$responseDecoded = \json_decode($response->getBody()->getContents());
 		Assert::assertEquals(
 			$responseDecoded->data->options->id,
 			$user,
@@ -299,6 +299,7 @@ class NotificationsContext implements Context {
 	 * @param string $firstOrLast
 	 *
 	 * @return void
+	 * @throws Exception
 	 */
 	public function deleteNotification(string $user, string $firstOrLast):void {
 		Assert::assertNotEmpty(
@@ -306,13 +307,16 @@ class NotificationsContext implements Context {
 		);
 		$lastNotificationIds
 			= $this->notificationsCoreContext->getLastNotificationIds();
+		if (empty($lastNotificationIds)) {
+			throw new Exception("Could not delete notifications, notifications list is empty");
+		}
 		if ($firstOrLast === 'first') {
 			$this->notificationsCoreContext->setDeletedNotification(
-				\end($lastNotificationIds)
+				(int)end($lastNotificationIds)
 			);
 		} else {
 			$this->notificationsCoreContext->setDeletedNotification(
-				\reset($lastNotificationIds)
+				(int)reset($lastNotificationIds)
 			);
 		}
 		$this->ocsContext->userSendsToOcsApiEndpoint(
