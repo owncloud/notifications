@@ -27,6 +27,12 @@ use OCP\Notification\IManager;
 use OCP\Notification\INotification;
 
 class Handler {
+	/**
+	 * Used in fetchDescendentList and fetchAscendentList method to limit the number of results
+	 * Intended to be used as default value, but a larger value can be set (no enforcement)
+	 */
+	const FETCH_DEFAULT_LIMIT = 20;
+
 	/** @var IDBConnection */
 	protected $connection;
 
@@ -171,6 +177,116 @@ class Handler {
 		$statement->closeCursor();
 
 		return $notifications;
+	}
+
+	/**
+	 * Fetch a list of notifications starting from notification id $id up to $limit number of
+	 * notifications. If id = null, we'll start from the newest id available. If there is a
+	 * notification matching the id, it will be ignored and won't be returned
+	 * @param string $user the target user for the notifications
+	 * @param int|null $id the starting notification id (it won't be returned)
+	 * @param int $limit the maximum number of notifications that will be fetched
+	 * @param callable|null $callable the condition that the notification should match to be part
+	 * of the result. The callable will be called with a INotification object as parameter such as
+	 * "$callable(INotification $notification)" and must return an INotification object if such
+	 * notification should be part of the result or null otherwise
+	 * @return array [notification_id => INotification]
+	 */
+	public function fetchDescendentList($user, $id = null, $limit = self::FETCH_DEFAULT_LIMIT, $callable = null) {
+		$sql = $this->connection->getQueryBuilder();
+		$sql->select('*')
+			->from('notifications')
+			->orderBy('notification_id', 'DESC');
+
+		$sql->where($sql->expr()->eq('user', $sql->createNamedParameter($user)));
+		if ($id !== null) {
+			$sql->andWhere($sql->expr()->lt('notification_id', $sql->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+		}
+
+		$statement = $sql->execute();
+
+		$notifications = [];
+		$numberOfNotifications = 0;
+		while (($row = $statement->fetch()) && $numberOfNotifications < $limit) {
+			$notification = $this->notificationFromRow($row);
+			$processedNotification = $this->processByCallback($notification, $callable);
+			if ($processedNotification !== null) {
+				$notifications[(int) $row['notification_id']] = $processedNotification;
+				$numberOfNotifications++;
+			}
+		}
+		$statement->closeCursor();
+
+		return $notifications;
+	}
+
+	/**
+	 * Fetch a list of notifications starting from notification id $id up to $limit number of
+	 * notifications. If id = null, we'll start from the oldest id available. If there is a
+	 * notification matching the id, it will be ignored and won't be returned
+	 * @param string $user the target user for the notifications
+	 * @param int|null $id the starting notification id (it won't be returned)
+	 * @param int $limit the maximum number of notifications that will be fetched
+	 * @param callable|null $callable the condition that the notification should match to be part
+	 * of the result. The callable will be called with a INotification object as parameter such as
+	 * "$callable(INotification $notification)" and must return an INotification object if such
+	 * notification should be part of the result or null otherwise
+	 * @return array [notification_id => INotification]
+	 */
+	public function fetchAscendentList($user, $id = null, $limit = self::FETCH_DEFAULT_LIMIT, $callable = null) {
+		$sql = $this->connection->getQueryBuilder();
+		$sql->select('*')
+			->from('notifications')
+			->orderBy('notification_id', 'ASC');
+
+		$sql->where($sql->expr()->eq('user', $sql->createNamedParameter($user)));
+		if ($id !== null) {
+			$sql->andWhere($sql->expr()->gt('notification_id', $sql->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+		}
+
+		$statement = $sql->execute();
+
+		$notifications = [];
+		$numberOfNotifications = 0;
+		while (($row = $statement->fetch()) && $numberOfNotifications < $limit) {
+			$notification = $this->notificationFromRow($row);
+			$processedNotification = $this->processByCallback($notification, $callable);
+			if ($processedNotification !== null) {
+				$notifications[(int) $row['notification_id']] = $processedNotification;
+				$numberOfNotifications++;
+			}
+		}
+		$statement->closeCursor();
+
+		return $notifications;
+	}
+
+	/**
+	 * Get the maximum notification id available for the user
+	 * @param string $user the user to be filtered with
+	 * @return int|null the maximum notification id for the user or null if the user doesn't have
+	 * any notification
+	 */
+	public function getMaxNotificationId($user) {
+		$sql = $this->connection->getQueryBuilder();
+		$sql->select($sql->createFunction('max(`notification_id`) as `max_id`'))
+			->from('notifications')
+			->where($sql->expr()->eq('user', $sql->createNamedParameter($user)));
+
+		$statement = $sql->execute();
+		$row = $statement->fetch();
+		$maxId = $row['max_id'];
+		$statement->closeCursor();
+
+		return $maxId;
+	}
+
+	private function processByCallback(INotification $notification, $callable = null) {
+		if (is_callable($callable)) {
+			return $callable($notification);
+		} else {
+			return $notification;
+		}
 	}
 
 	/**

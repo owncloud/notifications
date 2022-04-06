@@ -26,6 +26,14 @@
 	font-size: 16px;
 }
 
+.notification-container .notification-controls {
+	text-align: center;
+}
+
+.notification-container .notification-controls button {
+	display: inline;
+}
+
 /* Fill width on mobile */
 @media (max-width: 500px) {
 	.notification-container {
