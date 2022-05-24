@@ -17,4 +17,4 @@ OC.L10N.register(
     "It was not possible to get your session. Please, try reloading the page or logout and login again" : "Não foi possível obter a sua sessão. Por favor tente recarregar a página ou saia e entre novamente",
     "To be able to receive mail notifications it is required to specify an email address for your account." : "Para pode receber notificações por email é requerido que especifique um endereço e email para a sua conta."
 },
-"nplurals=2; plural=(n != 1);");
+"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

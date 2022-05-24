@@ -18,5 +18,5 @@
     "You can choose to be notified about events via mail. Some events are informative, others require an action (like accept/decline). Select your preference below:" : "Você pode escolher ser notificado sobre eventos por correio. Alguns eventos são informativos, outros requerem uma ação (como aceitar / recusar). Selecione sua preferência abaixo:",
     "It was not possible to get your session. Please, try reloading the page or logout and login again" : "Não foi possível obter sua sessão. Por favor, tente recarregar a página ou sair e faça o login novamente",
     "To be able to receive mail notifications it is required to specify an email address for your account." : "Para poder receber notificações por correio, é necessário especificar um endereço de e-mail para sua conta."
-},"pluralForm" :"nplurals=2; plural=(n > 1);"
+},"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
