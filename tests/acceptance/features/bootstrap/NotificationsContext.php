@@ -368,8 +368,10 @@ class NotificationsContext implements Context {
 			if (\array_key_exists("link", $content)) {
 				$cmd = $cmd . " -l {$content['link']}";
 			}
-			$this->featureContext->runOcc(
-				[$cmd]
+			$this->featureContext->setOccLastCode(
+				$this->featureContext->runOcc(
+					[$cmd]
+				)
 			);
 		}
 	}
