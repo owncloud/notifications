@@ -5,6 +5,7 @@ Feature: notifications-content
     Given user "Alice" has been created with default attributes and without skeleton files
     And using OCS API version "2"
 
+
   Scenario: Create notification
     When user "Alice" is sent a notification with
       | app         | notificationsacceptancetesting                                            |
@@ -24,6 +25,7 @@ Feature: notifications-content
       | message     | About Activities and Notifications in ownCloud                            |
       | object_type | blog                                                                      |
       | object_id   | 9483                                                                      |
+
 
   Scenario: Create different notification
     When user "Alice" is sent a notification with
