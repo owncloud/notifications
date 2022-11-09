@@ -9,6 +9,7 @@ Feature: display notifications on the webUI
     Given the administrator has logged in using the webUI
     And using OCS API version "2"
 
+
   Scenario: Create notifications
     When the administrator is sent a notification with
       | app         | notificationsacceptancetesting |
@@ -30,6 +31,7 @@ Feature: display notifications on the webUI
       | title              | link                      | message                   | user  |
       | Acceptance Testing | https://owncloud.org/blog | Notifications in ownCloud | Alice |
       | UI tests           | http://owncloud.org/      | second notification       | Alice |
+
 
   Scenario: follow notifications link
     When the administrator is sent a notification with

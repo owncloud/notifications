@@ -5,6 +5,7 @@ Feature: notifications-content
     Given user "Alice" has been created with default attributes and without skeleton files
     And using OCS API version "2"
 
+
   Scenario: Create notification
     When user "Alice" sets the email notification option to "always" using the API
     And user "Alice" is sent a notification with
