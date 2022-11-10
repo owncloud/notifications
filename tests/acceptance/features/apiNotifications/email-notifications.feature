@@ -1,4 +1,4 @@
-@api @mailhog
+@api @email
 Feature: notifications-content
 
   Background:
