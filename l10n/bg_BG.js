@@ -17,7 +17,7 @@ OC.L10N.register(
     "See <a href=\"%s\">%s</a> on %s for more information" : "Вижте <a href=\"%s\">%s</a> на %sза повече информация",
     "See %s on %s for more information" : "Вижте %s на %s за повече информация",
     "Mail Notifications" : "Известия по имейл",
-    "You can choose to be notified about events via mail. Some events are informative, others require an action (like accept/decline). Select your preference below:" : "Може да изберете да бъдете известени за събития по имейл. Някои известия са информативни, други изискват някакво действие (като приемане/отказ). Изберете вашите предпочитания.",
+    "You can choose to be notified about events via mail. Some events are informative, others require an action (like accept/decline). Select your preference below:" : "Може да изберете да получавате известия за събития по имейл. Някои от тях са информативни, други изискват някакво действие (като приемане/отказ). Изберете според вашите предпочитания.",
     "It was not possible to get your session. Please, try reloading the page or logout and login again" : "Невъзможно е да се осъществи сесията ви. Моля, опитайте да презаредите страницата или да излезете и да влезете отново",
     "To be able to receive mail notifications it is required to specify an email address for your account." : "За да можете да получавате известия за поща, е необходимо да посочите имейл адрес във вашия профил."
 },
