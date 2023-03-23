@@ -2,6 +2,7 @@ OC.L10N.register(
     "notifications",
     {
     "Notifications" : "알림",
+    "No notifications" : "알림 없음",
     "Dismiss" : "닫기",
     "Admin notifications" : "관리자 알림",
     "Unknown user session. It is not possible to set the option" : "알 수 없는 사용자 세션입니다. 설정을 변경할 수 없습니다.",
