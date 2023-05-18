@@ -58,7 +58,7 @@ class RepairNotifications extends Command {
 	 * @param OutputInterface $output
 	 * @return int
 	 */
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$subject = $input->getArgument('subject');
 
 		if (!\in_array($subject, self::$availableSubjects)) {
