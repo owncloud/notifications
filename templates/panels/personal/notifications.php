@@ -6,8 +6,8 @@
 	<select id="email_sending_option" name="email_sending_option">
 		<?php foreach ($_['possibleOptions'] as $possibleValue => $data): ?>
 		<option value="<?php p($possibleValue) ?>" <?php if ($data['selected']) {
-	echo 'selected="selected"';
-} ?>><?php p($data['visibleText']); ?></option>
+			echo 'selected="selected"';
+		} ?>><?php p($data['visibleText']); ?></option>
 		<?php endforeach; ?>
 	</select>
 	<span class="msg"></span>
