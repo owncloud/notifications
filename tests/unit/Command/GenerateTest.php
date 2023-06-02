@@ -32,7 +32,6 @@ use OCP\Notification\INotification;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class GenerateTest extends TestCase {
-
 	/** @var IURLGenerator | \PHPUnit\Framework\MockObject\MockObject */
 	protected $urlGenerator;
 	/** @var IManager | \PHPUnit\Framework\MockObject\MockObject */

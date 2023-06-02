@@ -33,7 +33,6 @@ require_once 'bootstrap.php';
  * Defines application features from the specific context.
  */
 class NotificationsContext implements Context {
-
 	/**
 	 * @var FeatureContext
 	 */

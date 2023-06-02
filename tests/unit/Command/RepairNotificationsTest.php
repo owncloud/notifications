@@ -29,7 +29,6 @@ use OCA\Notifications\Tests\Unit\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class RepairNotificationsTest extends TestCase {
-
 	/** @var Handler | \PHPUnit\Framework\MockObject\MockObject */
 	protected $handler;
 	/** @var Generate */
