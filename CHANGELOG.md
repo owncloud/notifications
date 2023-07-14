@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - [#376](https://github.com/owncloud/notifications/pull/376) -  Always return an int from Symfony Command execute method #376 
+- Minimum core version 10.11, minimum php version 7.4
 
 
 ## [0.5.4] - 2021-06-30

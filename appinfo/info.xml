@@ -31,7 +31,8 @@
 	</settings>
 
 	<dependencies>
-		<owncloud min-version="10.2" max-version="11" />
+                <owncloud min-version="10.11" max-version="10" />
+                <php min-version="7.4" />
 	</dependencies>
 	<use-migrations>true</use-migrations>
 </info>
