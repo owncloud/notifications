@@ -12,7 +12,7 @@ class Version20180119080933 implements ISchemaMigration {
 	 */
 	public function changeSchema(Schema $schema, array $options) {
 		$prefix = $options['tablePrefix'];
-		$table = $schema->getTable("${prefix}notifications");
+		$table = $schema->getTable("{$prefix}notifications");
 		$column = $table->getColumn('message');
 		$column->setNotnull(false);
 		$column = $table->getColumn('link');
