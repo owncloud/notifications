@@ -1,0 +1,24 @@
+OC.L10N.register(
+    "notifications",
+    {
+    "Notifications" : "ئۇقتۇرۇشلار",
+    "No notifications" : "ئەسكەرتىش يوق",
+    "Dismiss" : "تاشلىۋەت",
+    "Admin notifications" : "باشقۇرغۇچى ئۇقتۇرۇشى",
+    "Unknown user session. It is not possible to set the option" : "يوچۇن ئىشلەتكۈچى ئەڭگىمە. تاللانمىنى بەلگىلىگىلى بولمىدى",
+    "Option not supported" : "تاللانمىنى قوللىمايدۇ",
+    "Saved" : "ساقلاندى",
+    "Incomplete data" : "چالا سانلىق-مەلۇمات",
+    "Do not notify via mail" : "خەتتە خەۋەر قىلمىسۇن",
+    "Notify only when an action is required" : "پەقەت مەشغۇلات زۆرۈر بولغاندىلا ئۇقتۇرۇش قىلسۇن",
+    "Notify about all events" : "بارلىق ئىشلارنى ئۇقتۇرۇش قىلىش",
+    "Choose an option" : "تاللانما تاللا",
+    "Hello," : "سالام،",
+    "See <a href=\"%s\">%s</a> on %s for more information" : "%s نىڭ تېخىمۇ كۆپ ئۇچۇرى ئۈچۈن <a href=\"%s\">%s</a> نى كۆرۈڭ",
+    "See %s on %s for more information" : "%s نىڭ تېخىمۇ كۆپ ئۇچۇرى ئۈچۈن %s نى كۆرۈڭ",
+    "Mail Notifications" : "ئېلخەت ئۇقتۇرۇشى",
+    "You can choose to be notified about events via mail. Some events are informative, others require an action (like accept/decline). Select your preference below:" : "سىز ھادىسىلەرنى ئېلىخەت ئارقىلىق ئۇقتۇرۇشنى تاللىيالايسىز. بەزى ھادىسىلەر بولسا مەلۇم قىلارلىق، بەزىلىرى بولسا مەشخۇلات تەلەپ قىلىدۇ (مەسىلەن قۇبۇل/رەت قىلىش). مايىللىقىڭىزنى تۆۋەندىن تاللاڭ:",
+    "It was not possible to get your session. Please, try reloading the page or logout and login again" : "ئەڭگىمەگە ئېرىشىش مۇمكىن ئەمەس. بەتنى قايتا ئوقۇپ ئاندىن قايتا سىناڭ ياكى قايتا كىرىڭ.",
+    "To be able to receive mail notifications it is required to specify an email address for your account." : "ئېلخەت ئۇقتۇرۇشىنى تاپشۇرۇش ئۈچۈن ھېساباتىڭىزغا بىر ئېلىخەت ئادىرىسنى بەلگىلىشىڭىز تەلەپ قىلىنىدۇ."
+},
+"nplurals=2; plural=(n != 1);");
