@@ -21,4 +21,4 @@ OC.L10N.register(
     "It was not possible to get your session. Please, try reloading the page or logout and login again" : "לא הייתה אפשרות לקבל את ההפעלה שלך. נא לנסות לטעון את העמוד מחדש או לצאת ולהיכנס שוב.",
     "To be able to receive mail notifications it is required to specify an email address for your account." : "כדי לקבל הודעות דוא״ל יש לציין כתובת דוא״ל לחשבון שלך."
 },
-"nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");
+"nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");
