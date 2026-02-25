@@ -3,6 +3,7 @@ namespace OCA\notifications\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use OCP\Migration\ISchemaMigration;
 
 /**
@@ -15,6 +16,6 @@ class Version20170801152524 implements ISchemaMigration {
 		if ($table->hasColumn('icon')) {
 			return;
 		}
-		$table->addColumn('icon', Type::STRING, ['length' => 4000, 'notNull' => false]);
+		$table->addColumn('icon', Types::STRING, ['length' => 4000, 'notNull' => false]);
 	}
 }
