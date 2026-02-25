@@ -68,10 +68,8 @@ class Handler {
 		$this->sqlWhere($sql, $notification);
 
 		$statement = $sql->execute();
-		/* @phan-suppress-next-line PhanDeprecatedFunction */
-		$count = (int) $statement->fetchColumn();
-		/* @phan-suppress-next-line PhanDeprecatedFunction */
-		$statement->closeCursor();
+		$count = (int) $statement->fetchOne();
+		$statement->free();
 
 		return $count;
 	}
@@ -135,12 +133,10 @@ class Handler {
 		$statement = $sql->execute();
 
 		$notification = null;
-		/* @phan-suppress-next-line PhanDeprecatedFunction */
-		if ($row = $statement->fetch()) {
+		if ($row = $statement->fetchAssociative()) {
 			$notification = $this->notificationFromRow($row);
 		}
-		/* @phan-suppress-next-line PhanDeprecatedFunction */
-		$statement->closeCursor();
+		$statement->free();
 
 		return $notification;
 	}
@@ -163,12 +159,11 @@ class Handler {
 		$statement = $sql->execute();
 
 		$notifications = [];
-		/* @phan-suppress-next-line PhanDeprecatedFunction */
-		while ($row = $statement->fetch()) {
+		while ($row = $statement->fetchAssociative()) {
 			$notifications[(int) $row['notification_id']] = $this->notificationFromRow($row);
 		}
-		/* @phan-suppress-next-line PhanDeprecatedFunction */
-		$statement->closeCursor();
+
+		$statement->free();
 
 		return $notifications;
 	}
@@ -334,8 +329,7 @@ class Handler {
 		$statement = $sql->execute();
 		$counter = 0;
 
-		/* @phan-suppress-next-line PhanDeprecatedFunction */
-		while ($row = $statement->fetch()) {
+		while ($row = $statement->fetchAssociative()) {
 			$sql = $this->connection->getQueryBuilder();
 			$sql->update('notifications')
 				->where($sql->expr()->eq('notification_id', $sql->createNamedParameter($row['notification_id'])));
@@ -362,8 +356,7 @@ class Handler {
 			$sql->execute();
 		}
 
-		/* @phan-suppress-next-line PhanDeprecatedFunction */
-		$statement->closeCursor();
+		$statement->free();
 
 		return $counter;
 	}

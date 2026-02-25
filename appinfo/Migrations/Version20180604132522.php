@@ -3,6 +3,7 @@ namespace OCA\notifications\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use OCP\Migration\ISchemaMigration;
 
 /**
@@ -14,8 +15,8 @@ class Version20180604132522 implements ISchemaMigration {
 		$prefix = $options['tablePrefix'];
 		$table = $schema->getTable("{$prefix}notifications");
 		$column = $table->getColumn('object_id');
-		if ($column->getType() === Type::getType(Type::INTEGER)) {
-			$column->setType(Type::getType(Type::STRING));
+		if ($column->getType() === Type::getType(Types::INTEGER)) {
+			$column->setType(Type::getType(Types::STRING));
 		}
 	}
 }

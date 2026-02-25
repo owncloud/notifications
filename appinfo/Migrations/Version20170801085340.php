@@ -4,6 +4,7 @@ namespace OCA\notifications\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use OCP\Migration\ISchemaMigration;
 
 class Version20170801085340 implements ISchemaMigration {
@@ -14,19 +15,19 @@ class Version20170801085340 implements ISchemaMigration {
 		}
 
 		$table = $schema->createTable("{$prefix}notifications");
-		$table->addColumn('notification_id', Type::INTEGER, ['autoincrement' => true]);
-		$table->addColumn('app', Type::STRING, ['length' => 32]);
-		$table->addColumn('user', Type::STRING, ['length' => 64]);
-		$table->addColumn('timestamp', Type::INTEGER, ['default' => 0]);
-		$table->addColumn('object_type', Type::STRING, ['length' => 64]);
-		$table->addColumn('object_id', Type::STRING, ['length' => 64]);
-		$table->addColumn('subject', Type::STRING, ['length' => 64]);
-		$table->addColumn('subject_parameters', Type::TEXT, ['notNull' => false]);
-		$table->addColumn('message', Type::STRING, ['length' => 64]);
-		$table->addColumn('message_parameters', Type::TEXT, ['notNull' => false]);
-		$table->addColumn('link', Type::STRING, ['length' => 4000]);
-		$table->addColumn('actions', Type::TEXT, ['notNull' => false]);
-		$table->addColumn('icon', Type::STRING, ['length' => 4000, 'notNull' => false]);
+		$table->addColumn('notification_id', Types::INTEGER, ['autoincrement' => true]);
+		$table->addColumn('app', Types::STRING, ['length' => 32]);
+		$table->addColumn('user', Types::STRING, ['length' => 64]);
+		$table->addColumn('timestamp', Types::INTEGER, ['default' => 0]);
+		$table->addColumn('object_type', Types::STRING, ['length' => 64]);
+		$table->addColumn('object_id', Types::STRING, ['length' => 64]);
+		$table->addColumn('subject', Types::STRING, ['length' => 64]);
+		$table->addColumn('subject_parameters', Types::TEXT, ['notNull' => false]);
+		$table->addColumn('message', Types::STRING, ['length' => 64]);
+		$table->addColumn('message_parameters', Types::TEXT, ['notNull' => false]);
+		$table->addColumn('link', Types::STRING, ['length' => 4000]);
+		$table->addColumn('actions', Types::TEXT, ['notNull' => false]);
+		$table->addColumn('icon', Types::STRING, ['length' => 4000, 'notNull' => false]);
 
 		$table->setPrimaryKey(['notification_id']);
 		$table->addIndex(['app']);
