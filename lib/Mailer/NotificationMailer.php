@@ -104,7 +104,7 @@ class NotificationMailer {
 		$emailMessage->setTo([$emailAddress]);
 		$emailMessage->setFrom([$this->getSenderData('email') => $this->getSenderData('name')]);
 
-		$notificationLink = $notification->getLink();
+		$notificationLink = $notification->getLink() ?? '';
 		$urlComponents = \parse_url($notificationLink);
 
 		if ($notificationLink === '') {
@@ -138,7 +138,7 @@ class NotificationMailer {
 	 * @param string $email the email to be validated
 	 * @return bool true if the email is valid, false otherwise
 	 */
-	public function validateEmail($email) {
+	public function validateEmail(string $email) {
 		return $this->mailer->validateMailAddress($email);
 	}
 
