@@ -134,6 +134,7 @@ class NotificationMailerTest extends \Test\TestCase {
 		$mockedNotification->method('getObjectId')->willReturn('202');
 		$mockedNotification->method('getParsedSubject')->willReturn('This is a parsed subject');
 		$mockedNotification->method('getParsedMessage')->willReturn('Parsed message is this');
+		$mockedNotification->method('getLink')->willReturn('');
 
 		$this->manager->method('prepare')->willReturn($mockedNotification);
 

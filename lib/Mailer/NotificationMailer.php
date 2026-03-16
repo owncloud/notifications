@@ -104,7 +104,7 @@ class NotificationMailer {
 		$emailMessage->setTo([$emailAddress]);
 		$emailMessage->setFrom([$this->getSenderData('email') => $this->getSenderData('name')]);
 
-		$notificationLink = $notification->getLink() ?? '';
+		$notificationLink = $notification->getLink();
 		$urlComponents = \parse_url($notificationLink);
 
 		if ($notificationLink === '') {
