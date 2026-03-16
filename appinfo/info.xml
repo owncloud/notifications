@@ -10,7 +10,7 @@
 
 	<licence>AGPL</licence>
 	<author>Joas Schilling, Thomas Müller</author>
-	<version>0.6.0</version>
+	<version>0.7.0</version>
 
 	<types>
 		<logging/>
@@ -31,7 +31,8 @@
 	</settings>
 
 	<dependencies>
-		<owncloud min-version="10.2" max-version="11" />
+		<owncloud min-version="11" max-version="11" />
+		<php min-version="8.3" />
 	</dependencies>
 	<use-migrations>true</use-migrations>
 </info>
