@@ -72,7 +72,6 @@ class NotificationMailerTest extends \Test\TestCase {
 			['oöGm41l@test.com'],
 			['@b.test.com'],
 			[''],
-			[null],
 		];
 	}
 
@@ -115,7 +114,7 @@ class NotificationMailerTest extends \Test\TestCase {
 
 		$sentMessage = $this->notificationMailer->sendNotification($mockedNotification, 'http://test.server/oc', 'test@example.com');
 
-		$this->assertEquals(['test@example.com' => null], $sentMessage->getTo());
+		$this->assertEquals(['test@example.com'], $sentMessage->getTo());
 		// check that the notification subject is the email subject
 		$this->assertEquals('This is a parsed subject', $sentMessage->getSubject());
 
@@ -135,6 +134,7 @@ class NotificationMailerTest extends \Test\TestCase {
 		$mockedNotification->method('getObjectId')->willReturn('202');
 		$mockedNotification->method('getParsedSubject')->willReturn('This is a parsed subject');
 		$mockedNotification->method('getParsedMessage')->willReturn('Parsed message is this');
+		$mockedNotification->method('getLink')->willReturn('');
 
 		$this->manager->method('prepare')->willReturn($mockedNotification);
 
