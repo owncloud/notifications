@@ -100,6 +100,11 @@ else
 endif
 	tar --format=gnu --owner=nobody --group=nogroup -czf $(appstore_package_name).tar.gz -C $(appstore_package_name)/../ $(app_name)
 
+# Installs dependencies and does any build actions needed for the app to run in CI
+.PHONY: ci
+ci: vendor
+	@echo dependencies and build actions for CI are completed
+
 ##------------
 ## Tests
 ##------------
