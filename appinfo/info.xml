@@ -10,7 +10,7 @@
 
 	<licence>AGPL</licence>
 	<author>Joas Schilling, Thomas Müller</author>
-	<version>0.7.0</version>
+	<version>0.7.1</version>
 
 	<types>
 		<logging/>
