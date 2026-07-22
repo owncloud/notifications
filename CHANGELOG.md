@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [0.7.1] - 2026-07-22
+
+### Changed
+- Maintenance release re-signed with the ownCloud G2 code-signing certificate for the ownCloud 11.0.0 release.
+
+## [0.7.0] - 2026-06-29
+
+### Changed
+- ownCloud 11 compatible release (oc 11.0.0-rc1).
+
+
 ## [0.6.0] - 2023-07-10
 
 ### Changed
@@ -67,7 +78,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Move OCS calls to app framework - consumes less resources - [#98](https://github.com/owncloud/notifications/pull/98)
 - Don't use escaped message for browser notification - [#100](https://github.com/owncloud/notifications/pull/100)
 
-[Unreleased]: https://github.com/owncloud/notifications/compare/v0.6.0...master
+[Unreleased]: https://github.com/owncloud/notifications/compare/v0.7.1..master
+[0.7.1]: https://github.com/owncloud/notifications/compare/v0.7.0..v0.7.1
+[0.7.0]: https://github.com/owncloud/notifications/compare/v0.6.0..v0.7.0
 [0.6.0]: https://github.com/owncloud/notifications/compare/v0.5.4...v0.6.0
 [0.5.4]: https://github.com/owncloud/notifications/compare/v0.5.3...v0.5.4
 [0.5.3]: https://github.com/owncloud/notifications/compare/v0.5.2...v0.5.3
