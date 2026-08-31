@@ -4,7 +4,7 @@
 
 [![License](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](COPYING) [![ownCloud OSPO](https://img.shields.io/badge/OSPO-ownCloud-blue)](https://kiteworks.com/opensource) [![Docker Hub](https://img.shields.io/docker/pulls/owncloud)](https://hub.docker.com/r/owncloud/server)
 
-The notifications backend and UI for ownCloud Server. It provides the notification bell/panel in the web interface and an OCS REST API that other ownCloud apps (such as announcementcenter and federatedfilesharing) use to create, display, and manage user notifications.
+The notifications backend and UI for ownCloud Classic. It provides the notification bell/panel in the web interface and an OCS REST API that other ownCloud apps (such as announcementcenter and federatedfilesharing) use to create, display, and manage user notifications.
 
 ## Getting Started
 
@@ -17,7 +17,7 @@ Follow the steps below to install and enable the Notifications app.
 
 ### Installation
 
-This app is typically bundled with ownCloud Server. To install manually:
+This app is typically bundled with ownCloud Classic. To install manually:
 
 ```bash
 git clone https://github.com/owncloud/notifications.git /var/www/owncloud/apps/notifications
@@ -44,7 +44,7 @@ make test-php-style
 
 ## Part of ownCloud Server (Classic)
 
-This app provides the core notification infrastructure for [ownCloud Server 10](https://github.com/owncloud/core). Other apps register notification providers through this app's API.
+This app provides the core notification infrastructure for [ownCloud Classic](https://github.com/owncloud/core). Other apps register notification providers through this app's API.
 
 The ownCloud Server is available on [Docker Hub](https://hub.docker.com/r/owncloud/server).
 
@@ -87,8 +87,6 @@ Please submit translations via Transifex -- do not open pull requests for transl
 **Do not open a public GitHub issue for security vulnerabilities.**
 
 Report vulnerabilities at **<https://security.owncloud.com>** -- see [SECURITY.md](SECURITY.md).
-
-Bug bounty: [YesWeHack ownCloud Program](https://yeswehack.com/programs/owncloud-bug-bounty-program)
 
 ## License
 

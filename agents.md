@@ -2,7 +2,7 @@
 
 ## Repository Overview
 
-Notification backend and UI for ownCloud Server. Provides the notification infrastructure that other apps use to create and display user notifications. Licensed under AGPL-3.0.
+Notification backend and UI for ownCloud Classic. Provides the notification infrastructure that other apps use to create and display user notifications. Licensed under AGPL-3.0.
 
 ## Architecture & Key Paths
 
@@ -13,7 +13,7 @@ Notification backend and UI for ownCloud Server. Provides the notification infra
 - `appinfo/` -- ownCloud app metadata
 - `l10n/` -- Translation files
 - `docs/` -- Developer documentation (API reference)
-- `tests/` -- Unit tests
+- `tests/` -- Unit and Acceptance tests
 - `Makefile` -- Build and test automation
 - `composer.json` -- PHP dependencies
 
@@ -30,6 +30,7 @@ make test-php-unit            # Run PHP unit tests
 make test-php-style           # Check PHP code style
 make test-php-phpstan         # Run PHPStan static analysis
 make test-acceptance-api      # Run API acceptance tests
+make test-acceptance-webui    # Run WebUI acceptance tests
 ```
 
 ## Important Constraints
