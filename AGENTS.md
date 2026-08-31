@@ -1,4 +1,4 @@
-# agents.md -- Notifications
+# AGENTS.md -- Notifications
 
 ## Repository Overview
 
